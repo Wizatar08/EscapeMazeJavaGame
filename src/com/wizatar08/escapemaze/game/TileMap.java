@@ -9,8 +9,8 @@ public class TileMap {
     private int tilesWide, tilesHigh;
 
     public TileMap(){
-        this.tilesWide = 20;
-        this.tilesHigh = 16;
+        this.tilesWide = 16;
+        this.tilesHigh = 12;
         map = new Tile[tilesWide][tilesHigh];
         for(int i = 0; i < map.length; i++){
             for(int j = 0; j < map[i].length; j++){
