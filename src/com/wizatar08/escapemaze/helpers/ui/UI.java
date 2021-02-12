@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.helpers.ui;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.opengl.Texture;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -94,6 +95,16 @@ public class UI {
 
         public void addButton(String name, String buttonTextureName) {
             Button b = new Button(name, LoadPNG("buttons/" + buttonTextureName), 0, 0);
+            setButton(b);
+        }
+
+        /**
+         * Editor UI
+         * @param name
+         * @param buttonTexture
+         */
+        public void addButton(String name, Texture buttonTexture) {
+            Button b = new Button(name, buttonTexture, 0, 0);
             setButton(b);
         }
 
