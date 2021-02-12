@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 
 public class Drawer {
-    public static final int WIDTH = 1280, HEIGHT = 1024, TILE_SIZE = 64;
+    public static final int WIDTH = 1024, HEIGHT = 768, TILE_SIZE = 64;
 
     public static void BeginSession(){
         Display.setTitle("Escape Maze <DEV>"); // Set title
