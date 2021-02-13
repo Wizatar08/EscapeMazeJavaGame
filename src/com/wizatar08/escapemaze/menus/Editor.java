@@ -5,6 +5,9 @@ import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
+
+import javax.swing.*;
+
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 import java.util.ArrayList;
@@ -35,6 +38,13 @@ public class Editor {
         while (Keyboard.next()) {
             if (Keyboard.getEventKey() == Keyboard.KEY_S && Keyboard.getEventKeyState()) {
                 ExternalMapHandler.SaveMap("map.wtremm", map);
+            }
+            if (Keyboard.getEventKey() == Keyboard.KEY_EQUALS && Keyboard.getEventKeyState()) {
+                try {
+                    System.out.println(Integer.parseInt(JOptionPane.showInputDialog("FIUBVHJDFUH")));
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
+                }
             }
         }
     }
