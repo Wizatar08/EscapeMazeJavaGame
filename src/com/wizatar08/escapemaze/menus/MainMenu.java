@@ -7,6 +7,7 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class MainMenu {
     // Initialize variables

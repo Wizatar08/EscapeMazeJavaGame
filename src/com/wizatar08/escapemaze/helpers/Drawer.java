@@ -14,26 +14,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 
 public class Drawer {
-    public static final int WIDTH = 1024, HEIGHT = 768, TILE_SIZE = 64;
-
-    public static void BeginSession(){
-        Display.setTitle("Escape Maze <DEV>"); // Set title
-        try {
-            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-            Display.create();
-            Display.setResizable(true);
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-        }
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
-        glMatrixMode(GL_MODELVIEW);
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
 
     public static boolean checkCollision(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2) {
         if (x1 + width1 > x2 && x1 < x2 + width2 && y1 + height1 > y2 && y1 < y2 + height2) {

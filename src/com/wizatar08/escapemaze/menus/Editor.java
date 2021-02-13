@@ -9,7 +9,7 @@ import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Editor {
     // Initialize variables

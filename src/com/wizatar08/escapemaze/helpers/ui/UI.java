@@ -1,7 +1,11 @@
 package com.wizatar08.escapemaze.helpers.ui;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.render.Renderer.*;
+
+import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 
@@ -31,11 +35,13 @@ public class UI {
 
     public boolean isButtonClicked(String buttonName) {
         Button b = getButton(buttonName);
-        float mouseY = HEIGHT - Mouse.getY() - 1;
-        if (Mouse.getX() > b.getX() && Mouse.getX() < b.getX() + b.getWidth() && mouseY > b.getY() && mouseY < b.getY() + b.getHeight()) {
-            return true;
-        }
-        return false;
+        float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
+        //System.out.println(((float) b.getX() * stretchedMultiplierTotal) + ", " + (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) + ", " + ((float) b.getY() * stretchedMultiplierTotal) + ", " + (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal) + ", " + mouseY + ", " + stretchedMultiplierTotal);
+        return
+                Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) && // 97.5
+                Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) && // 162.5
+                mouseY > ((float) b.getY() * stretchedMultiplierTotal) && // 87
+                mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal); // 103
     }
 
     private Button getButton(String buttonName) {
