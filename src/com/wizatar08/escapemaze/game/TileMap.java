@@ -2,7 +2,7 @@ package com.wizatar08.escapemaze.game;
 
 import com.wizatar08.escapemaze.enumerators.TileType;
 import com.wizatar08.escapemaze.objects.Tile;
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class TileMap {
     public Tile[][] map;
