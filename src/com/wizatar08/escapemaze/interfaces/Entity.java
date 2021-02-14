@@ -26,12 +26,12 @@ public interface Entity {
     /**
      * Set X position of entity
      */
-    void setX(int x);
+    void setX(float x);
 
     /**
      * Set Y position of entity
      */
-    void setY(int y);
+    void setY(float y);
 
     /**
      * Set width of entity
