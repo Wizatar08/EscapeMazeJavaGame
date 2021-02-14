@@ -5,11 +5,14 @@ import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import org.newdawn.slick.opengl.Texture;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity, TileEntity {
     private float x, y;
     private int width, height;
     private Texture texture;
+    private Texture overlapTexture;
+    private int overlapTexRot;
     private TileType type;
 
     public Tile(float x, float y, int width, int height, TileType type){
@@ -19,10 +22,15 @@ public class Tile implements Entity, TileEntity {
         this.width = width;
         this.type = type;
         this.texture = LoadPNG("tiles/" + type.getTexture());
+        this.overlapTexture = type.getOverlayTex();
+        this.overlapTexRot = type.getOverlayTexRot();
     }
 
     public void draw(){
         drawQuadTex(texture, x, y, width, height);
+        if (overlapTexture != null) {
+            drawQuadTex(overlapTexture, x, y, width, height, overlapTexRot);
+        }
     }
 
     // Getters
