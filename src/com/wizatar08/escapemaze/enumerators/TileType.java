@@ -5,12 +5,15 @@ import com.wizatar08.escapemaze.helpers.VariationID;
 import org.newdawn.slick.opengl.Texture;
 
 import java.util.*;
+import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 public enum TileType {
-    NULL(new VariationID(IDTypes.TILE), "null", new Builder()
-            .isPassable()),
-    METAL_WALL(new VariationID(IDTypes.TILE, "001", "00"), "metal_wall", new Builder()
-            .isSafeSpot());
+    NULL(new VariationID(IDTypes.TILE), "null", new Builder().isPassable()),
+    METAL_WALL(new VariationID(IDTypes.TILE, "001", "00"), "metal_wall", new Builder().isSafeSpot()),
+    METAL_WALL_B(new VariationID(IDTypes.TILE, "001", "11"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"))),
+    METAL_WALL_L(new VariationID(IDTypes.TILE, "001", "12"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"), 90)),
+    METAL_WALL_T(new VariationID(IDTypes.TILE, "001", "13"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"), 180)),
+    METAL_WALL_R(new VariationID(IDTypes.TILE, "001", "14"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"), 270));
 
     // Initialize variables
     private String id;
@@ -108,7 +111,7 @@ public enum TileType {
         }
 
         /**
-         * Set and rotate overlay texture if needed
+         * Set and rotate overlay texture if needed. Rotates clockwise.
          */
         private Builder overlayTex(Texture tex, int rot) {
             overlayTex = tex;
