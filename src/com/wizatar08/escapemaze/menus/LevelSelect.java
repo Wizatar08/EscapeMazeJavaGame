@@ -18,21 +18,21 @@ public class LevelSelect {
     // Constructor
     public LevelSelect() {
         background = LoadPNG("backgrounds/main_menu");
-        path = "level_buttons/";
+        path = "buttons/level_buttons/";
         levelSelectionUI = new UI();
         levelSelectionUI.createMenu("Levels", 100, 100, WIDTH - 200, 96 * 7, 7, 3);
         levelMenu = levelSelectionUI.getMenu("Levels");
-        levelMenu.addButton("L1", path + "lvl1");
-        levelMenu.addButton("L2", path + "lvl2");
-        levelMenu.addButton("L3", path + "lvl3");
-        levelMenu.addButton("L4", path + "lvl4");
-        levelMenu.addButton("L5", path + "lvl5");
-        levelMenu.addButton("L6", path + "lvl6");
-        levelMenu.addButton("L7", path + "lvl7");
-        levelMenu.addButton("L8", path + "lvl8");
-        levelMenu.addButton("L9", path + "lvl9");
-        levelMenu.addButton("L10", path + "lvl10");
-        levelMenu.addButton("L11", path + "lvl11");
+        levelMenu.addButton("L1", new Texture[]{LoadPNG(path + "lvl1")});
+        levelMenu.addButton("L2", new Texture[]{LoadPNG(path + "lvl2")});
+        levelMenu.addButton("L3", new Texture[]{LoadPNG(path + "lvl3")});
+        levelMenu.addButton("L4", new Texture[]{LoadPNG(path + "lvl4")});
+        levelMenu.addButton("L5", new Texture[]{LoadPNG(path + "lvl5")});
+        levelMenu.addButton("L6", new Texture[]{LoadPNG(path + "lvl6")});
+        levelMenu.addButton("L7", new Texture[]{LoadPNG(path + "lvl7")});
+        levelMenu.addButton("L8", new Texture[]{LoadPNG(path + "lvl8")});
+        levelMenu.addButton("L9", new Texture[]{LoadPNG(path + "lvl9")});
+        levelMenu.addButton("L10", new Texture[]{LoadPNG(path + "lvl10")});
+        levelMenu.addButton("L11", new Texture[]{LoadPNG(path + "lvl11")});
     }
 
     // Detect if button is pressed
@@ -55,8 +55,8 @@ public class LevelSelect {
     // Loop
     public void update() {
         drawQuadTex(background, 0, 0, WIDTH * 2, HEIGHT);
-        draw();
         detectIfButtonHit();
+        draw();
     }
 
     // Draw objects on stage

@@ -18,9 +18,9 @@ public class MainMenu {
     public MainMenu() {
         background = LoadPNG("backgrounds/main_menu");
         ui = new UI();
-        ui.addButton("PlayBtn", "playbtn", WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.45));
-        ui.addButton("QuitBtn", "quitbtn", WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.55));
-        ui.addButton("EditBtn", "editorbtn", WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.65));
+        ui.addButton("PlayBtn", new Texture[]{LoadPNG("buttons/playbtn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.45));
+        ui.addButton("QuitBtn", new Texture[]{LoadPNG("buttons/quitbtn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.55));
+        ui.addButton("EditBtn", new Texture[]{LoadPNG("buttons/editorbtn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.65));
     }
 
     // Detect if a button is pressed
