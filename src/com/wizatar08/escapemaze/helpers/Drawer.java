@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 
 public class Drawer {
 

@@ -3,7 +3,6 @@ package com.wizatar08.escapemaze.helpers.ui;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
-import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.TrueTypeFont;
@@ -29,14 +28,21 @@ public class UI {
         font.drawString(x, y, text);
     }
 
-    public void addButton(String name, String textureName, int x, int y) {
-        buttonList.add(new Button(name, LoadPNG("buttons/" + textureName), x, y));
+    public void addButton(String name, Texture[] textureNames, int x, int y) {
+        int[] rots = new int[textureNames.length];
+        for (int i = 0; i < textureNames.length; i++) {
+            rots[i] = 0;
+        }
+        addButton(name, textureNames, x, y, rots);
+    }
+
+    public void addButton(String name, Texture[] textureNames, int x, int y, int[] rots) {
+        buttonList.add(new Button(name, textureNames, x, y, rots));
     }
 
     public boolean isButtonClicked(String buttonName) {
         Button b = getButton(buttonName);
         float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
-        //System.out.println(((float) b.getX() * stretchedMultiplierTotal) + ", " + (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) + ", " + ((float) b.getY() * stretchedMultiplierTotal) + ", " + (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal) + ", " + mouseY + ", " + stretchedMultiplierTotal);
         return
                 Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) && // 97.5
                 Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) && // 162.5
@@ -68,7 +74,9 @@ public class UI {
 
     public void draw() {
         for (Button b: buttonList) {
-            drawQuadTex(b.getTexture(), b.getX(), b.getY(), b.getWidth(), b.getHeight());
+            for (int i = 0; i < b.getTextures().length; i++) {
+                drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight());
+            }
         }
         for (Menu m: menuList) {
             m.draw();
@@ -95,12 +103,12 @@ public class UI {
             this.show = true;
         }
 
-        public void addButton(Button b) {
-            setButton(b);
-        }
-
-        public void addButton(String name, String buttonTextureName) {
-            Button b = new Button(name, LoadPNG("buttons/" + buttonTextureName), 0, 0);
+        public void addButton(String name, Texture[] buttonTextures) {
+            int[] rots = new int[buttonTextures.length];
+            for (int i = 0; i < buttonTextures.length; i++) {
+                rots[i] = 0;
+            }
+            Button b = new Button(name, buttonTextures, 0, 0, rots);
             setButton(b);
         }
 
@@ -108,9 +116,10 @@ public class UI {
          * Editor UI
          * @param name
          * @param buttonTexture
+         * @param rot
          */
-        public void addButton(String name, Texture buttonTexture) {
-            Button b = new Button(name, buttonTexture, 0, 0);
+        public void addButton(String name, Texture[] buttonTexture, int[] rot) {
+            Button b = new Button(name, buttonTexture, 0, 0, rot);
             setButton(b);
         }
 
@@ -142,7 +151,9 @@ public class UI {
         public void draw() {
             if (show) {
                 for (Button b : menuButtons) {
-                    drawQuadTex(b.getTexture(), b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                    for (int i = 0; i < b.getTextures().length; i++) {
+                        drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i]);
+                    }
                 }
             }
         }

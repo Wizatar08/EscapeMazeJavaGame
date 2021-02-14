@@ -4,25 +4,48 @@ import org.newdawn.slick.opengl.Texture;
 
 public class Button {
     private String name;
-    private Texture texture;
+    private Texture[] textures = new Texture[]{};
+    private int[] rots;
     private int x, y, width, height;
 
-    public Button(String name, Texture texture, int x, int y, int width, int height) {
+    public Button(String name, Texture[] textures, int x, int y, int width, int height) {
         this.name = name;
-        this.texture = texture;
+        this.textures = textures;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        for (int i = 0; i < textures.length; i++) {
+            rots[i] = 0;
+        }
     }
 
-    public Button(String name, Texture texture, int x, int y) {
+    public Button(String name, Texture[] textures, int x, int y) {
+        int[] rots = new int[textures.length];
+        for (int i = 0; i < textures.length; i++) {
+            rots[i] = 0;
+        }
+        new Button(name, textures, x, y, rots);
+    }
+
+    public Button(String name, Texture[] textures, int x, int y, int[] rots) {
         this.name = name;
-        this.texture = texture;
+        this.textures = textures;
         this.x = x;
         this.y = y;
-        this.width = texture.getImageWidth();
-        this.height = texture.getImageHeight();
+        this.rots = rots;
+        int biggestWidth = 1;
+        int biggestHeight = 1;
+        for (int i = 0; i < textures.length; i++) {
+            if (textures[i].getImageWidth() > biggestWidth) {
+                biggestWidth = textures[i].getImageWidth();
+            }
+            if (textures[i].getImageHeight() > biggestHeight) {
+                biggestHeight = textures[i].getImageHeight();
+            }
+        }
+        this.width = biggestWidth;
+        this.height = biggestHeight;
     }
 
 
@@ -35,8 +58,8 @@ public class Button {
         return height;
     }
 
-    public Texture getTexture() {
-        return texture;
+    public Texture[] getTextures() {
+        return textures;
     }
 
     public int getX() {
@@ -49,6 +72,10 @@ public class Button {
 
     public String getName() {
         return name;
+    }
+
+    public int[] getRots() {
+        return rots;
     }
 
     public void setX(int x) {
