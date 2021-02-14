@@ -3,12 +3,13 @@ package com.wizatar08.escapemaze.objects;
 import com.wizatar08.escapemaze.enumerators.TileType;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
+import com.wizatar08.escapemaze.menus.Editor;
 import org.newdawn.slick.opengl.Texture;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity, TileEntity {
-    private float x, y;
+    private float x, y, initialX, initialY;
     private int width, height;
     private Texture texture;
     private Texture overlapTexture;
@@ -18,6 +19,8 @@ public class Tile implements Entity, TileEntity {
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
         this.y = y;
+        this.initialX = x;
+        this.initialY = y;
         this.height = height;
         this.width = width;
         this.type = type;
@@ -27,6 +30,8 @@ public class Tile implements Entity, TileEntity {
     }
 
     public void draw(){
+        setX(initialX + Editor.displacementX);
+        setY(initialY + Editor.displacementY);
         drawQuadTex(texture, x, y, width, height);
         if (overlapTexture != null) {
             drawQuadTex(overlapTexture, x, y, width, height, overlapTexRot);
@@ -61,10 +66,10 @@ public class Tile implements Entity, TileEntity {
     public int getYPlace() {
         return (int) y / TILE_SIZE;
     }
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
     public void setWidth(int width) {
