@@ -47,7 +47,7 @@ public class Drawer {
         glLoadIdentity();
     }
 
-    public static void drawQuadTexRot(Texture tex, float x, float y, float width, float height, float angle) {
+    public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle) {
         tex.bind();
         glTranslatef(x + width / 2, y + height / 2, 0);
         glRotatef(angle, 0, 0, 1);
