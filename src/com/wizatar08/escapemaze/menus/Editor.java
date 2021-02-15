@@ -43,6 +43,20 @@ public class Editor {
         background = LoadPNG("backgrounds/main_menu");
     }
 
+    private void changeMapSize(int width, int height) {
+        TileMap oldMap = map;
+        map = new TileMap(width, height);
+        for(int i = 0; i < map.getMapAsArray().length; i++){
+            for(int j = 0; j < map.getMapAsArray()[i].length; j++){
+                map.setTile(i, j, TileType.METAL_WALL);
+                try {
+                    map.setTile(i, j, oldMap.getTile(i, j).getType());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                }
+            }
+        }
+    }
+
     private void detectKey() {
         while (Keyboard.next()) {
             if (keyDown(Keyboard.KEY_S)) {
@@ -50,7 +64,24 @@ public class Editor {
             }
             if (keyDown(Keyboard.KEY_EQUALS)) {
                 try {
-                    System.out.println(Integer.parseInt(JOptionPane.showInputDialog("FIUBVHJDFUH")));
+                    int size = Integer.parseInt(JOptionPane.showInputDialog("Change width of map:"));
+                    if (size < 1) {
+                        JOptionPane.showMessageDialog(null, "Width of map cannot be less than 1.");
+                    } else if (size > 48) {
+                        JOptionPane.showMessageDialog(null, "Width of map cannot be greater than 48.");
+                    } else changeMapSize(size, map.getTilesHigh());
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
+                }
+            }
+            if (keyDown(Keyboard.KEY_MINUS)) {
+                try {
+                    int size = Integer.parseInt(JOptionPane.showInputDialog("Change height of map:"));
+                    if (size < 1) {
+                        JOptionPane.showMessageDialog(null, "Width of map cannot be less than 1.");
+                    } else if (size > 48) {
+                        JOptionPane.showMessageDialog(null, "Width of map cannot be greater than 48.");
+                    } else changeMapSize(map.getTilesWide(), size);
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
                 }
@@ -58,8 +89,8 @@ public class Editor {
         }
         if (keyDown(Keyboard.KEY_UP)) displacementY -= 1;
         if (keyDown(Keyboard.KEY_DOWN)) displacementY += 1;
-        if (keyDown(Keyboard.KEY_LEFT)) displacementX -= 1;
-        if (keyDown(Keyboard.KEY_RIGHT)) displacementX += 1;
+        if (keyDown(Keyboard.KEY_LEFT)) displacementX += 1;
+        if (keyDown(Keyboard.KEY_RIGHT)) displacementX -= 1;
     }
 
     private boolean keyDown(int key) {
