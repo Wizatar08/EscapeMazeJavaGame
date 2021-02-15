@@ -4,7 +4,9 @@ import com.wizatar08.escapemaze.enumerators.TileType;
 import com.wizatar08.escapemaze.game.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
+import com.wizatar08.escapemaze.objects.Tile;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 
 import javax.swing.*;
@@ -12,6 +14,7 @@ import javax.swing.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -23,12 +26,13 @@ public class Editor {
     private ArrayList<UI.Menu> menus;
     public static int displacementX;
     public static int displacementY;
+    private TileType tileSelected;
 
     public Editor() {
         editorUI = new UI();
         menus = new ArrayList<>();
+        tileSelected = TileType.METAL_WALL;
         createMenus();
-        addButtons();
         try {
             map = ExternalMapHandler.LoadMap("map.wtremm");
         } catch (NullPointerException e) {
@@ -62,8 +66,23 @@ public class Editor {
         return (Keyboard.getEventKey() == key) && (Keyboard.getEventKeyState());
     }
 
+    private void detectIfButtonDown() {
+        if (Mouse.isButtonDown(0)) {
+            for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
+                int ceil = (int) Math.ceil(i / (3 * 11));
+                for (int j = 0; j < editorUI.getMenu("Tiles" + ceil).getButtons().size(); j++) {
+                    if (editorUI.getMenu("Tiles" + ceil).isButtonClicked(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName())) {
+                        tileSelected = TileType.TILE_IDS.get(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName());
+                    }
+                }
+            }
+            map.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
+        }
+    }
+
     public void update() {
         detectKey();
+        detectIfButtonDown();
         draw();
     }
 
@@ -75,15 +94,14 @@ public class Editor {
 
 
     private void createMenus() {
-        editorUI.createMenu("Tiles1", WIDTH - (64 * 3), 20, (64 * 3), HEIGHT - 64, 3, 11);
-    }
-
-    private void addButtons() {
-        editorUI.getMenu("Tiles1").addButton(TileType.METAL_WALL.getId(), new Texture[]{LoadPNG("tiles/metal_wall")});
-        editorUI.getMenu("Tiles1").addButton(TileType.METAL_WALL_B.getId(), new Texture[]{LoadPNG("tiles/metal_wall"), LoadPNG("tile_overlays/wall_side")}, new int[]{0, 0});
-        editorUI.getMenu("Tiles1").addButton(TileType.METAL_WALL_L.getId(), new Texture[]{LoadPNG("tiles/metal_wall"), LoadPNG("tile_overlays/wall_side")}, new int[]{0, 90});
-        editorUI.getMenu("Tiles1").addButton(TileType.METAL_WALL_T.getId(), new Texture[]{LoadPNG("tiles/metal_wall"), LoadPNG("tile_overlays/wall_side")}, new int[]{0, 180});
-        editorUI.getMenu("Tiles1").addButton(TileType.METAL_WALL_R.getId(), new Texture[]{LoadPNG("tiles/metal_wall"), LoadPNG("tile_overlays/wall_side")}, new int[]{0, 270});
+        int w = 3;
+        int h = 11;
+        for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
+            int ceil = (int) Math.ceil(i / (w * h));
+            if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (64 * 3), 20, (64 * 3), HEIGHT - 64, 3, 11);;
+            System.out.println(editorUI.getMenu("Tiles" + ceil) + ", " + ("Tiles" + ceil) + ", " + ceil + ", " + TileType.TILE_TYPES.size());
+            editorUI.getMenu("Tiles" + ceil).addButton(TileType.TILE_TYPES.get(i).getId(), new Texture[]{LoadPNG("tiles/" + TileType.TILE_TYPES.get(i).getTexture()), TileType.TILE_TYPES.get(i).getOverlayTex()}, new int[]{0, TileType.TILE_TYPES.get(i).getOverlayTexRot()});
+        }
     }
 
 }
