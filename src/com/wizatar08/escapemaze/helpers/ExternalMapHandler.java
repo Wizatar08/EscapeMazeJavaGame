@@ -40,13 +40,15 @@ public class ExternalMapHandler {
     }
 
     public static TileMap LoadMap(String mapName) {
-        TileMap grid = new TileMap();
         String map = "";
+        String[] mapAsArray = new String[]{};
         try {
-            map = getMapAsString(getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName)));
+            mapAsArray = getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName));
+            map = getMapAsString(mapAsArray);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        TileMap grid = new TileMap(mapAsArray.length, (int) Math.floor(mapAsArray[0].length() / 6));
         try {
             for (int i = 0; i < grid.getTilesWide(); i++) {
                 for (int j = 0; j < grid.getTilesHigh(); j++) {
@@ -71,4 +73,5 @@ public class ExternalMapHandler {
         ID = t.getType().getId();
         return ID;
     }
+
 }
