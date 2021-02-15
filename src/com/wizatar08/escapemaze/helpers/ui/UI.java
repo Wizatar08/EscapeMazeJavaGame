@@ -44,10 +44,10 @@ public class UI {
         Button b = getButton(buttonName);
         float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
         return
-                Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) && // 97.5
-                Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) && // 162.5
-                mouseY > ((float) b.getY() * stretchedMultiplierTotal) && // 87
-                mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal); // 103
+                Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) &&
+                Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) &&
+                mouseY > ((float) b.getY() * stretchedMultiplierTotal) &&
+                mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal);
     }
 
     private Button getButton(String buttonName) {
@@ -132,11 +132,12 @@ public class UI {
 
         public boolean isButtonClicked(String buttonName) {
             Button b = getButton(buttonName);
-            float mouseY = HEIGHT - Mouse.getY() - 1;
-            if (Mouse.getX() > b.getX() && Mouse.getX() < b.getX() + b.getWidth() && mouseY > b.getY() && mouseY < b.getY() + b.getHeight()) {
-                return true;
-            }
-            return false;
+            float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
+            return
+                    Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) &&
+                    Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) &&
+                    mouseY > ((float) b.getY() * stretchedMultiplierTotal) &&
+                    mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal);
         }
 
         private Button getButton(String buttonName) {
@@ -164,6 +165,10 @@ public class UI {
 
         public void showMenu(boolean showMenu) {
             show = showMenu;
+        }
+
+        public ArrayList<Button> getButtons() {
+            return menuButtons;
         }
     }
 
