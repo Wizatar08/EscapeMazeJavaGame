@@ -5,8 +5,8 @@ import com.wizatar08.escapemaze.objects.Tile;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class TileMap {
-    public Tile[][] map;
-    private int tilesWide, tilesHigh;
+    private Tile[][] map;
+    public static int tilesWide, tilesHigh;
 
     public TileMap(){
         this.tilesWide = 16;
@@ -21,7 +21,7 @@ public class TileMap {
     public TileMap(int[][] newMap) {
         this.tilesWide = newMap[0].length;
         this.tilesHigh = newMap.length;
-        map = new Tile[tilesWide][tilesHigh];
+        map = new Tile[][]{};
         for(int i = 0; i < map.length; i++){
             for(int j = 0; j < map[i].length; j++){
                 map[i][j] = new Tile(TILE_SIZE*i,j*TILE_SIZE,TILE_SIZE,TILE_SIZE, TileType.TILE_IDS.get(newMap[j][i]));
