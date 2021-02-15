@@ -18,6 +18,18 @@ public class TileMap {
             }
         }
     }
+
+    public TileMap(int width, int height){
+        this.tilesWide = width;
+        this.tilesHigh = height;
+        map = new Tile[tilesWide][tilesHigh];
+        for(int i = 0; i < map.length; i++){
+            for(int j = 0; j < map[i].length; j++){
+                map[i][j] = new Tile(TILE_SIZE*i,j*TILE_SIZE,TILE_SIZE,TILE_SIZE, TileType.METAL_WALL);
+            }
+        }
+    }
+
     public TileMap(int[][] newMap) {
         this.tilesWide = newMap[0].length;
         this.tilesHigh = newMap.length;
@@ -55,5 +67,9 @@ public class TileMap {
 
     public int getTilesWide() {
         return tilesWide;
+    }
+
+    public Tile[][] getMapAsArray() {
+        return map;
     }
 }
