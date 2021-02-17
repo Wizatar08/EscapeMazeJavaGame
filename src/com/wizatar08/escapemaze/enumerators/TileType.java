@@ -44,7 +44,12 @@ public enum TileType {
     METAL_WALL_LTR(new VariationID(IDTypes.TILE, "001", "42"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_three_corners"), 90)),
     METAL_WALL_TBR(new VariationID(IDTypes.TILE, "001", "43"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_three_corners"), 180)),
     METAL_WALL_RBL(new VariationID(IDTypes.TILE, "001", "44"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_three_corners"), 270)),
-    METAL_WALL_AC(new VariationID(IDTypes.TILE, "001", "44"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_four_corners"), 0));
+    METAL_WALL_AC(new VariationID(IDTypes.TILE, "001", "45"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_four_corners"), 0)),
+    METAL_WALL_FBL(new VariationID(IDTypes.TILE, "001", "46"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side_corner_edge"), 0)),
+    METAL_WALL_FTL(new VariationID(IDTypes.TILE, "001", "47"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side_corner_edge"), 90)),
+    METAL_WALL_FTR(new VariationID(IDTypes.TILE, "001", "48"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side_corner_edge"), 180)),
+    METAL_WALL_FBR(new VariationID(IDTypes.TILE, "001", "49"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side_corner_edge"), 270)),
+    METAL_WALL_FULL(new VariationID(IDTypes.TILE, "001", "50"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_full"), 0));
 
     // Initialize variables
     private String id;
