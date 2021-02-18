@@ -4,29 +4,9 @@ import org.newdawn.slick.opengl.Texture;
 
 public class Button {
     private String name;
-    private Texture[] textures = new Texture[]{};
+    private Texture[] textures;
     private int[] rots;
     private int x, y, width, height;
-
-    public Button(String name, Texture[] textures, int x, int y, int width, int height) {
-        this.name = name;
-        this.textures = textures;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        for (int i = 0; i < textures.length; i++) {
-            rots[i] = 0;
-        }
-    }
-
-    public Button(String name, Texture[] textures, int x, int y) {
-        int[] rots = new int[textures.length];
-        for (int i = 0; i < textures.length; i++) {
-            rots[i] = 0;
-        }
-        new Button(name, textures, x, y, rots);
-    }
 
     public Button(String name, Texture[] textures, int x, int y, int[] rots) {
         this.name = name;

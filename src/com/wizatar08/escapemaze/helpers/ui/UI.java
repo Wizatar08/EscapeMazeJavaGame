@@ -59,8 +59,12 @@ public class UI {
         return null;
     }
 
+    public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Texture background, int xOffset, int yOffset) {
+        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, background, xOffset, yOffset));
+    }
+
     public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight) {
-        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight));
+        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, null, 0, 0));
     }
 
     public Menu getMenu(String name) {
@@ -83,13 +87,18 @@ public class UI {
         }
     }
 
+    public ArrayList<Menu> getMenuList() {
+        return menuList;
+    }
+
     public class Menu {
         String name;
         private ArrayList<Button> menuButtons;
-        private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding;
+        private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset;
         private boolean show;
+        private Texture background;
 
-        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight) {
+        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Texture background, int xOffset, int yOffset) {
             this.name = name;
             this.x = x;
             this.y = y;
@@ -97,7 +106,10 @@ public class UI {
             this.height = height;
             this.optionsWidth = optionsWidth;
             this.optionsHeight = optionsHeight;
+            this.background = background;
             this.padding = (width - (optionsWidth * TILE_SIZE)) / (optionsWidth + 1);
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
             this.buttonAmount = 0;
             this.menuButtons = new ArrayList<Button>();
             this.show = true;
@@ -134,10 +146,12 @@ public class UI {
             Button b = getButton(buttonName);
             float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
             return
+                    (
                     Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) &&
                     Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) &&
                     mouseY > ((float) b.getY() * stretchedMultiplierTotal) &&
-                    mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal);
+                    mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal)
+                    ) && show;
         }
 
         private Button getButton(String buttonName) {
@@ -151,6 +165,7 @@ public class UI {
 
         public void draw() {
             if (show) {
+                //if (background != null) drawQuadTex(background, -xOffset + x, -yOffset + y, width, height);
                 for (Button b : menuButtons) {
                     for (int i = 0; i < b.getTextures().length; i++) {
                         drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i]);
