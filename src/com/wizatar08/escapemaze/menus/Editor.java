@@ -1,10 +1,9 @@
 package com.wizatar08.escapemaze.menus;
 
 import com.wizatar08.escapemaze.enumerators.TileType;
-import com.wizatar08.escapemaze.game.TileMap;
+import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
-import com.wizatar08.escapemaze.objects.Tile;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
@@ -14,7 +13,7 @@ import javax.swing.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Arrays;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -36,7 +35,7 @@ public class Editor {
         menuIndex = 0;
         createMenus();
         try {
-            map = ExternalMapHandler.LoadMap("map.wtremm");
+            map = ExternalMapHandler.LoadMap("map_default.wtremm");
         } catch (NullPointerException e) {
             map = new TileMap();
         }
@@ -157,7 +156,14 @@ public class Editor {
         for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
             int ceil = (int) Math.ceil(i / (w * h));
             if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 20, 220, 704, 3, 11);
-            editorUI.getMenu("Tiles" + ceil).addButton(TileType.TILE_TYPES.get(i).getId(), new Texture[]{LoadPNG("tiles/" + TileType.TILE_TYPES.get(i).getTexture()), TileType.TILE_TYPES.get(i).getOverlayTex()}, new int[]{0, TileType.TILE_TYPES.get(i).getOverlayTexRot()});
+            Texture[] textures = new Texture[TileType.TILE_TYPES.get(i).getOverlayTex().length + 1];
+            int ind = 0;
+            textures[0] = LoadPNG("tiles/" + TileType.TILE_TYPES.get(i).getTexture());
+            for (int j = 0; j < TileType.TILE_TYPES.get(i).getOverlayTex().length; j++) {
+                textures[j + 1] = TileType.TILE_TYPES.get(i).getOverlayTex()[j];
+            }
+            System.out.println("Textures length: " + textures.length + ", " + textures.length + ", " + TileType.TILE_TYPES.get(i).getOverlayTex().length);
+            editorUI.getMenu("Tiles" + ceil).addButton(TileType.TILE_TYPES.get(i).getId(), textures, TileType.TILE_TYPES.get(i).getOverlayTexRot());
         }
     }
 
