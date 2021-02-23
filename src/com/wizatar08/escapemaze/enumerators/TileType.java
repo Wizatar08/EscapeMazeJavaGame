@@ -9,7 +9,7 @@ import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 public enum TileType {
     NULL(new VariationID(IDTypes.TILE), "null", new Builder().isPassable()),
-    METAL_WALL(new VariationID(IDTypes.TILE, "001", "00"), "metal_wall", new Builder().isSafeSpot()),
+    METAL_WALL(new VariationID(IDTypes.TILE, "001", "00"), "metal_wall", new Builder()),
     METAL_WALL_B(new VariationID(IDTypes.TILE, "001", "11"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"))),
     METAL_WALL_L(new VariationID(IDTypes.TILE, "001", "12"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"), 90)),
     METAL_WALL_T(new VariationID(IDTypes.TILE, "001", "13"), "metal_wall", new Builder().overlayTex(LoadPNG("tile_overlays/wall_side"), 180)),
