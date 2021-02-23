@@ -168,7 +168,11 @@ public class UI {
                 //if (background != null) drawQuadTex(background, -xOffset + x, -yOffset + y, width, height);
                 for (Button b : menuButtons) {
                     for (int i = 0; i < b.getTextures().length; i++) {
-                        drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i]);
+                        if (i == 0) {
+                            drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                        } else {
+                            drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i - 1]);
+                        }
                     }
                 }
             }
