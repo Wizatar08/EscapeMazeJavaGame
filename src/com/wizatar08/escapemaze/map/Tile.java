@@ -12,8 +12,8 @@ public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
     private Texture texture;
-    private Texture overlapTexture;
-    private int overlapTexRot;
+    private Texture overlapTexture[];
+    private int overlapTexRot[];
     private TileType type;
 
     public Tile(float x, float y, int width, int height, TileType type){
@@ -34,7 +34,9 @@ public class Tile implements Entity, TileEntity {
         setY(initialY + Editor.displacementY);
         drawQuadTex(texture, x, y, width, height);
         if (overlapTexture != null) {
-            drawQuadTex(overlapTexture, x, y, width, height, overlapTexRot);
+            for (int i = 0; i < overlapTexture.length; i++) {
+                drawQuadTex(overlapTexture[i], x, y, width, height, overlapTexRot[i]);
+            }
         }
     }
 
