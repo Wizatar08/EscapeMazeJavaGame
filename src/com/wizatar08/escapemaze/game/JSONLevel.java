@@ -11,9 +11,13 @@ public class JSONLevel {
     @SerializedName("level_name")
     private String levelName;
 
-    public JSONLevel(String map, String levelName) {
+    @SerializedName("player_start")
+    private int[] playerStartPos;
+
+    public JSONLevel(String map, String levelName, int[] playerStartPos) {
         this.map = map;
         this.levelName = levelName;
+        this.playerStartPos = playerStartPos;
     }
 
     // Getters
@@ -24,5 +28,9 @@ public class JSONLevel {
 
     public String getMap() {
         return map;
+    }
+
+    public int[] getPlayerStartPos() {
+        return playerStartPos;
     }
 }
