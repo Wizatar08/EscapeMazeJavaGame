@@ -52,13 +52,13 @@ public class Tile implements Entity, TileEntity {
     }
 
     // Getters
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
 
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
     public float getX() {
