@@ -16,12 +16,12 @@ public interface Entity {
     /**
      * Get width of entity
      */
-    int getWidth();
+    float getWidth();
 
     /**
      * Get height of entity
      */
-    int getHeight();
+    float getHeight();
 
     /**
      * Set X position of entity
