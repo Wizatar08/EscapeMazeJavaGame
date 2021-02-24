@@ -10,57 +10,93 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 public class Player implements Entity {
+    // Initialize variables
     private float x, y;
     private float width, height;
     private TileMap map;
+    private boolean isSafe;
 
+    // Constructor for Player object
     public Player(float startXTile, float startYTile, TileMap map) {
         setX(startXTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         setY(startYTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         this.width = 32;
         this.height = 32;
         this.map = map;
+        this.isSafe = false;
     }
 
+    // Update (loop) method
     public void update() {
         detectKeyAndMove();
-        detectIfNearSafeSpot();
         draw();
     }
 
-    private void detectIfNearSafeSpot() {
+    // Detects if Player is near a safe spot, return true if so and false if not
+    private boolean isNearSafeSpot() {
         if (map.getSafeSpots() != null) {
+            int i = 0;
             for (SafeSpot safeSpot : map.getSafeSpots()) {
                 Tile tile = safeSpot.getDetectTile();
                 float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
                 float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
                 if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
-                    // Code to check if player hit something goes here
+                    i++;
                 }
+            }
+            return i > 0;
+        }
+        return false;
+    }
+
+    // Code that detects whether a *certain* key is pressed
+    private void detectKeyAndMove() {
+        while(Keyboard.next()) { // Detect if a key is pressed ONCE
+            if (keyDown(Keyboard.KEY_SPACE)) {
+                if (isNearSafeSpot() && !isSafe) {
+                    goIntoSafeSpot();
+                } else if (isSafe){
+                    isSafe = false;
+                }
+            }
+        }
+        // Below: Detect if a key is pressed and held
+        if (!isSafe) {
+            if (keyDown(Keyboard.KEY_W)) {
+                moveCharacter(0, -1);
+            }
+            if (keyDown(Keyboard.KEY_S)) {
+                moveCharacter(0, 1);
+            }
+            if (keyDown(Keyboard.KEY_A)) {
+                moveCharacter(-1, 0);
+            }
+            if (keyDown(Keyboard.KEY_D)) {
+                moveCharacter(1, 0);
             }
         }
     }
 
-    private void detectKeyAndMove() {
-        Keyboard.next();
-        if (keyDown(Keyboard.KEY_W)) {
-            moveCharacter(0, -1);
-        }
-        if (keyDown(Keyboard.KEY_S)) {
-            moveCharacter(0, 1);
-        }
-        if (keyDown(Keyboard.KEY_A)) {
-            moveCharacter(-1, 0);
-        }
-        if (keyDown(Keyboard.KEY_D)) {
-            moveCharacter(1, 0);
+    // Go into a safe spot. Make yourself immune to anything and set your position to where you will appear when exiting the safe spot
+    private void goIntoSafeSpot() {
+        isSafe = true;
+        for (SafeSpot safeSpot : map.getSafeSpots()) {
+            Tile tile = safeSpot.getDetectTile();
+            float distX = tile.getX() - safeSpot.getSafeTile().getX();
+            float distY = tile.getY() - safeSpot.getSafeTile().getY();
+            if (checkCollision(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), x, y, width, height)) {
+                x = tile.getX() - (distX / 4) + ((float) TILE_SIZE / 2) - 16;
+                y = tile.getY() - (distY / 4) + ((float) TILE_SIZE / 2) - 16;
+            }
         }
     }
 
+    // Check if a key is pressed
     private boolean keyDown(int key) {
         return (Keyboard.getEventKey() == key) && (Keyboard.getEventKeyState());
     }
 
+    // Move the player and detect if the player hit any walls
     private void moveCharacter(int xDir, int yDir) {
         Tile leftTile = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.floor(y / TILE_SIZE));
         Tile rightTile = map.getTile((int) Math.floor(x / TILE_SIZE) + 1, (int) Math.floor(y / TILE_SIZE));
@@ -71,10 +107,6 @@ public class Player implements Entity {
         Tile currTile2 = map.getTile((int) Math.ceil(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE) - 1);
         Tile currTile3 = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.ceil(y / TILE_SIZE));
 
-        //System.out.println(leftTile.getType().isPassable() + ", " + rightTile.getType().isPassable() + ", " + upTile.getType().isPassable() + ", " + downTile.getType().isPassable());
-        //drawQuadTex(LoadPNG("tiles/null"), currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight());
-        //drawQuadTex(LoadPNG("tiles/null"), currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight());
-        //drawQuadTex(LoadPNG("tiles/null"), currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight());
         if (xDir < 0) {
             x += xDir;
             if (!leftTile.getType().isPassable() && checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
@@ -105,31 +137,33 @@ public class Player implements Entity {
         }
     }
 
+    // Draw the player if not in a safe spot
     public void draw() {
-        drawQuadTex(LoadPNG("entities/player"), x, y, width, height);
+        if (!isSafe) {
+            drawQuadTex(LoadPNG("entities/player"), x, y, width, height);
+        }
     }
 
 
     // Getters and setters
-
     @Override
     public float getX() {
-        return 0;
+        return x;
     }
 
     @Override
     public float getY() {
-        return 0;
+        return y;
     }
 
     @Override
-    public int getWidth() {
-        return 0;
+    public float getWidth() {
+        return width;
     }
 
     @Override
-    public int getHeight() {
-        return 0;
+    public float getHeight() {
+        return height;
     }
 
     @Override
@@ -150,5 +184,9 @@ public class Player implements Entity {
     @Override
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public boolean isSafe() {
+        return isSafe;
     }
 }
