@@ -1,9 +1,9 @@
 package com.wizatar08.escapemaze.game.game_entities;
 
-import com.wizatar08.escapemaze.enumerators.TileType;
-import com.wizatar08.escapemaze.game.TileMap;
+import com.wizatar08.escapemaze.map.SafeSpot;
+import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
-import com.wizatar08.escapemaze.objects.Tile;
+import com.wizatar08.escapemaze.map.Tile;
 import org.lwjgl.input.Keyboard;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
@@ -24,6 +24,21 @@ public class Player implements Entity {
 
     public void update() {
         detectKeyAndMove();
+        detectIfNearSafeSpot();
+        draw();
+    }
+
+    private void detectIfNearSafeSpot() {
+        if (map.getSafeSpots() != null) {
+            for (SafeSpot safeSpot : map.getSafeSpots()) {
+                Tile tile = safeSpot.getDetectTile();
+                float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
+                float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
+                if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
+                    // Code to check if player hit something goes here
+                }
+            }
+        }
     }
 
     private void detectKeyAndMove() {
