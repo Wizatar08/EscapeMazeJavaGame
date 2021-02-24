@@ -1,12 +1,17 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.enumerators.TileType;
+import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.map.Tile;
+
+import java.util.ArrayList;
+
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class TileMap {
     private Tile[][] map;
     public static int tilesWide, tilesHigh;
+    private ArrayList<SafeSpot> safeSpots;
 
     public TileMap(){
         this.tilesWide = 16;
@@ -30,21 +35,10 @@ public class TileMap {
         }
     }
 
-    public TileMap(int[][] newMap) {
-        this.tilesWide = newMap[0].length;
-        this.tilesHigh = newMap.length;
-        map = new Tile[][]{};
-        for(int i = 0; i < map.length; i++){
-            for(int j = 0; j < map[i].length; j++){
-                map[i][j] = new Tile(TILE_SIZE*i,j*TILE_SIZE,TILE_SIZE,TILE_SIZE, TileType.TILE_IDS.get(newMap[j][i]));
-            }
-        }
-    }
-
     public void draw(){
-        for (int i = 0; i < map.length; i++){
-            for(int j = 0; j < map[i].length; j++){
-                map[i][j].draw();
+        for (Tile[] tiles : map) {
+            for (Tile tile : tiles) {
+                tile.update();
             }
         }
     }
@@ -61,6 +55,13 @@ public class TileMap {
         }
     }
 
+    public void addSafeSpot(SafeSpot safeSpot) {
+        if (safeSpots == null) {
+            safeSpots = new ArrayList<>();
+        }
+        safeSpots.add(safeSpot);
+    }
+
     public int getTilesHigh() {
         return tilesHigh;
     }
@@ -71,5 +72,9 @@ public class TileMap {
 
     public Tile[][] getMapAsArray() {
         return map;
+    }
+
+    public ArrayList<SafeSpot> getSafeSpots() {
+        return safeSpots;
     }
 }

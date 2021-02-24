@@ -15,6 +15,8 @@ public class Tile implements Entity, TileEntity {
     private Texture overlapTexture[];
     private int overlapTexRot[];
     private TileType type;
+    private SafeSpots safeSpotDir;
+    private SafeSpot safeSpot;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -27,6 +29,7 @@ public class Tile implements Entity, TileEntity {
         this.texture = LoadPNG("tiles/" + type.getTexture());
         this.overlapTexture = type.getOverlayTex();
         this.overlapTexRot = type.getOverlayTexRot();
+        this.safeSpotDir = type.getSafeSpot();
     }
 
     public void draw(){
@@ -38,6 +41,14 @@ public class Tile implements Entity, TileEntity {
                 drawQuadTex(overlapTexture[i], x, y, width, height, overlapTexRot[i]);
             }
         }
+    }
+
+    public void update() {
+        draw();
+    }
+
+    private void createSafeSpot() {
+
     }
 
     // Getters
