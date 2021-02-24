@@ -3,7 +3,7 @@ package com.wizatar08.escapemaze.menus;
 import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.game.TileMap;
+import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import org.lwjgl.util.glu.Project;
 
@@ -35,7 +35,6 @@ public class Game {
 
     private void draw() {
         drawMap();
-        player.draw();
     }
 
     private void drawMap() {
