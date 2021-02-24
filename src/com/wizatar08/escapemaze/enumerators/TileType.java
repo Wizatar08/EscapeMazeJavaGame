@@ -2,10 +2,13 @@ package com.wizatar08.escapemaze.enumerators;
 
 import com.wizatar08.escapemaze.helpers.IDTypes;
 import com.wizatar08.escapemaze.helpers.VariationID;
+import com.wizatar08.escapemaze.map.SafeSpot;
+import com.wizatar08.escapemaze.map.SafeSpots;
 import org.newdawn.slick.opengl.Texture;
 
 import java.util.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.map.SafeSpot.*;
 
 public enum TileType {
     NULL(new VariationID(IDTypes.TILE), "null", new Builder().isPassable()),
@@ -55,16 +58,17 @@ public enum TileType {
     METAL_WALL_FBR(new VariationID(IDTypes.TILE, "001", "53"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side_corner_edge")}, new int[]{270})),
     METAL_WALL_FULL(new VariationID(IDTypes.TILE, "001", "54"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_full")}, new int[]{0})),
     DEFAULT_FLOOR(new VariationID(IDTypes.TILE, "002", "00"), "default_floor", new Builder().isPassable()),
-    METAL_WALL_B_DOOR(new VariationID(IDTypes.TILE, "003", "01"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")})),
-    METAL_WALL_L_DOOR(new VariationID(IDTypes.TILE, "003", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{90, 90})),
-    METAL_WALL_T_DOOR(new VariationID(IDTypes.TILE, "003", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{180, 180})),
-    METAL_WALL_R_DOOR(new VariationID(IDTypes.TILE, "003", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{270, 270}));
+    METAL_WALL_B_DOOR(new VariationID(IDTypes.TILE, "003", "01"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}).safeSpot(SafeSpots.DOWN)),
+    METAL_WALL_L_DOOR(new VariationID(IDTypes.TILE, "003", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{90, 90}).safeSpot(SafeSpots.LEFT)),
+    METAL_WALL_T_DOOR(new VariationID(IDTypes.TILE, "003", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{180, 180}).safeSpot(SafeSpots.UP)),
+    METAL_WALL_R_DOOR(new VariationID(IDTypes.TILE, "003", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(SafeSpots.RIGHT));
 
     // Initialize variables
     private String id;
     private String texture;
     private boolean isPassable;
     private boolean isSafeSpot;
+    private SafeSpots safeSpot;
     private Texture[] overlayTex;
     private int[] overlayTexRot;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
@@ -78,6 +82,7 @@ public enum TileType {
         this.texture = texture;
         this.isPassable = builder.getIsPassable();
         this.isSafeSpot = builder.getIsSafeSpot();
+        this.safeSpot = builder.getSafeSpot();
         this.overlayTex = builder.getOverlayTex();
         this.overlayTexRot = builder.getOverlayTexRot();
     }
@@ -106,6 +111,9 @@ public enum TileType {
     public boolean isSafeSpot() {
         return isSafeSpot;
     }
+    public SafeSpots getSafeSpot() {
+        return safeSpot;
+    }
     public Texture[] getOverlayTex() {
         return overlayTex;
     }
@@ -121,6 +129,7 @@ public enum TileType {
     private static class Builder {
         public static boolean isPassable;
         public static boolean isSafeSpot;
+        public static SafeSpots safeSpot;
         public static Texture[] overlayTex;
         public static int overlayTexRot[];
 
@@ -131,6 +140,7 @@ public enum TileType {
         private Builder() {
             isPassable = false;
             isSafeSpot = false;
+            safeSpot = SafeSpots.NONE;
             overlayTex = new Texture[]{LoadPNG("tiles/blank")};
             overlayTexRot = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         }
@@ -146,13 +156,15 @@ public enum TileType {
         /**
          * Is safety tile
          */
-        private Builder isSafeSpot() {
+        private Builder safeSpot(SafeSpots direction) {
             isSafeSpot = true;
+            safeSpot = direction;
             return this;
         }
 
         /**
          * Set overlay texture, if any
+         * Only 16 of these are allowed, otherwise game will throw ArrayIndexOutOfBoundsException
          */
         private Builder overlayTex(Texture[] tex) {
             overlayTex = tex;
@@ -161,6 +173,7 @@ public enum TileType {
 
         /**
          * Set and rotate overlay texture if needed. Rotates clockwise.
+         * Only 16 of these are allowed, otherwise game will throw ArrayIndexOutOfBoundsException
          */
         private Builder overlayTex(Texture[] tex, int[] rot) {
             overlayTex = tex;
@@ -168,15 +181,15 @@ public enum TileType {
             return this;
         }
 
-
-
-
         // Getters
         public boolean getIsPassable() {
             return isPassable;
         }
         public boolean getIsSafeSpot() {
             return isSafeSpot;
+        }
+        public SafeSpots getSafeSpot() {
+            return safeSpot;
         }
         public Texture[] getOverlayTex() {
             return overlayTex;
