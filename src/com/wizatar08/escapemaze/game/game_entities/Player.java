@@ -142,6 +142,18 @@ public class Player implements Entity {
         if (!isSafe) {
             drawQuadTex(LoadPNG("entities/player"), x, y, width, height);
         }
+
+        if (isNearSafeSpot()) {
+            for (SafeSpot safeSpot : map.getSafeSpots()) {
+                Tile tile = safeSpot.getDetectTile();
+                Tile safeTile = safeSpot.getSafeTile();
+                float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
+                float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
+                if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
+                    drawQuadTex(LoadPNG("tiles/selectors/safe_space_selector"), safeTile.getX(), safeTile.getY(), safeTile.getWidth(), safeTile.getHeight());;
+                }
+            }
+        }
     }
 
 
