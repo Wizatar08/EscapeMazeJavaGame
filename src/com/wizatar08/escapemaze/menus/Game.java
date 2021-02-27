@@ -2,12 +2,15 @@ package com.wizatar08.escapemaze.menus;
 
 import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
+import com.wizatar08.escapemaze.game.game_entities.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
+import org.lwjgl.Sys;
 import org.lwjgl.util.glu.Project;
 
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Game {
     // Initialize variables
@@ -17,6 +20,7 @@ public class Game {
     private String levelName;
     private JSONLevel level;
     private Player player;
+    private ArrayList<Enemy> enemies;
 
     public Game() {
         gson = new Gson();
@@ -26,6 +30,7 @@ public class Game {
         System.out.println(level.getPlayerStartPos()[0] + ", " + level.getPlayerStartPos()[1]);
         map = ExternalMapHandler.LoadMap(level.getMap());
         player = new Player(level.getPlayerStartPos()[0], level.getPlayerStartPos()[1], map);
+        enemies = level.getEnemies();
     }
 
     public void update() {
