@@ -1,6 +1,14 @@
 package com.wizatar08.escapemaze.game;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.wizatar08.escapemaze.game.game_entities.Enemy;
+import com.wizatar08.escapemaze.game.game_entities.JSONEnemyClass;
+import org.lwjgl.util.glu.Project;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class JSONLevel {
     // Initialize variables
@@ -14,10 +22,24 @@ public class JSONLevel {
     @SerializedName("player_start")
     private int[] playerStartPos;
 
-    public JSONLevel(String map, String levelName, int[] playerStartPos) {
+    @SerializedName("enemies")
+    private String enemyFileName;
+
+    private Gson gson;
+
+    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies) {
         this.map = map;
         this.levelName = levelName;
         this.playerStartPos = playerStartPos;
+        this.enemyFileName = enemies;
+    }
+
+    public ArrayList<Enemy> getEnemies() {
+        this.gson = new Gson();
+        InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json")));
+        JSONEnemyClass enemies = gson.fromJson(reader, JSONEnemyClass.class);
+        return enemies.getEnemies();
+
     }
 
     // Getters
