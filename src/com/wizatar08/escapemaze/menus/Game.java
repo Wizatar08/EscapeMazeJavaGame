@@ -2,11 +2,10 @@ package com.wizatar08.escapemaze.menus;
 
 import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
-import com.wizatar08.escapemaze.game.game_entities.Enemy;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
-import org.lwjgl.Sys;
 import org.lwjgl.util.glu.Project;
 
 import java.io.InputStreamReader;
@@ -36,6 +35,16 @@ public class Game {
     public void update() {
         draw();
         player.update();
+        updateEnemies();
+    }
+
+    /**
+     * Method to update all enemies
+     */
+    private void updateEnemies() {
+        for (Enemy enemy : enemies) {
+            enemy.update();
+        }
     }
 
     private void draw() {
