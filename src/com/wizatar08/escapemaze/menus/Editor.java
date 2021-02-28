@@ -1,6 +1,6 @@
 package com.wizatar08.escapemaze.menus;
 
-import com.wizatar08.escapemaze.enumerators.TileType;
+import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
@@ -12,8 +12,10 @@ import javax.swing.*;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -27,15 +29,23 @@ public class Editor {
     public static int displacementY;
     private TileType tileSelected;
     private int menuIndex;
+    private boolean isSelectingEnemy;
+    private int[][] positions;
+    private int index;
+    private String id;
+    private boolean buttonPressed;
 
     public Editor() {
         editorUI = new UI();
         menus = new ArrayList<>();
         tileSelected = null;
         menuIndex = 0;
+        isSelectingEnemy = false;
+        positions = new int[1024][2];
+        buttonPressed = false;
         createMenus();
         try {
-            map = ExternalMapHandler.LoadMap("map_default.wtremm");
+            map = ExternalMapHandler.LoadMap("map.wtremm");
         } catch (NullPointerException e) {
             map = new TileMap();
         }
@@ -87,6 +97,17 @@ public class Editor {
                     JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
                 }
             }
+            if (keyDown(Keyboard.KEY_E)) {
+                if (!isSelectingEnemy) {
+                    id = JOptionPane.showInputDialog("Enter enemy ID:");
+                    index = 0;
+                    isSelectingEnemy = true;
+                } else {
+                    writeCoords();
+                    JOptionPane.showMessageDialog(null, "Coordinates have been written to a .json file. Copy it and paste it into your respective file inside level_enemies.");
+                    isSelectingEnemy = false;
+                }
+            }
             if (keyDown(Keyboard.KEY_D)) {
                 menuIndex++;
                 int max = 0;
@@ -111,18 +132,31 @@ public class Editor {
     private void detectIfButtonDown() {
         boolean isOverButton = false;
         if (Mouse.isButtonDown(0)) {
-            for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
-                int ceil = (int) Math.ceil(i / (3 * 11));
-                for (int j = 0; j < editorUI.getMenu("Tiles" + ceil).getButtons().size(); j++) {
-                    if (editorUI.getMenu("Tiles" + ceil).isButtonClicked(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName())) {
-                        tileSelected = TileType.TILE_IDS.get(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName());
-                        isOverButton = true;
+            if (!isSelectingEnemy) {
+                for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
+                    int ceil = (int) Math.ceil(i / (3 * 11));
+                    for (int j = 0; j < editorUI.getMenu("Tiles" + ceil).getButtons().size(); j++) {
+                        if (editorUI.getMenu("Tiles" + ceil).isButtonClicked(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName())) {
+                            tileSelected = TileType.TILE_IDS.get(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName());
+                            isOverButton = true;
+                        }
                     }
                 }
+                if (!isOverButton && tileSelected != null) {
+                    map.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
+                }
+            } else {
+                if (buttonPressed == false) {
+                    buttonPressed = true;
+                    int xPlace = (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE);
+                    int yPlace = (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE));
+                    positions[index][0] = xPlace;
+                    positions[index][1] = yPlace;
+                    index++;
+                }
             }
-            if (!isOverButton && tileSelected != null) {
-                map.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
-            }
+        } else {
+            buttonPressed = false;
         }
     }
 
@@ -136,11 +170,46 @@ public class Editor {
         }
     }
 
+    private void writeCoords() {
+        try {
+            File file = new File("enemyFile.json");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            bw.write("{");
+            bw.newLine();
+            bw.write("  \"id\": " + id + ",");
+            bw.newLine();
+            String coords = "[";
+            int[][] newArray = new int[index][2];
+            for (int i = 0; i < index; i++) {
+                newArray[i][0] = positions[i][0];
+                newArray[i][1] = positions[i][1];
+                coords += ("[" + newArray[i][0] + ", " + newArray[i][1] + "]");
+                if (i != (index - 1)) {
+                    coords += ", ";
+                }
+            }
+            coords += "]";
+            bw.write("  \"paths\": " + coords);
+            bw.newLine();
+            bw.write("}");
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setEnemy() {
+        drawQuadTex(LoadPNG("tiles/selectors/safe_space_selector"), (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE) * TILE_SIZE + displacementX, (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)) * TILE_SIZE +  displacementY, TILE_SIZE, TILE_SIZE);
+    }
+
     public void update() {
         detectKey();
         detectIfButtonDown();
         showMenu();
         draw();
+        if (isSelectingEnemy) {
+            setEnemy();
+        }
     }
 
     private void draw() {
