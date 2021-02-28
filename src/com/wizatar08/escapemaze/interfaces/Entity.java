@@ -36,10 +36,20 @@ public interface Entity {
     /**
      * Set width of entity
      */
-    void setWidth(int width);
+    void setWidth(float width);
 
     /**
      * Set height of entity
      */
-    void setHeight(int height);
+    void setHeight(float height);
+
+    /**
+     * Draw the entity
+     */
+    void draw();
+
+    /**
+     * Update the entity
+     */
+    void update();
 }
