@@ -5,5 +5,5 @@ public enum SafeSpots {
     UP,
     DOWN,
     LEFT,
-    RIGHT;
+    RIGHT
 }

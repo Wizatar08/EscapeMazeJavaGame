@@ -1,14 +1,11 @@
-package com.wizatar08.escapemaze.enumerators;
+package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.helpers.IDTypes;
 import com.wizatar08.escapemaze.helpers.VariationID;
-import com.wizatar08.escapemaze.map.SafeSpot;
-import com.wizatar08.escapemaze.map.SafeSpots;
 import org.newdawn.slick.opengl.Texture;
 
 import java.util.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
-import static com.wizatar08.escapemaze.map.SafeSpot.*;
 
 public enum TileType {
     NULL(new VariationID(IDTypes.TILE), "null", new Builder().isPassable()),
@@ -76,7 +73,6 @@ public enum TileType {
 
     TileType(VariationID id, String texture, Builder builder) {
         createIdMapAndArrays();
-        System.out.println(id.getFullId());
         addToMap(id.getFullId(), this);
         this.id = id.getFullId();
         this.texture = texture;

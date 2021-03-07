@@ -1,4 +1,4 @@
-package com.wizatar08.escapemaze.enumerators;
+package com.wizatar08.escapemaze.menus;
 
 public enum Menus {
     MAIN_MENU,

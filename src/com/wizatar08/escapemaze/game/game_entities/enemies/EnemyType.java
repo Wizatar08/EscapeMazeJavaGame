@@ -6,13 +6,13 @@ import com.wizatar08.escapemaze.helpers.VariationID;
 import java.util.*;
 
 public enum EnemyType {
-    CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(1.0f).viewDistance(64));
+    CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60));
 
     // Initialize variables
     private String id;
     private String texture;
     private float speed;
-    private int viewDistance;
+    private int viewDistance, angleOfView;
 
     public static HashMap<String, EnemyType> ENEMY_IDS;
 
@@ -23,6 +23,7 @@ public enum EnemyType {
         this.texture = texture;
         this.speed = builder.getSpeed();
         this.viewDistance = builder.getViewDistance();
+        this.angleOfView = builder.getangleOfView();
     }
 
     private void createIdMapAndArrays() {
@@ -47,6 +48,9 @@ public enum EnemyType {
     public int getViewDistance() {
         return viewDistance;
     }
+    public int getAngleOfView() {
+        return angleOfView;
+    }
 
 
 
@@ -56,6 +60,7 @@ public enum EnemyType {
     private static class Builder {
         private float speed;
         private int viewDistance;
+        private int angleOfView;
 
         /**
          * Builder constructor. Defines all variables to its default value.
@@ -63,6 +68,7 @@ public enum EnemyType {
         private Builder() {
             speed = 1.0f;
             viewDistance = 64;
+            angleOfView = 45;
         }
 
         private Builder speed(float speed) {
@@ -75,12 +81,20 @@ public enum EnemyType {
             return this;
         }
 
+        private Builder angleOfView(int angleOfView) {
+            this.angleOfView = viewDistance;
+            return this;
+        }
+
 
         public float getSpeed() {
             return speed;
         }
         public int getViewDistance() {
             return viewDistance;
+        }
+        public int getangleOfView() {
+            return angleOfView;
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.wizatar08.escapemaze.map;
 
-import com.wizatar08.escapemaze.enumerators.TileType;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
@@ -78,11 +77,11 @@ public class Tile implements Entity, TileEntity {
     public void setY(float y) {
         this.y = y;
     }
-    public void setWidth(int width) {
-        this.width = width;
+    public void setWidth(float width) {
+        this.width = (int) width;
     }
-    public void setHeight(int height) {
-         this.height = height;
+    public void setHeight(float height) {
+         this.height = (int) height;
     }
     public boolean canPass() {
         return this.type.isPassable();

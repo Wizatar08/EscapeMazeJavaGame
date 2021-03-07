@@ -2,8 +2,9 @@ package com.wizatar08.escapemaze.game;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.wizatar08.escapemaze.game.game_entities.Enemy;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.JSONEnemyClass;
+import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.util.glu.Project;
 
 import java.io.InputStreamReader;
@@ -34,11 +35,11 @@ public class JSONLevel {
         this.enemyFileName = enemies;
     }
 
-    public ArrayList<Enemy> getEnemies() {
+    public ArrayList<Enemy> getEnemies(Game game) {
         this.gson = new Gson();
         InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json")));
         JSONEnemyClass enemies = gson.fromJson(reader, JSONEnemyClass.class);
-        return enemies.getEnemies();
+        return enemies.getEnemies(game);
 
     }
 

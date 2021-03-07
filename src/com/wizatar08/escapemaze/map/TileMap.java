@@ -1,9 +1,5 @@
 package com.wizatar08.escapemaze.map;
 
-import com.wizatar08.escapemaze.enumerators.TileType;
-import com.wizatar08.escapemaze.helpers.Drawer;
-import com.wizatar08.escapemaze.map.Tile;
-
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;

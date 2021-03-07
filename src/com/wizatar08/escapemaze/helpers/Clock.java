@@ -6,6 +6,7 @@ public class Clock {
     private static boolean paused = false;
     public static long lastFrame, totalTime;
     public static float d = 0, multiplier = 1;
+    public static int FPS;
 
     public static long getTime() {
         return Sys.getTime() * 1000 / Sys.getTimerResolution();

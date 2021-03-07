@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-import com.wizatar08.escapemaze.game.JSONLevel;
-import org.lwjgl.Sys;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
+import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class JSONEnemyClass {
         this.enemies = enemies;
     }
 
-    public ArrayList<Enemy> getEnemies() {
+    public ArrayList<Enemy> getEnemies(Game game) {
         gson = new Gson();
         int[][][] enemyList = new int[enemies.size()][1024][2];
         int index[] = new int[enemies.size()];
@@ -41,7 +41,7 @@ public class JSONEnemyClass {
                 enemyPathList[j] = enemyList[i][j];
             }
             //System.out.println(enemyPathList.length + ", " + enemies.get(i).getAsJsonObject().get("paths").getAsJsonArray().size() + ", " + enemies.size());
-            enemiesList.add(new Enemy(
+            enemiesList.add(new Enemy(game,
                     enemies.get(i).getAsJsonObject().get("id").getAsInt(),
                     enemyPathList));
         }

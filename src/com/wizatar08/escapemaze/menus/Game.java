@@ -29,7 +29,7 @@ public class Game {
         System.out.println(level.getPlayerStartPos()[0] + ", " + level.getPlayerStartPos()[1]);
         map = ExternalMapHandler.LoadMap(level.getMap());
         player = new Player(level.getPlayerStartPos()[0], level.getPlayerStartPos()[1], map);
-        enemies = level.getEnemies();
+        enemies = level.getEnemies(this);
     }
 
     public void update() {
@@ -53,5 +53,13 @@ public class Game {
 
     private void drawMap() {
         map.draw();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public TileMap getMap() {
+        return map;
     }
 }

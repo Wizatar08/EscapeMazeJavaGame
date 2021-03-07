@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.helpers;
 
+import apple.laf.JRSUIUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -27,6 +28,13 @@ public class Drawer {
         glVertex2f(x + width, y); // Top right
         glVertex2f(x + width, y + height); // Bottom right
         glVertex2f(x, y + height); // Bottom right
+        glEnd();
+    }
+
+    public static void drawLine(float x1, float y1, float x2, float y2) {
+        glBegin(GL_LINES);
+        glVertex2f(x1, y1);
+        glVertex2f(x2, y2);
         glEnd();
     }
 

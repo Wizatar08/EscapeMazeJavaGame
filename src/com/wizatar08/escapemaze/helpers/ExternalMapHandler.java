@@ -1,13 +1,16 @@
 package com.wizatar08.escapemaze.helpers;
 
-import com.wizatar08.escapemaze.enumerators.TileType;
-import com.wizatar08.escapemaze.game.TileMap;
-import com.wizatar08.escapemaze.game.WRTEMMHandler;
-import com.wizatar08.escapemaze.objects.Tile;
+import com.wizatar08.escapemaze.menus.Menus;
+import com.wizatar08.escapemaze.map.TileType;
+import com.wizatar08.escapemaze.map.SafeSpot;
+import com.wizatar08.escapemaze.map.SafeSpots;
+import com.wizatar08.escapemaze.map.TileMap;
+import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.menus.MenuRun;
 import org.lwjgl.util.glu.Project;
 
 import java.io.*;
-import static com.wizatar08.escapemaze.game.WRTEMMHandler.*;
+import static com.wizatar08.escapemaze.map.WRTEMMHandler.*;
 
 public class ExternalMapHandler {
 
@@ -53,6 +56,12 @@ public class ExternalMapHandler {
             for (int i = 0; i < grid.getTilesWide(); i++) {
                 for (int j = 0; j < grid.getTilesHigh(); j++) {
                     grid.setTile(i, j, getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)));
+
+                    if (MenuRun.MENU == Menus.GAME) {
+                        if (grid.getTile(i, j).getType().getSafeSpot() != SafeSpots.NONE) {
+                            grid.addSafeSpot(new SafeSpot(SafeSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j)));
+                        }
+                    }
                 }
             }
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.wizatar08.escapemaze.menus;
 
-import com.wizatar08.escapemaze.enumerators.Menus;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;

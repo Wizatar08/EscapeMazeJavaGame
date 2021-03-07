@@ -1,5 +1,6 @@
 {
   "level_name": "Level 1",
   "map": "level1.wtremm",
-  "player_start":[4, 3]
+  "player_start":[4, 3],
+  "enemies": "lvl1"
 }

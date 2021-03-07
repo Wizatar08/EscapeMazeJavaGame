@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities;
 
+import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.map.SafeSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
@@ -108,31 +109,31 @@ public class Player implements Entity {
         Tile currTile3 = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.ceil(y / TILE_SIZE));
 
         if (xDir < 0) {
-            x += xDir;
+            x += xDir * Clock.Delta() * Clock.FPS;
             if (!leftTile.getType().isPassable() && checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
                 (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.getType().isPassable())) {
-                x -= xDir;
+                x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (xDir > 0) {
-            x += xDir;
+            x += xDir * Clock.Delta() * Clock.FPS;
             if (!rightTile.getType().isPassable() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
                 (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.getType().isPassable())) {
-                x -= xDir;
+                x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir < 0) {
-            y += yDir;
+            y += yDir * Clock.Delta() * Clock.FPS;
             if (!upTile.getType().isPassable() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
                     (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.getType().isPassable())) {
-                y -= yDir;
+                y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir > 0) {
-            y += yDir;
+            y += yDir * Clock.Delta() * Clock.FPS;
             if ((!downTile.getType().isPassable() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
                 (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.getType().isPassable())) {
-                y -= yDir;
+                y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
     }
@@ -189,12 +190,12 @@ public class Player implements Entity {
     }
 
     @Override
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
     @Override
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 

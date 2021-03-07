@@ -1,10 +1,8 @@
 package com.wizatar08.escapemaze.menus;
 
-import com.wizatar08.escapemaze.enumerators.Menus;
-
 public class MenuRun {
     // Initialize variables
-    private static Menus menu = Menus.MAIN_MENU;
+    public static Menus MENU = Menus.MAIN_MENU;
     private static int level;
     private MainMenu mainMenu;
     private LevelSelect levelSelect;
@@ -13,7 +11,7 @@ public class MenuRun {
 
     // Update
     public void update() {
-        switch (menu) { // Loop through all possible values of 'menu'
+        switch (MENU) { // Loop through all possible values of 'menu'
             case MAIN_MENU: // Run if 'menu' == Menus.MAIN_MENU
                 if (mainMenu == null) mainMenu = new MainMenu();
                 mainMenu.update();
@@ -34,7 +32,7 @@ public class MenuRun {
     }
 
     public static void setState(Menus state) {
-        menu = state;
+        MENU = state;
     }
 
     public static void setLevel(int setLevel) {
