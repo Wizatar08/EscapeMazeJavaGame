@@ -29,8 +29,6 @@ public class Player implements Entity {
 
     // Update (loop) method
     public void update() {
-        detectKeyAndMove();
-        draw();
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not
@@ -51,17 +49,17 @@ public class Player implements Entity {
     }
 
     // Code that detects whether a *certain* key is pressed
-    private void detectKeyAndMove() {
-        while(Keyboard.next()) { // Detect if a key is pressed ONCE
-            if (keyDown(Keyboard.KEY_SPACE)) {
-                if (isNearSafeSpot() && !isSafe) {
-                    goIntoSafeSpot();
-                } else if (isSafe){
-                    isSafe = false;
-                }
+    public void playerTapKeyDetection() {
+        if (keyDown(Keyboard.KEY_SPACE)) {
+            if (isNearSafeSpot() && !isSafe) {
+                goIntoSafeSpot();
+            } else if (isSafe){
+                isSafe = false;
             }
         }
-        // Below: Detect if a key is pressed and held
+    }
+
+    public void playerPressAndHoldKeyDetection() {
         if (!isSafe) {
             if (keyDown(Keyboard.KEY_W)) {
                 moveCharacter(0, -1);

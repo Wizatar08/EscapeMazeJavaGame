@@ -82,7 +82,7 @@ public enum EnemyType {
         }
 
         private Builder angleOfView(int angleOfView) {
-            this.angleOfView = viewDistance;
+            this.angleOfView = angleOfView;
             return this;
         }
 

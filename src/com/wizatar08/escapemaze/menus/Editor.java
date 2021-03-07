@@ -45,7 +45,7 @@ public class Editor {
         buttonPressed = false;
         createMenus();
         try {
-            map = ExternalMapHandler.LoadMap("map.wtremm");
+            map = ExternalMapHandler.LoadMap("level1.wtremm");
         } catch (NullPointerException e) {
             map = new TileMap();
         }

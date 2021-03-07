@@ -89,11 +89,22 @@ public class Enemy implements Entity {
     public void update() {
         rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0], pathCoords[currentPathPoint][1]);
         move();
-        draw();
         pathfinder.update();
-        if (pathfinder.scanForWalls(distanceView)) {
+        detectPlayer();
+    }
+
+    private void detectPlayer() {
+        if (pathfinder.scanForWalls(distanceView) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !player.isSafe()) {
+            // System.out.println("Detect, " + getAngleOfPlayerRelativeToEnemy() + ", " + (type.getAngleOfView() / 2) + ", " + (-type.getAngleOfView() / 2));
             // Code to trigger alarm
         }
+    }
+
+    public float getAngleOfPlayerRelativeToEnemy() {
+        float rotComparison = pathfinder.getRotInDegrees(x, y, player.getX(), player.getY());
+        float finalRot = rotComparison - rot;
+        // System.out.println(rotComparison + ", " + rot + ", " + finalRot);
+        return finalRot;
     }
 
     // Getters and setters
@@ -136,6 +147,10 @@ public class Enemy implements Entity {
     @Override
     public void setHeight(float height) {
 
+    }
+
+    public EnemyType getType() {
+        return type;
     }
 
     public Player getPlayer() {
