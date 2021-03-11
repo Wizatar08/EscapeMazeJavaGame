@@ -5,27 +5,46 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class UI {
     private ArrayList<Button> buttonList;
     private ArrayList<Menu> menuList;
-    private TrueTypeFont font;
-    private Font awtFont;
 
     public UI() {
         buttonList = new ArrayList<Button>();
         menuList = new ArrayList<Menu>();
-        awtFont = new Font("Times New Roman", Font.BOLD, 24);
-        font = new TrueTypeFont(awtFont, false);
+    }
+
+    public void changeFontSize(float size) {
+        java.awt.Font newFont = FONT.deriveFont(size);
+        TRUE_TYPE_FONT = new TrueTypeFont(newFont, false);
+        FONT = newFont;
+    }
+
+    public void drawString(int x, int y, String text, org.newdawn.slick.Color color) {
+        TRUE_TYPE_FONT.drawString(x, y, text, color);
+    }
+
+    public void drawString(int x, int y, String text, float fontSize, org.newdawn.slick.Color color) {
+        changeFontSize(fontSize);
+        TRUE_TYPE_FONT.drawString(x, y, text, color);
+    }
+
+    public void drawString(int x, int y, String text, float fontSize) {
+        changeFontSize(fontSize);
+        TRUE_TYPE_FONT.drawString(x, y, text);
     }
 
     public void drawString(int x, int y, String text) {
-        font.drawString(x, y, text);
+        TRUE_TYPE_FONT.drawString(x, y, text);
     }
 
     public void addButton(String name, Texture[] textureNames, int x, int y) {

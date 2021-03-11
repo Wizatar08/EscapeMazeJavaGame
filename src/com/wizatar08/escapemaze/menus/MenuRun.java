@@ -8,6 +8,8 @@ public class MenuRun {
     private LevelSelect levelSelect;
     private Game game;
     private Editor editor;
+    public static long nextSecond = System.currentTimeMillis() + 1000;
+    public static int framesInLastSecond = 0, framesInCurrentSecond = 0;
 
     // Update
     public void update() {
@@ -29,6 +31,14 @@ public class MenuRun {
                 editor.update();
                 break;
         }
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime > nextSecond) {
+            nextSecond += 1000;
+            framesInLastSecond = framesInCurrentSecond;
+            framesInCurrentSecond = 0;
+        }
+        framesInCurrentSecond++;
     }
 
     public static void setState(Menus state) {

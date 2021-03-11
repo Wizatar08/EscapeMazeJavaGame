@@ -102,9 +102,7 @@ public class Enemy implements Entity {
 
     public float getAngleOfPlayerRelativeToEnemy() {
         float rotComparison = pathfinder.getRotInDegrees(x, y, player.getX(), player.getY());
-        float finalRot = rotComparison - rot;
-        // System.out.println(rotComparison + ", " + rot + ", " + finalRot);
-        return finalRot;
+        return rotComparison - rot;
     }
 
     // Getters and setters

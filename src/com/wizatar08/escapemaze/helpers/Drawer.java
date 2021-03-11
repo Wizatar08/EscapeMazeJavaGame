@@ -4,16 +4,38 @@ import apple.laf.JRSUIUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.glu.Project;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class Drawer {
+    private static java.awt.Font FONT_CREATION;
+    public static java.awt.Font FONT;
+    public static TrueTypeFont TRUE_TYPE_FONT;
+
+    public static void createFont() {
+        try{
+            FONT_CREATION = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("src/resources/font/game_font.ttf"));
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("src/resources/font/game_font.ttf")));
+
+            FONT = new Font(FONT_CREATION.getFontName(), Font.PLAIN, 24);
+            TRUE_TYPE_FONT = new TrueTypeFont(FONT, false);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static boolean checkCollision(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2) {
         if (x1 + width1 > x2 && x1 < x2 + width2 && y1 + height1 > y2 && y1 < y2 + height2) {

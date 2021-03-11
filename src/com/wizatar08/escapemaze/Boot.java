@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze;
 
 import com.wizatar08.escapemaze.helpers.Clock;
+import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.opengl.Display;
@@ -17,7 +18,7 @@ public class Boot {
      */
     public Boot() {
         Renderer.begin(); // Setup display and drawing tools
-
+        Drawer.createFont();
 
         menu = new MenuRun();
 

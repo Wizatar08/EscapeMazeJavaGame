@@ -107,6 +107,11 @@ public class Game {
 
     private void draw() {
         drawMap();
+        drawText();
+    }
+
+    private void drawText() {
+        ui.drawString(924, 4, "FPS:  " + MenuRun.framesInLastSecond);
     }
 
     private void drawMap() {
