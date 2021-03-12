@@ -5,6 +5,7 @@ import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Where all the code is set up and run
@@ -27,8 +28,8 @@ public class Boot {
             menu.update();
             Renderer.loop();
             Display.update();
-            Clock.FPS = 120;
-            Display.sync(Clock.FPS); // Set FPS to 120
+            Clock.FPS = 60;
+            Display.sync(Clock.FPS); // Set FPS
         }
 
         Display.destroy(); // Destroy (close) display

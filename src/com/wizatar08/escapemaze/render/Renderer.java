@@ -12,18 +12,17 @@ public class Renderer {
     private static float stretchedMultiplierW;
     private static float stretchedMultiplierH;
     public static float stretchedMultiplierTotal;
-    public static float xOffset = 0;
-    public static float yOffset = 0;
 
     public static void begin() {
-        Display.setTitle("Escape Maze <DEV>"); // Set title
-        try {
 
-            Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-            Display.setResizable(true);
-            Display.create();
+        try {
+        Display.setTitle("Escape Maze <DEV>"); // Set titletry {
+        Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
+        Display.create();
+        Display.setVSyncEnabled(true);
         } catch (LWJGLException e) {
             e.printStackTrace();
+            System.exit(0);
         }
 
         glViewport(0, 0, WIDTH, HEIGHT);
@@ -37,12 +36,9 @@ public class Renderer {
     }
 
     public static void loop() {
-        //xOffset = (Display.getWidth() / 2) - (WIDTH / 2);
-        //yOffset = (Display.getHeight() / 2) - (HEIGHT / 2);
         stretchedMultiplierW = (Display.getWidth() / (float) WIDTH);
         stretchedMultiplierH = (Display.getHeight() / (float) HEIGHT);
         stretchedMultiplierTotal = Math.min(stretchedMultiplierW, stretchedMultiplierH);
-        //System.out.println(stretchedMultiplierW + ", " + stretchedMultiplierH + ", " + stretchedMultiplierTotal);
         glViewport(0, 0, Math.round(WIDTH * stretchedMultiplierTotal), Math.round(HEIGHT * stretchedMultiplierTotal));
     }
 }

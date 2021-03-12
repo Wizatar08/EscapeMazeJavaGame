@@ -3,48 +3,49 @@ package com.wizatar08.escapemaze.helpers.ui;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
+import com.wizatar08.escapemaze.helpers.TextBlock;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.newdawn.slick.Font;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 
 public class UI {
     private ArrayList<Button> buttonList;
     private ArrayList<Menu> menuList;
+    private ArrayList<TextBlock> textList;
 
     public UI() {
-        buttonList = new ArrayList<Button>();
-        menuList = new ArrayList<Menu>();
+        buttonList = new ArrayList<>();
+        menuList = new ArrayList<>();
+        textList = new ArrayList<>();
     }
 
-    public void changeFontSize(float size) {
-        java.awt.Font newFont = FONT.deriveFont(size);
-        TRUE_TYPE_FONT = new TrueTypeFont(newFont, false);
-        FONT = newFont;
+    public void drawString(TextBlock text) {
+        textList.add(text);
     }
 
-    public void drawString(int x, int y, String text, org.newdawn.slick.Color color) {
-        TRUE_TYPE_FONT.drawString(x, y, text, color);
+    public void eraseString(String name) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                textList.remove(text);
+                break;
+            }
+        }
     }
 
-    public void drawString(int x, int y, String text, float fontSize, org.newdawn.slick.Color color) {
-        changeFontSize(fontSize);
-        TRUE_TYPE_FONT.drawString(x, y, text, color);
+    public void changeString(String name, String newText) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                text.setText(newText);
+                break;
+            }
+        }
     }
 
-    public void drawString(int x, int y, String text, float fontSize) {
-        changeFontSize(fontSize);
-        TRUE_TYPE_FONT.drawString(x, y, text);
-    }
-
-    public void drawString(int x, int y, String text) {
-        TRUE_TYPE_FONT.drawString(x, y, text);
+    public void drawAllStrings() {
+        for (TextBlock text : textList) {
+            text.draw();
+        }
     }
 
     public void addButton(String name, Texture[] textureNames, int x, int y) {
@@ -207,6 +208,10 @@ public class UI {
 
         public ArrayList<Button> getButtons() {
             return menuButtons;
+        }
+
+        public ArrayList<TextBlock> getTextBlocks() {
+            return textList;
         }
     }
 

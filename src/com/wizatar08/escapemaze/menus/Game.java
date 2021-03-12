@@ -5,12 +5,14 @@ import com.wizatar08.escapemaze.game.JSONLevel;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.TextBlock;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.glu.Project;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import java.io.InputStreamReader;
@@ -27,6 +29,7 @@ public class Game {
     private ArrayList<Enemy> enemies;
     private GameStates currentGameState, prevGameState;
     private UI ui;
+    private TextBlock fpsDisplay, blank;
 
     public Game() {
         gson = new Gson();
@@ -39,6 +42,10 @@ public class Game {
         enemies = level.getEnemies(this);
         currentGameState = GameStates.NORMAL;
         ui = new UI();
+        blank = new TextBlock(ui, "blank", "", 0, 0, 24f, Color.white);
+        fpsDisplay = new TextBlock(ui, "fps", "", 924, 4, 24f, Color.green);
+        ui.drawString(fpsDisplay);
+        ui.drawString(blank);
         createMenu();
     }
 
@@ -107,11 +114,13 @@ public class Game {
 
     private void draw() {
         drawMap();
+        ui.drawAllStrings();
+        ui.draw();
         drawText();
     }
 
     private void drawText() {
-        ui.drawString(924, 4, "FPS:  " + MenuRun.framesInLastSecond);
+        ui.changeString("fps", "FPS: " + MenuRun.framesInLastSecond);
     }
 
     private void drawMap() {

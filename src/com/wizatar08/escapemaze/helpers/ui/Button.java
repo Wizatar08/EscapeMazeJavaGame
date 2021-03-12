@@ -7,8 +7,13 @@ public class Button {
     private Texture[] textures;
     private int[] rots;
     private int x, y, width, height;
+    private String text;
 
     public Button(String name, Texture[] textures, int x, int y, int[] rots) {
+        this(name, textures, x, y, rots, "", 0, 0);
+    }
+
+    public Button(String name, Texture[] textures, int x, int y, int[] rots, String text, int textX, int textY) {
         this.name = name;
         this.textures = textures;
         this.x = x;

@@ -20,28 +20,37 @@ import java.util.ArrayList;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Drawer {
-    private static java.awt.Font FONT_CREATION;
     public static java.awt.Font FONT;
     public static TrueTypeFont TRUE_TYPE_FONT;
 
     public static void createFont() {
-        try{
-            FONT_CREATION = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("src/resources/font/game_font.ttf"));
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("src/resources/font/game_font.ttf")));
+        // load font from file
+        try {
+            InputStream inputStream = ResourceLoader.getResourceAsStream("src/resources/font/game_font.ttf");
 
-            FONT = new Font(FONT_CREATION.getFontName(), Font.PLAIN, 24);
-            TRUE_TYPE_FONT = new TrueTypeFont(FONT, false);
+            FONT = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            FONT = FONT.deriveFont(24f); // set font size
+
+            TRUE_TYPE_FONT = new TrueTypeFont(FONT, true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*
+        try{
+            InputStream inputStream = ResourceLoader.getResourceAsStream("resources/font/game_font.ttf");
+            FONT = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+            FONT = FONT.deriveFont(24f); // set font size
+            TRUE_TYPE_FONT = new TrueTypeFont(FONT, true);
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
+
+         */
     }
 
     public static boolean checkCollision(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2) {
-        if (x1 + width1 > x2 && x1 < x2 + width2 && y1 + height1 > y2 && y1 < y2 + height2) {
-            return true;
-        }
-        return false;
+        return x1 + width1 > x2 && x1 < x2 + width2 && y1 + height1 > y2 && y1 < y2 + height2;
     }
 
     public static void drawQuad(float x, float y, float width, float height){
@@ -107,7 +116,7 @@ public class Drawer {
     public static Texture LoadPNG(String name) {
         if (name != null) {
             Texture tex = null;
-            tex = LoadTexture("resources/images/" + name + ".png", "png");
+            tex = LoadTexture("src/resources/images/" + name + ".png", "png");
             return tex;
         }
         return null;
