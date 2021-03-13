@@ -4,10 +4,11 @@ public class MenuRun {
     // Initialize variables
     public static Menus MENU = Menus.MAIN_MENU;
     private static int level;
-    private MainMenu mainMenu;
-    private LevelSelect levelSelect;
-    private Game game;
-    private Editor editor;
+    private static MainMenu mainMenu;
+    private static LevelSelect levelSelect;
+    private static Game game;
+    private static Settings settings;
+    private static Editor editor;
     public static long nextSecond = System.currentTimeMillis() + 1000;
     public static int framesInLastSecond = 0, framesInCurrentSecond = 0;
 
@@ -26,6 +27,10 @@ public class MenuRun {
                 if (game == null) game = new Game();
                 game.update();
                 break;
+            case SETTINGS: // Run if 'menu' == Menus.SETTINGS
+                if (settings == null) settings = new Settings();
+                settings.update();
+                break;
             case EDITOR: // DEV ONLY - Run if 'menu' == Menus.EDITOR
                 if (editor == null) editor = new Editor();
                 editor.update();
@@ -42,6 +47,11 @@ public class MenuRun {
     }
 
     public static void setState(Menus state) {
+        mainMenu = null;
+        levelSelect = null;
+        game = null;
+        settings = null;
+        editor = null;
         MENU = state;
     }
 

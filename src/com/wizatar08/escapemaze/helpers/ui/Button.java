@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.helpers.ui;
 
+import com.wizatar08.escapemaze.helpers.TextBlock;
 import org.newdawn.slick.opengl.Texture;
 
 public class Button {
@@ -7,13 +8,13 @@ public class Button {
     private Texture[] textures;
     private int[] rots;
     private int x, y, width, height;
-    private String text;
+    private TextBlock text;
 
     public Button(String name, Texture[] textures, int x, int y, int[] rots) {
-        this(name, textures, x, y, rots, "", 0, 0);
+        this(name, textures, x, y, rots, null);
     }
 
-    public Button(String name, Texture[] textures, int x, int y, int[] rots, String text, int textX, int textY) {
+    public Button(String name, Texture[] textures, int x, int y, int[] rots, TextBlock text) {
         this.name = name;
         this.textures = textures;
         this.x = x;
@@ -31,6 +32,7 @@ public class Button {
         }
         this.width = biggestWidth;
         this.height = biggestHeight;
+        this.text = text;
     }
 
 
@@ -63,11 +65,19 @@ public class Button {
         return rots;
     }
 
+    public TextBlock getText() {
+        return text;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void changeString(String newText) {
+        text.setChars(newText);
     }
 }

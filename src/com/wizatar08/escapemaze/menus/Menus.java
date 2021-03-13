@@ -4,5 +4,6 @@ public enum Menus {
     MAIN_MENU,
     LEVEL_SELECT,
     GAME,
+    SETTINGS,
     EDITOR; // Dev only
 }

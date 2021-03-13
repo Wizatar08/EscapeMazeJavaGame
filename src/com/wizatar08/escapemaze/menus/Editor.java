@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.menus;
 
+import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
@@ -75,36 +76,36 @@ public class Editor {
             }
             if (keyDown(Keyboard.KEY_EQUALS)) {
                 try {
-                    int size = Integer.parseInt(JOptionPane.showInputDialog("Change width of map:"));
+                    int size = Integer.parseInt(JOptionPane.showInputDialog(Lang.get("editor.change_map.width.popup")));
                     if (size < 1) {
-                        JOptionPane.showMessageDialog(null, "Width of map cannot be less than 1.");
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.less"));
                     } else if (size > 48) {
-                        JOptionPane.showMessageDialog(null, "Width of map cannot be greater than 48.");
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.more"));
                     } else changeMapSize(size, map.getTilesHigh());
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
+                    JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.nan"));
                 }
             }
             if (keyDown(Keyboard.KEY_MINUS)) {
                 try {
-                    int size = Integer.parseInt(JOptionPane.showInputDialog("Change height of map:"));
+                    int size = Integer.parseInt(JOptionPane.showInputDialog(Lang.get("editor.change_map.height.popup")));
                     if (size < 1) {
-                        JOptionPane.showMessageDialog(null, "Width of map cannot be less than 1.");
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.height.error.less"));
                     } else if (size > 48) {
-                        JOptionPane.showMessageDialog(null, "Width of map cannot be greater than 48.");
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.height.error.more"));
                     } else changeMapSize(map.getTilesWide(), size);
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null,"Inputted number is not an integer.");
+                    JOptionPane.showMessageDialog(null,Lang.get("editor.change_map.height.error.nan"));
                 }
             }
             if (keyDown(Keyboard.KEY_E)) {
                 if (!isSelectingEnemy) {
-                    id = JOptionPane.showInputDialog("Enter enemy ID:");
+                    id = JOptionPane.showInputDialog(Lang.get("editor.add_enemy.enter_id"));
                     index = 0;
                     isSelectingEnemy = true;
                 } else {
                     writeCoords();
-                    JOptionPane.showMessageDialog(null, "Coordinates have been written to a .json file. Copy it and paste it into your respective file inside level_enemies.");
+                    JOptionPane.showMessageDialog(null, Lang.get("editor.add_enemy.save"));
                     isSelectingEnemy = false;
                 }
             }
@@ -231,7 +232,6 @@ public class Editor {
             for (int j = 0; j < TileType.TILE_TYPES.get(i).getOverlayTex().length; j++) {
                 textures[j + 1] = TileType.TILE_TYPES.get(i).getOverlayTex()[j];
             }
-            System.out.println("Textures length: " + textures.length + ", " + textures.length + ", " + TileType.TILE_TYPES.get(i).getOverlayTex().length);
             editorUI.getMenu("Tiles" + ceil).addButton(TileType.TILE_TYPES.get(i).getId(), textures, TileType.TILE_TYPES.get(i).getOverlayTexRot());
         }
     }

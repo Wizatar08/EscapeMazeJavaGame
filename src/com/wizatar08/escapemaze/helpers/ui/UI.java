@@ -4,8 +4,10 @@ import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 import com.wizatar08.escapemaze.helpers.TextBlock;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import java.util.ArrayList;
 
@@ -13,11 +15,13 @@ public class UI {
     private ArrayList<Button> buttonList;
     private ArrayList<Menu> menuList;
     private ArrayList<TextBlock> textList;
+    private TextBlock blank;
 
     public UI() {
         buttonList = new ArrayList<>();
         menuList = new ArrayList<>();
         textList = new ArrayList<>();
+        blank = new TextBlock(null, "blank", "", 0, 0, 24f, Color.white);
     }
 
     public void drawString(TextBlock text) {
@@ -36,7 +40,7 @@ public class UI {
     public void changeString(String name, String newText) {
         for (TextBlock text : textList) {
             if (text.getName().equals(name)) {
-                text.setText(newText);
+                text.setChars(newText);
                 break;
             }
         }
@@ -60,6 +64,31 @@ public class UI {
         buttonList.add(new Button(name, textureNames, x, y, rots));
     }
 
+    public void addButton(String name, Texture[] textureNames, int x, int y, TextBlock text) {
+        addButton(name, textureNames, x, y, text, false, false);
+    }
+
+    public void addButton(String name, Texture[] textureNames, int x, int y, TextBlock text, boolean centerW, boolean centerH) {
+        Button b;
+        int[] rots = new int[textureNames.length];
+        for (int i = 0; i < textureNames.length; i++) {
+            rots[i] = 0;
+        }
+        buttonList.add(b = new Button(name, textureNames, x, y, rots, text));
+        if (b.getText() != null) {
+            if (!centerW) {
+                b.getText().setX(x + b.getText().getX());
+            } else {
+                b.getText().setX(b.getX() + (float) b.getWidth() / 2 - (b.getText().getWidth() / 2));
+            }
+            if (!centerH) {
+                b.getText().setY(y + b.getText().getY());
+            } else {
+                b.getText().setY(b.getY() + (float) b.getHeight() / 2 - (b.getText().getHeight() / 2));
+            }
+        }
+    }
+
     public boolean isButtonClicked(String buttonName) {
         Button b = getButton(buttonName);
         float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
@@ -70,7 +99,7 @@ public class UI {
                 mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal);
     }
 
-    private Button getButton(String buttonName) {
+    public Button getButton(String buttonName) {
         for (Button b: buttonList) {
             if (b.getName().equals(buttonName)) {
                 return b;
@@ -101,10 +130,15 @@ public class UI {
             for (int i = 0; i < b.getTextures().length; i++) {
                 drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight());
             }
+            if (b.getText() != null) {
+                b.getText().draw();
+            }
+            blank.draw();
         }
         for (Menu m: menuList) {
             m.draw();
         }
+        blank.draw();
     }
 
     public ArrayList<Menu> getMenuList() {
@@ -117,6 +151,7 @@ public class UI {
         private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset;
         private boolean show;
         private Texture background;
+        private TextBlock blank;
 
         public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Texture background, int xOffset, int yOffset) {
             this.name = name;
@@ -133,15 +168,32 @@ public class UI {
             this.buttonAmount = 0;
             this.menuButtons = new ArrayList<Button>();
             this.show = true;
+            this.blank = new TextBlock(null, "blank", "", 0, 0, 24f, Color.white);
         }
 
         public void addButton(String name, Texture[] buttonTextures) {
+            addButton(name, buttonTextures, (TextBlock) null, false, false);
+        }
+
+        public void addButton(String name, Texture[] buttonTextures, TextBlock text, boolean centerW, boolean centerH) {
             int[] rots = new int[buttonTextures.length];
             for (int i = 0; i < buttonTextures.length; i++) {
                 rots[i] = 0;
             }
-            Button b = new Button(name, buttonTextures, 0, 0, rots);
+            Button b = new Button(name, buttonTextures, 0, 0, rots, text);
             setButton(b);
+            if (b.getText() != null) {
+                if (!centerW) {
+                    b.getText().setX(b.getX() + b.getText().getX());
+                } else {
+                    b.getText().setX(b.getX() + (float) b.getWidth() / 2 - (b.getText().getWidth() / 2));
+                }
+                if (!centerH) {
+                    b.getText().setY(b.getY() + b.getText().getY());
+                } else {
+                    b.getText().setY(b.getY() + (float) b.getHeight() / 2 - (b.getText().getHeight() / 2));
+                }
+            }
         }
 
         /**
@@ -194,6 +246,10 @@ public class UI {
                             drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i - 1]);
                         }
                     }
+                    if (b.getText() != null) {
+                        b.getText().draw();
+                        blank.draw();
+                    }
                 }
             }
         }
@@ -212,6 +268,14 @@ public class UI {
 
         public ArrayList<TextBlock> getTextBlocks() {
             return textList;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
         }
     }
 

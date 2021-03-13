@@ -1,7 +1,10 @@
 package com.wizatar08.escapemaze.menus;
 
+import com.wizatar08.escapemaze.helpers.Lang;
+import com.wizatar08.escapemaze.helpers.TextBlock;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
@@ -21,17 +24,17 @@ public class LevelSelect {
         levelSelectionUI = new UI();
         levelSelectionUI.createMenu("Levels", 100, 100, WIDTH - 200, 96 * 7, 7, 3);
         levelMenu = levelSelectionUI.getMenu("Levels");
-        levelMenu.addButton("L1", new Texture[]{LoadPNG(path + "lvl1")});
-        levelMenu.addButton("L2", new Texture[]{LoadPNG(path + "lvl2")});
-        levelMenu.addButton("L3", new Texture[]{LoadPNG(path + "lvl3")});
-        levelMenu.addButton("L4", new Texture[]{LoadPNG(path + "lvl4")});
-        levelMenu.addButton("L5", new Texture[]{LoadPNG(path + "lvl5")});
-        levelMenu.addButton("L6", new Texture[]{LoadPNG(path + "lvl6")});
-        levelMenu.addButton("L7", new Texture[]{LoadPNG(path + "lvl7")});
-        levelMenu.addButton("L8", new Texture[]{LoadPNG(path + "lvl8")});
-        levelMenu.addButton("L9", new Texture[]{LoadPNG(path + "lvl9")});
-        levelMenu.addButton("L10", new Texture[]{LoadPNG(path + "lvl10")});
-        levelMenu.addButton("L11", new Texture[]{LoadPNG(path + "lvl11")});
+        levelMenu.addButton("L1", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L1", Lang.get("level_select.level_button.1"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L2", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L2", Lang.get("level_select.level_button.2"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L3", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L3", Lang.get("level_select.level_button.3"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L4", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L4", Lang.get("level_select.level_button.4"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L5", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L5", Lang.get("level_select.level_button.5"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L6", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L6", Lang.get("level_select.level_button.6"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L7", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L7", Lang.get("level_select.level_button.7"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L8", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L8", Lang.get("level_select.level_button.8"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L9", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L9", Lang.get("level_select.level_button.9"), 25, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L10", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L10", Lang.get("level_select.level_button.10"), 15, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L11", new Texture[]{LoadPNG(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L11", Lang.get("level_select.level_button.11"), 15, 10, 48, Color.red), true, true);
     }
 
     // Detect if button is pressed

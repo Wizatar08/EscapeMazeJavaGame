@@ -5,6 +5,7 @@ import com.wizatar08.escapemaze.game.JSONLevel;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.helpers.TextBlock;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import com.wizatar08.escapemaze.map.TileMap;
@@ -43,7 +44,7 @@ public class Game {
         currentGameState = GameStates.NORMAL;
         ui = new UI();
         blank = new TextBlock(ui, "blank", "", 0, 0, 24f, Color.white);
-        fpsDisplay = new TextBlock(ui, "fps", "", 924, 4, 24f, Color.green);
+        fpsDisplay = new TextBlock(ui, "fps", "", 924, 4, 24f, Color.gray);
         ui.drawString(fpsDisplay);
         ui.drawString(blank);
         createMenu();
@@ -120,7 +121,7 @@ public class Game {
     }
 
     private void drawText() {
-        ui.changeString("fps", "FPS: " + MenuRun.framesInLastSecond);
+        ui.changeString("fps", Lang.get("game.ui.fps") + MenuRun.framesInLastSecond);
     }
 
     private void drawMap() {

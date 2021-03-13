@@ -2,10 +2,12 @@ package com.wizatar08.escapemaze;
 
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+
+import java.io.FileNotFoundException;
 
 /**
  * Where all the code is set up and run
@@ -18,6 +20,7 @@ public class Boot {
      * Holds the loop that runs all the game code.
      */
     public Boot() {
+        Lang.start();
         Renderer.begin(); // Setup display and drawing tools
         Drawer.createFont();
 

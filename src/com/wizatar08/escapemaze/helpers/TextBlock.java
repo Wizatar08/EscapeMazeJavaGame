@@ -5,6 +5,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
@@ -14,6 +16,9 @@ public class TextBlock {
     private float x, y;
     private float fontSize;
     private Color textColor;
+
+    private Font awtFont;
+    private TrueTypeFont trueTypeFont;
 
     public TextBlock(UI ui, String name, String text, int x, int y) {
         this(ui, name, text, x, y, 24f, Color.white);
@@ -35,17 +40,19 @@ public class TextBlock {
         this.y = y;
         this.fontSize = fontSize;
         this.textColor = color;
+        this.awtFont = FONT;
+        this.trueTypeFont = TRUE_TYPE_FONT;
         changeFontSize(fontSize);
     }
 
     public void draw() {
-        TRUE_TYPE_FONT.drawString(x, y, text, textColor);
+        trueTypeFont.drawString(x, y, text, textColor);
     }
 
     public void changeFontSize(float size) {
-        java.awt.Font newFont = FONT.deriveFont(size);
-        TRUE_TYPE_FONT = new TrueTypeFont(newFont, true);
-        FONT = newFont;
+        java.awt.Font newFont = awtFont.deriveFont(size);
+        trueTypeFont = new TrueTypeFont(newFont, true);
+        awtFont = newFont;
     }
 
     public float getX() {
@@ -56,7 +63,7 @@ public class TextBlock {
         return y;
     }
 
-    public String getText() {
+    public String getChars() {
         return text;
     }
 
@@ -72,6 +79,17 @@ public class TextBlock {
         return name;
     }
 
+    public float getWidth() {
+        FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
+        int w = (int)(awtFont.getStringBounds(text, frc).getWidth());
+        return w;
+    }
+    public float getHeight() {
+        FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
+        int h = (int)(awtFont.getStringBounds(text, frc).getHeight());
+        return h;
+    }
+
     public void setX(float x) {
         this.x = x;
     }
@@ -80,7 +98,7 @@ public class TextBlock {
         this.y = y;
     }
 
-    public void setText(String text) {
+    public void setChars(String text) {
         this.text = text;
     }
 
