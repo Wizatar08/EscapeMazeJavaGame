@@ -10,8 +10,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class Lang {
-    public static Locale LOCALE_en_US = new Locale("en", "US");
-
     public static Locale CURRENT_LANG;
 
     public static void start() {

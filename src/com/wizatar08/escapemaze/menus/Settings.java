@@ -19,7 +19,7 @@ public class Settings {
     private Texture background;
     private boolean buttonDown;
 
-    private String[] langs = new String[]{"en_US", "it_IT"};
+    private String[] langs = new String[]{"en_US", "te_ST"};
     private int langIndex = 0;
 
     public Settings() {
