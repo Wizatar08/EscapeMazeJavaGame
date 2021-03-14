@@ -32,16 +32,17 @@ public class Tile implements Entity, TileEntity {
     public void draw(){
         setX(initialX + Editor.displacementX);
         setY(initialY + Editor.displacementY);
-        drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
-        if (overlapTexture != null) {
-            for (int i = 0; i < overlapTexture.length; i++) {
-                drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
+        if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
+            drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
+            if (overlapTexture != null) {
+                for (int i = 0; i < overlapTexture.length; i++) {
+                    drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
+                }
             }
         }
     }
 
     public void update() {
-        draw();
     }
 
     // Getters

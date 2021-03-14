@@ -34,7 +34,7 @@ public class TileMap {
     public void draw(){
         for (Tile[] tiles : map) {
             for (Tile tile : tiles) {
-                tile.update();
+                tile.draw();
             }
         }
     }
