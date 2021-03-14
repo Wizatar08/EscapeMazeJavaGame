@@ -46,6 +46,15 @@ public class UI {
         }
     }
 
+    public void changeColor(String name, Color color) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                text.setTextColor(color);
+                break;
+            }
+        }
+    }
+
     public void drawAllStrings() {
         for (TextBlock text : textList) {
             text.draw();

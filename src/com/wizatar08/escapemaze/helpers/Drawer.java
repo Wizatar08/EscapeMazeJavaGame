@@ -69,6 +69,25 @@ public class Drawer {
         glEnd();
     }
 
+    /**
+     * Use this <code>drawQuadTex</code> to load an image using the default image's height and width.
+     * @param tex Make sure to have a <code>Texture</code> variable initialized and not use <code>LoadPNG()</code> as the argument, otherwise a crash and freeze will occur over time.
+     * @param x x position
+     * @param y y position
+     */
+    public static void drawQuadTex(Texture tex, float x, float y) {
+        drawQuadTex(tex, x, y, tex.getImageWidth(), tex.getImageHeight());
+    }
+
+    /**
+     * This method will take a <code>Texture</code> object, which will be the image file, and display it on the screen at the desired location. To get a <code>Texture</code> object, use the method <code>LoadPNG()</code> in this class. The height and width of image should be equal to the actual image's height and width, otherwise the stretching of images may occur. Alternatively, you can use the other <code>drawQuadTex</code> method, the one that does not require height and width.
+     *
+     * @param tex Make sure to have a <code>Texture</code> variable initialized and not use <code>LoadPNG()</code> as the argument, otherwise a crash and freeze will occur over time.
+     * @param x x position
+     * @param y y position
+     * @param width width of image
+     * @param height height of image
+     */
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height) {
         tex.bind();
         glTranslatef(x, y, 0);
@@ -85,6 +104,15 @@ public class Drawer {
         glLoadIdentity();
     }
 
+    /**
+     * If you want to rotate an image, use this <code>drawQuadTex</code> method.
+     * @param tex Make sure to have a <code>Texture</code> variable initialized and not use <code>LoadPNG()</code> as the argument, otherwise a crash and freeze will occur over time.
+     * @param x x position
+     * @param y y position
+     * @param width width of image
+     * @param height height of image
+     * @param angle angle of rotation
+     */
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle) {
         tex.bind();
         glTranslatef(x + width / 2, y + height / 2, 0);

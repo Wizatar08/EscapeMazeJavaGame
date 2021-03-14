@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.map;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
+import com.wizatar08.escapemaze.menus.Game;
 import org.newdawn.slick.opengl.Texture;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
@@ -31,10 +32,10 @@ public class Tile implements Entity, TileEntity {
     public void draw(){
         setX(initialX + Editor.displacementX);
         setY(initialY + Editor.displacementY);
-        drawQuadTex(texture, x, y, width, height);
+        drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
         if (overlapTexture != null) {
             for (int i = 0; i < overlapTexture.length; i++) {
-                drawQuadTex(overlapTexture[i], x, y, width, height, overlapTexRot[i]);
+                drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
             }
         }
     }

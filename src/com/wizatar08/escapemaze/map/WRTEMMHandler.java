@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.function.Consumer;
 
 public class WRTEMMHandler {
-    public static int MAX_MAP_HEIGHT = 48;
+    public static int MAX_MAP_HEIGHT = 49;
 
     public static String[] getMapAsArray(InputStream mapFile) throws IOException {
         InputStreamReader isr = new InputStreamReader(mapFile);

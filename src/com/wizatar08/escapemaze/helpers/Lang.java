@@ -28,7 +28,6 @@ public class Lang {
     }
 
     public static String get(String translationKey) {
-        System.out.println(CURRENT_LANG);
         ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/lang.bundle", CURRENT_LANG);
         try {
             return (resourceBundle.getString(translationKey));

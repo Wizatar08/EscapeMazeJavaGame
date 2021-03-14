@@ -69,7 +69,7 @@ public class Enemy implements Entity {
     }
 
     public void draw() {
-        drawQuadTex(texture, x, y, width, height, rot);
+        drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height, rot);
     }
 
     private void move() {

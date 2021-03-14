@@ -1,6 +1,7 @@
 {
   "level_name": "Level 1",
   "map": "level1.wtremm",
-  "player_start":[4, 3],
-  "enemies": "lvl1"
+  "player_start":[15, 11],
+  "enemies": "lvl1",
+  "scroll": "move_with_player"
 }

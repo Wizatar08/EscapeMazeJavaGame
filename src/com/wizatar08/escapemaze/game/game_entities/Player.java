@@ -5,7 +5,10 @@ import com.wizatar08.escapemaze.map.SafeSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.input.Keyboard;
+import org.newdawn.slick.opengl.Texture;
+import org.omg.SendingContext.RunTime;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
@@ -16,6 +19,7 @@ public class Player implements Entity {
     private float width, height;
     private TileMap map;
     private boolean isSafe;
+    private Texture tex, safeSpotTex;
 
     // Constructor for Player object
     public Player(float startXTile, float startYTile, TileMap map) {
@@ -25,10 +29,8 @@ public class Player implements Entity {
         this.height = 32;
         this.map = map;
         this.isSafe = false;
-    }
-
-    // Update (loop) method
-    public void update() {
+        this.tex = LoadPNG("entities/player");
+        this.safeSpotTex = LoadPNG("tiles/selectors/safe_space_selector");
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not
@@ -139,9 +141,8 @@ public class Player implements Entity {
     // Draw the player if not in a safe spot
     public void draw() {
         if (!isSafe) {
-            drawQuadTex(LoadPNG("entities/player"), x, y, width, height);
+            drawQuadTex(tex, x + Game.DIS_X, y + Game.DIS_Y);
         }
-
         if (isNearSafeSpot()) {
             for (SafeSpot safeSpot : map.getSafeSpots()) {
                 Tile tile = safeSpot.getDetectTile();
@@ -149,10 +150,15 @@ public class Player implements Entity {
                 float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
                 float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
                 if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
-                    drawQuadTex(LoadPNG("tiles/selectors/safe_space_selector"), safeTile.getX(), safeTile.getY(), safeTile.getWidth(), safeTile.getHeight());;
+                    drawQuadTex(safeSpotTex, safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y, safeTile.getWidth(), safeTile.getHeight());
                 }
             }
         }
+    }
+
+    @Override
+    public void update() {
+
     }
 
 
