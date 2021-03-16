@@ -3,5 +3,6 @@
   "map": "level1.wtremm",
   "player_start":[15, 11],
   "enemies": "lvl1",
-  "scroll": "move_with_player"
+  "scroll": "move_with_player",
+  "alarm_seconds": 45
 }

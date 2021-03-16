@@ -16,7 +16,7 @@ public class TextBlock {
     private float x, y;
     private float fontSize;
     private Color textColor;
-
+    private boolean show;
     private Font awtFont;
     private TrueTypeFont trueTypeFont;
 
@@ -43,10 +43,13 @@ public class TextBlock {
         this.awtFont = FONT;
         this.trueTypeFont = TRUE_TYPE_FONT;
         changeFontSize(fontSize);
+        show = true;
     }
 
     public void draw() {
-        trueTypeFont.drawString(x, y, text, textColor);
+        if (show) {
+            trueTypeFont.drawString(x, y, text, textColor);
+        }
     }
 
     public void changeFontSize(float size) {
@@ -108,5 +111,17 @@ public class TextBlock {
 
     public void setTextColor(Color color) {
         this.textColor = color;
+    }
+
+    public boolean isShown() {
+        return show;
+    }
+
+    public void show() {
+        show = true;
+    }
+
+    public void hide() {
+        show = false;
     }
 }

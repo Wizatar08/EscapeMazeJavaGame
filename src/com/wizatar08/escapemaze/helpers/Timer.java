@@ -137,4 +137,8 @@ public class Timer {
     public float getTotalSeconds() {
         return totalSeconds;
     }
+
+    public boolean isPaused() {
+        return paused;
+    }
 }

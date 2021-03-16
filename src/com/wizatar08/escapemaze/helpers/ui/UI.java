@@ -32,27 +32,65 @@ public class UI {
         for (TextBlock text : textList) {
             if (text.getName().equals(name)) {
                 textList.remove(text);
-                break;
+                return;
             }
         }
+        System.err.println("eraseString - TextBlock not found: " + name);
+    }
+
+    public void showString(String name, boolean show) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                if (show) {
+                    text.show();
+                } else {
+                    text.hide();
+                }
+                return;
+            }
+        }
+        System.err.println("showString - TextBlock not found: " + name);
+    }
+
+    public void setStringPos(String name, float x, float y) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                text.setX(x);
+                text.setY(y);
+                return;
+            }
+        }
+        System.err.println("setStringPos - TextBlock not found: " + name);
     }
 
     public void changeString(String name, String newText) {
         for (TextBlock text : textList) {
             if (text.getName().equals(name)) {
                 text.setChars(newText);
-                break;
+                return;
             }
         }
+        System.err.println("changeString - TextBlock not found: " + name);
     }
 
-    public void changeColor(String name, Color color) {
+    public TextBlock getString(String name) {
+        for (TextBlock text : textList) {
+            if (text.getName().equals(name)) {
+                return text;
+            }
+        }
+        System.err.println("getString - TextBlock not found: " + name);
+        return null;
+    }
+
+    public void changeStringColor(String name, Color color) {
         for (TextBlock text : textList) {
             if (text.getName().equals(name)) {
                 text.setTextColor(color);
-                break;
+                return;
             }
         }
+        System.err.println("changeStringColor - TextBlock not found: " + name);
     }
 
     public void drawAllStrings() {

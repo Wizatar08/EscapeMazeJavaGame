@@ -29,14 +29,18 @@ public class JSONLevel {
     @SerializedName("scroll")
     private String scroll;
 
+    @SerializedName("alarm_seconds")
+    private int alarmSeconds;
+
     private Gson gson;
 
-    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies, String scroll) {
+    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies, String scroll, int alarmSeconds) {
         this.map = map;
         this.levelName = levelName;
         this.playerStartPos = playerStartPos;
         this.enemyFileName = enemies;
         this.scroll = scroll;
+        this.alarmSeconds = alarmSeconds;
     }
 
     public ArrayList<Enemy> getEnemies(Game game) {
@@ -63,5 +67,9 @@ public class JSONLevel {
 
     public String getScroll() {
         return scroll;
+    }
+
+    public int getAlarmSeconds() {
+        return alarmSeconds;
     }
 }

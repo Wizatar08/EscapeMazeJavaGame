@@ -107,7 +107,7 @@ public class Settings {
     }
 
     private void draw() {
-        drawQuadTex(background, 0, 0, WIDTH * 2, HEIGHT);
+        drawQuadTex(background, 0, 0, WIDTH, HEIGHT);
         ui.draw();
 
     }

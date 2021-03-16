@@ -15,6 +15,7 @@ public class Tile implements Entity, TileEntity {
     private Texture overlapTexture[];
     private int overlapTexRot[];
     private TileType type;
+    private boolean isSecurityComputer;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -27,6 +28,7 @@ public class Tile implements Entity, TileEntity {
         this.texture = LoadPNG("tiles/" + type.getTexture());
         this.overlapTexture = type.getOverlayTex();
         this.overlapTexRot = type.getOverlayTexRot();
+        this.isSecurityComputer = type.isSecurityComputer();
     }
 
     public void draw(){
@@ -93,5 +95,8 @@ public class Tile implements Entity, TileEntity {
     }
     public boolean canHide() {
         return false;
+    }
+    public boolean isSecurityComputer() {
+        return isSecurityComputer;
     }
 }

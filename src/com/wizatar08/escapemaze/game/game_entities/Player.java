@@ -20,9 +20,11 @@ public class Player implements Entity {
     private TileMap map;
     private boolean isSafe;
     private Texture tex, safeSpotTex;
+    private Game gameController;
 
     // Constructor for Player object
-    public Player(float startXTile, float startYTile, TileMap map) {
+    public Player(Game game, float startXTile, float startYTile, TileMap map) {
+        this.gameController = game;
         setX(startXTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         setY(startYTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         this.width = 32;
@@ -31,6 +33,13 @@ public class Player implements Entity {
         this.isSafe = false;
         this.tex = LoadPNG("entities/player");
         this.safeSpotTex = LoadPNG("tiles/selectors/safe_space_selector");
+    }
+
+
+
+    // Detects if Player is near a safe spot, return true if so and false if not
+    private boolean isAtSecurityComputer() {
+        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isSecurityComputer();
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not
@@ -57,6 +66,9 @@ public class Player implements Entity {
                 goIntoSafeSpot();
             } else if (isSafe){
                 isSafe = false;
+            }
+            if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
+                gameController.setState(Game.GameStates.NORMAL);
             }
         }
     }
@@ -156,9 +168,7 @@ public class Player implements Entity {
         }
     }
 
-    @Override
     public void update() {
-
     }
 
 

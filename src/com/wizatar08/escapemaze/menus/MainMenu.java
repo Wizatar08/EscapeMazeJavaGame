@@ -16,12 +16,15 @@ public class MainMenu {
     private UI ui;
     private Texture background;
     private boolean buttonDown;
+    private Timer cooldownTimer;
 
     // Constructor
     public MainMenu() {
         background = LoadPNG("backgrounds/main_menu");
         ui = new UI();
         buttonDown = false;
+        cooldownTimer = new Timer();
+        cooldownTimer.unpause();
         ui.addButton("PlayBtn", new Texture[]{LoadPNG("buttons/main_menu_btn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.45), new TextBlock(ui, "Play", Lang.get("main_menu.buttons.play"), 0, 0, 56f, Color.yellow), true, true);
         ui.addButton("QuitBtn", new Texture[]{LoadPNG("buttons/main_menu_btn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.55), new TextBlock(ui, "Quit", Lang.get("main_menu.buttons.quit"), 0, 0, 56f, Color.yellow), true, true);
         ui.addButton("EditBtn", new Texture[]{LoadPNG("buttons/main_menu_btn")}, WIDTH / 2 - (256 / 2), (int) (HEIGHT * 0.65), new TextBlock(ui, "Editor", Lang.get("main_menu.buttons.editor"), 0, 0, 56f, Color.yellow), true, true);
@@ -30,7 +33,7 @@ public class MainMenu {
 
     // Detect if a button is pressed
     private void detectIfButtonHit() {
-        if (Mouse.isButtonDown(0) && !buttonDown) {
+        if (Mouse.isButtonDown(0) && !buttonDown && cooldownTimer.isPaused()) {
             if (ui.isButtonClicked("PlayBtn")) MenuRun.setState(Menus.LEVEL_SELECT);
             if (ui.isButtonClicked("QuitBtn")) System.exit(0);
             if (ui.isButtonClicked("EditBtn")) MenuRun.setState(Menus.EDITOR);
@@ -45,11 +48,15 @@ public class MainMenu {
     public void update() {
         draw();
         detectIfButtonHit();
+        cooldownTimer.update();
+        if (cooldownTimer.getTotalSeconds() >= 1) {
+            cooldownTimer.pause();
+        }
     }
 
     // Draw objects on display
     private void draw() {
-        drawQuadTex(background, 0, 0, WIDTH * 2, HEIGHT);
+        drawQuadTex(background, 0, 0, WIDTH, HEIGHT);
         ui.draw();
     }
 

@@ -95,8 +95,7 @@ public class Enemy implements Entity {
 
     private void detectPlayer() {
         if (pathfinder.scanForWalls(distanceView) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !player.isSafe()) {
-            // System.out.println("Detect, " + getAngleOfPlayerRelativeToEnemy() + ", " + (type.getAngleOfView() / 2) + ", " + (-type.getAngleOfView() / 2));
-            // Code to trigger alarm
+            gameController.setState(Game.GameStates.ALARM);
         }
     }
 

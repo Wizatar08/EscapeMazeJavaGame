@@ -58,7 +58,11 @@ public enum TileType {
     METAL_WALL_B_DOOR(new VariationID(IDTypes.TILE, "003", "01"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}).safeSpot(SafeSpots.DOWN)),
     METAL_WALL_L_DOOR(new VariationID(IDTypes.TILE, "003", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{90, 90}).safeSpot(SafeSpots.LEFT)),
     METAL_WALL_T_DOOR(new VariationID(IDTypes.TILE, "003", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{180, 180}).safeSpot(SafeSpots.UP)),
-    METAL_WALL_R_DOOR(new VariationID(IDTypes.TILE, "003", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(SafeSpots.RIGHT));
+    METAL_WALL_R_DOOR(new VariationID(IDTypes.TILE, "003", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(SafeSpots.RIGHT)),
+    COMPUTER_DEF_FLOOR(new VariationID(IDTypes.TILE, "004", "01"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{0})),
+    COMPUTER_DEF_FLOOR_90(new VariationID(IDTypes.TILE, "004", "02"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{90})),
+    COMPUTER_DEF_FLOOR_180(new VariationID(IDTypes.TILE, "004", "03"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{180})),
+    COMPUTER_DEF_FLOOR_270(new VariationID(IDTypes.TILE, "004", "04"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{270}));
 
     // Initialize variables
     private String id;
@@ -68,6 +72,7 @@ public enum TileType {
     private SafeSpots safeSpot;
     private Texture[] overlayTex;
     private int[] overlayTexRot;
+    private boolean isSecurityComputer;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
 
@@ -81,6 +86,7 @@ public enum TileType {
         this.safeSpot = builder.getSafeSpot();
         this.overlayTex = builder.getOverlayTex();
         this.overlayTexRot = builder.getOverlayTexRot();
+        this.isSecurityComputer = builder.isSecurityComputer();
     }
 
     private void createIdMapAndArrays() {
@@ -116,6 +122,9 @@ public enum TileType {
     public int[] getOverlayTexRot() {
         return overlayTexRot;
     }
+    public boolean isSecurityComputer() {
+        return isSecurityComputer;
+    }
 
 
 
@@ -128,6 +137,7 @@ public enum TileType {
         public static SafeSpots safeSpot;
         public static Texture[] overlayTex;
         public static int overlayTexRot[];
+        public static boolean isSecurityComputer;
 
 
         /**
@@ -139,6 +149,7 @@ public enum TileType {
             safeSpot = SafeSpots.NONE;
             overlayTex = new Texture[]{LoadPNG("tiles/blank")};
             overlayTexRot = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            isSecurityComputer = false;
         }
 
         /**
@@ -177,6 +188,14 @@ public enum TileType {
             return this;
         }
 
+        /**
+         * Determine whether or not this is a security computer (can disable alarms)
+         */
+        private Builder isSecurityComputer(boolean is) {
+            isSecurityComputer = is;
+            return this;
+        }
+
         // Getters
         public boolean getIsPassable() {
             return isPassable;
@@ -192,6 +211,9 @@ public enum TileType {
         }
         public int[] getOverlayTexRot() {
             return overlayTexRot;
+        }
+        public boolean isSecurityComputer() {
+            return isSecurityComputer;
         }
     }
 }
