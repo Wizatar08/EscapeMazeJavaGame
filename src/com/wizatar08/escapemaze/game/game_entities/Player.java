@@ -1,14 +1,22 @@
 package com.wizatar08.escapemaze.game.game_entities;
 
+import com.wizatar08.escapemaze.game.Inventory;
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.Clock;
+import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
+import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.map.SafeSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.Game;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
 import org.omg.SendingContext.RunTime;
+
+import javax.swing.*;
+import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
@@ -21,6 +29,7 @@ public class Player implements Entity {
     private boolean isSafe;
     private Texture tex, safeSpotTex;
     private Game gameController;
+    private Inventory inventory;
 
     // Constructor for Player object
     public Player(Game game, float startXTile, float startYTile, TileMap map) {
@@ -33,6 +42,7 @@ public class Player implements Entity {
         this.isSafe = false;
         this.tex = LoadPNG("entities/player");
         this.safeSpotTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.inventory = new Inventory(5);
     }
 
 
@@ -150,6 +160,35 @@ public class Player implements Entity {
         }
     }
 
+    private void useItem(int slot) {
+        try {
+            Item item = inventory.getItems().get(slot);
+            item.setX(x - (item.getWidth() / 2));
+            item.setY(y - (item.getHeight() / 2));
+            gameController.addItemToGame(item);
+            item.setIsInInventory(false);
+            inventory.remove(slot);
+        } catch (IndexOutOfBoundsException | NullPointerException ignored) {}
+    }
+
+    private void detectKey() {
+        if (keyDown(Keyboard.KEY_1)) {
+            useItem(0);
+        }
+        if (keyDown(Keyboard.KEY_2)) {
+            useItem(1);
+        }
+        if (keyDown(Keyboard.KEY_3)) {
+            useItem(2);
+        }
+        if (keyDown(Keyboard.KEY_4)) {
+            useItem(3);
+        }
+        if (keyDown(Keyboard.KEY_5)) {
+            useItem(4);
+        }
+    }
+
     // Draw the player if not in a safe spot
     public void draw() {
         if (!isSafe) {
@@ -166,9 +205,30 @@ public class Player implements Entity {
                 }
             }
         }
+        inventory.draw();
+    }
+
+    private void addItemToInventory(Item item) {
+        gameController.removeItemFromGame(item);
+        item.setIsInInventory(true);
+        inventory.add(item);
+    }
+
+    private void detectIfHitItem() {
+        Item hitItem = null;
+        for (Item item : gameController.getItems()) {
+            if (checkCollision(x, y, width, height, item.getTexX(), item.getTexY(), item.getWidth(), item.getHeight()) && !item.isInInventory() && item.canPickUp()) {
+                hitItem = item;
+            }
+        }
+        if (hitItem != null) {
+            addItemToInventory(hitItem);
+        }
     }
 
     public void update() {
+        detectKey();
+        detectIfHitItem();
     }
 
 

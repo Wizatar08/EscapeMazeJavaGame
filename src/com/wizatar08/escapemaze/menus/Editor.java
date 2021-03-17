@@ -1,6 +1,9 @@
 package com.wizatar08.escapemaze.menus;
 
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Lang;
+import com.wizatar08.escapemaze.helpers.TextBlock;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
@@ -30,11 +33,13 @@ public class Editor {
     public static int displacementY;
     private TileType tileSelected;
     private int menuIndex;
-    private boolean isSelectingEnemy;
+    private boolean isSelectingEnemy, isPlacingItem;
+    private ArrayList<Item> items;
     private int[][] positions;
     private int index;
     private String id;
     private boolean buttonPressed;
+    private TextBlock status;
 
     public Editor() {
         editorUI = new UI();
@@ -53,6 +58,8 @@ public class Editor {
         displacementX = 0;
         displacementY = 0;
         background = LoadPNG("backgrounds/main_menu");
+        items = new ArrayList<>();
+        status = new TextBlock(editorUI, "Status", "", 8, 8);
     }
 
     private void changeMapSize(int width, int height) {
@@ -99,14 +106,28 @@ public class Editor {
                 }
             }
             if (keyDown(Keyboard.KEY_E)) {
+                if (!isPlacingItem) {
+                    if (!isSelectingEnemy) {
+                        id = JOptionPane.showInputDialog(Lang.get("editor.add_enemy.enter_id"));
+                        index = 0;
+                        isSelectingEnemy = true;
+                    } else {
+                        writeCoords();
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.add_enemy.save"));
+                        isSelectingEnemy = false;
+                    }
+                }
+            }
+            if (keyDown(Keyboard.KEY_I)) {
                 if (!isSelectingEnemy) {
-                    id = JOptionPane.showInputDialog(Lang.get("editor.add_enemy.enter_id"));
-                    index = 0;
-                    isSelectingEnemy = true;
-                } else {
-                    writeCoords();
-                    JOptionPane.showMessageDialog(null, Lang.get("editor.add_enemy.save"));
-                    isSelectingEnemy = false;
+                    if (!isPlacingItem) {
+                        id = JOptionPane.showInputDialog(Lang.get("editor.add_item.enter_id"));
+                        isPlacingItem = true;
+                    } else {
+                        JOptionPane.showMessageDialog(null, Lang.get("editor.add_item.save"));
+                        writeItems();
+                        isPlacingItem = false;
+                    }
                 }
             }
             if (keyDown(Keyboard.KEY_D)) {
@@ -133,7 +154,36 @@ public class Editor {
     private void detectIfButtonDown() {
         boolean isOverButton = false;
         if (Mouse.isButtonDown(0)) {
-            if (!isSelectingEnemy) {
+            if (isSelectingEnemy) {
+                if (!buttonPressed) {
+                    buttonPressed = true;
+                    int xPlace = (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE);
+                    int yPlace = (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE));
+                    positions[index][0] = xPlace;
+                    positions[index][1] = yPlace;
+                    index++;
+                }
+            } else if (isPlacingItem) {
+                if (!buttonPressed) {
+                    buttonPressed = true;
+                    int xPlace = (int) Math.floor(Mouse.getX() - displacementX);
+                    int yPlace = (int) Math.floor(HEIGHT - Mouse.getY() - 1 - displacementY);
+                    boolean itemAlreadyThere = false;
+                    int ind = 0;
+                    for (int i = 0; i < items.size(); i++) {
+                        if (items.get(i).getX() == (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE && items.get(i).getY() == (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE) {
+                            ind = i;
+                            itemAlreadyThere = true;
+                        }
+                    }
+                    if (itemAlreadyThere) {
+                        items.remove(ind);
+                    } else {
+                        System.out.println(ItemType.getType(id) + ", " + id);
+                        items.add(new Item(ItemType.getType(id), LoadPNG("game/items/" + ItemType.getType(id).getTexture()), (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
+                    }
+                }
+            } else {
                 for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
                     int ceil = (int) Math.ceil(i / (3 * 11));
                     for (int j = 0; j < editorUI.getMenu("Tiles" + ceil).getButtons().size(); j++) {
@@ -145,15 +195,6 @@ public class Editor {
                 }
                 if (!isOverButton && tileSelected != null) {
                     map.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
-                }
-            } else {
-                if (buttonPressed == false) {
-                    buttonPressed = true;
-                    int xPlace = (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE);
-                    int yPlace = (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE));
-                    positions[index][0] = xPlace;
-                    positions[index][1] = yPlace;
-                    index++;
                 }
             }
         } else {
@@ -199,7 +240,36 @@ public class Editor {
         }
     }
 
-    private void setEnemy() {
+    private void writeItems() {
+        String fileString = "";
+        try {
+            File file = new File("itemFile.json");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+            fileString += "{\n";
+            fileString += "  \"items\": [\n";
+            for (int i = 0; i < items.size(); i++) {
+                Item item = items.get(i);
+                fileString += "    {\n";
+                fileString += "      \"id\": " + item.getId() + ",\n";
+                fileString += "      \"x\": " + item.getX() + ",\n";
+                fileString += "      \"y\": " + item.getY() + "\n";
+                fileString += "    }";
+                if (i < items.size() - 1) {
+                    fileString += ",\n";
+                }
+            }
+            fileString += "\n  ]";
+            bw.write(fileString);
+            bw.newLine();
+            bw.write("}");
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setPlacement() {
         drawQuadTex(LoadPNG("tiles/selectors/safe_space_selector"), (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE) * TILE_SIZE + displacementX, (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)) * TILE_SIZE +  displacementY, TILE_SIZE, TILE_SIZE);
     }
 
@@ -208,8 +278,8 @@ public class Editor {
         detectIfButtonDown();
         showMenu();
         draw();
-        if (isSelectingEnemy) {
-            setEnemy();
+        if (isSelectingEnemy || isPlacingItem) {
+            setPlacement();
         }
     }
 
@@ -217,6 +287,17 @@ public class Editor {
         drawQuadTex(background, 0, 0, WIDTH * 2, HEIGHT);
         map.draw();
         editorUI.draw();
+        for (Item item : items) {
+            drawQuadTex(item.getTexture(), item.getX() + displacementX, item.getY() + displacementY);
+        }
+        status.draw();
+        if (isPlacingItem) {
+            status.setChars(Lang.get("editor.status.status_text") + Lang.get("editor.status.items"));
+        } else if (isSelectingEnemy) {
+            status.setChars(Lang.get("editor.status.status_text") + Lang.get("editor.status.enemy"));
+        } else {
+            status.setChars(Lang.get("editor.status.status_text") + Lang.get("editor.status.tiles"));
+        }
     }
 
 

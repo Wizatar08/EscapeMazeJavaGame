@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.*;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.helpers.ui.UI;
@@ -32,6 +33,7 @@ public class Game {
     private JSONLevel level;
     private Player player;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Item> items;
     private GameStates currentGameState, prevGameState;
     private UI ui, gameEndUI;
     private TextBlock fpsDisplay, timeDisplay, blank, alarmTimer;
@@ -39,7 +41,6 @@ public class Game {
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
     private Texture redScreen, alertBox, gameEndTex;
-    private Texture[] inventorySlots;
 
     public Game() {
         gson = new Gson();
@@ -49,6 +50,7 @@ public class Game {
         map = ExternalMapHandler.LoadMap(level.getMap());
         player = new Player(this, level.getPlayerStartPos()[0], level.getPlayerStartPos()[1], map);
         enemies = level.getEnemies(this);
+        items = level.getItems(this);
         currentGameState = GameStates.NORMAL;
         ui = new UI();
         gameEndUI = new UI();
@@ -68,7 +70,6 @@ public class Game {
         internalAlarmTimer = new Timer(level.getAlarmSeconds());
         timeOnLevel.unpause();
         redScreen = Drawer.LoadPNG("backgrounds/red_screen");
-        inventorySlots = new Texture[]{Drawer.LoadPNG("game/inventory_slot"), Drawer.LoadPNG("game/inventory_slot"), Drawer.LoadPNG("game/inventory_slot"), Drawer.LoadPNG("game/inventory_slot"), Drawer.LoadPNG("game/inventory_slot")};
 
         switch (level.getScroll()) {
             case "none":
@@ -115,11 +116,14 @@ public class Game {
             updateDisplacement();
             drawAll();
             player.draw();
-            player.update();
             detectKey();
             if (currentGameState != GameStates.PAUSED) {
                 updateEnemies();
                 updateTime();
+                player.update();
+                for (Item item : items) {
+                    item.update();
+                }
             }
             if (internalAlarmTimer.getTotalSeconds() <= 0) {
                 currentGameState = GameStates.GAME_END;
@@ -213,6 +217,9 @@ public class Game {
         for (Enemy enemy : enemies) {
             enemy.draw();
         }
+        for (Item item : items) {
+            item.draw();
+        }
         player.draw();
         ui.draw();
         updateText();
@@ -222,9 +229,6 @@ public class Game {
             ui.showString("alarm", false);
         }
         ui.drawAllStrings();
-        for (int i = 0; i < inventorySlots.length; i++) {
-            Drawer.drawQuadTex(inventorySlots[i], ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * inventorySlots.length) + (i * 64), HEIGHT - 72);
-        }
     }
 
     /**
@@ -248,6 +252,14 @@ public class Game {
             ui.changeString("alarm", Lang.get("game.ui.alarm") + (int) Math.ceil(internalAlarmTimer.getTotalSeconds()));
             alarmTimer.setX(((float) WIDTH / 2) - (alarmTimer.getWidth() / 2));
         }
+    }
+
+    public void removeItemFromGame(Item item) {
+        items.remove(item);
+    }
+
+    public void addItemToGame(Item item) {
+        items.add(item);
     }
 
     private void endGame(boolean win) {
@@ -283,5 +295,9 @@ public class Game {
 
     public GameStates currentState() {
         return currentGameState;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
     }
 }
