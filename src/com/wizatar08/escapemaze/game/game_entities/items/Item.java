@@ -16,7 +16,7 @@ public class Item implements Entity {
     private Texture texture;
     private ItemType type;
     private String id;
-    private boolean inInventory;
+    private boolean inInventory, required;
     private Timer cooldownPickupTimer;
 
     public Item(ItemType type, Texture texture, float x, float y) {
@@ -31,6 +31,7 @@ public class Item implements Entity {
         this.id = type.getId();
         this.inInventory = false;
         this.weight = type.getWeight();
+        this.required = type.isRequired();
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
     }
 
@@ -136,5 +137,9 @@ public class Item implements Entity {
             }
         }
         return false;
+    }
+
+    public boolean isRequired() {
+        return required;
     }
 }

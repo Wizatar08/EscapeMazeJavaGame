@@ -67,11 +67,6 @@ public class Player implements Entity {
         return false;
     }
 
-    // Code that detects whether a *certain* key is pressed
-    public void playerTapKeyDetection() {
-
-    }
-
     public void detectKey() {
         while (Keyboard.next()) {
             if (keyDown(Keyboard.KEY_1)) {
@@ -108,16 +103,16 @@ public class Player implements Entity {
         }
         if (!isSafe) {
             if (keyDown(Keyboard.KEY_W)) {
-                moveCharacter(0, -1 / weightInfluence);
+                moveCharacter(0, -1.5f / weightInfluence);
             }
             if (keyDown(Keyboard.KEY_S)) {
-                moveCharacter(0, 1 / weightInfluence);
+                moveCharacter(0, 1.5f / weightInfluence);
             }
             if (keyDown(Keyboard.KEY_A)) {
-                moveCharacter(-1 / weightInfluence, 0);
+                moveCharacter(-1.5f / weightInfluence, 0);
             }
             if (keyDown(Keyboard.KEY_D)) {
-                moveCharacter(1 / weightInfluence, 0);
+                moveCharacter(1.5f / weightInfluence, 0);
             }
         }
 
@@ -145,7 +140,18 @@ public class Player implements Entity {
     }
 
     private void escapeDoor() {
-        // Update escape door stuffs
+        for (int i = 0; i < inventory.getItems().size(); i++) {
+            if (inventory.getItems().get(i) != null) {
+                if (inventory.getItems().get(i).isRequired()) {
+                    inventory.remove(i);
+                    gameController.stealItem();
+                }
+            }
+        }
+        if (gameController.getStolenItems() >= gameController.getRequiredItems()) {
+            gameController.setState(Game.GameStates.GAME_END);
+            gameController.endGame(true);
+        }
     }
 
     // Check if a key is pressed
@@ -227,9 +233,11 @@ public class Player implements Entity {
     }
 
     private void addItemToInventory(Item item) {
-        gameController.removeItemFromGame(item);
-        item.setIsInInventory(true);
-        inventory.add(item);
+        if (inventory.canAdd()) {
+            gameController.removeItemFromGame(item);
+            item.setIsInInventory(true);
+            inventory.add(item);
+        }
     }
 
     private void detectIfHitItem() {

@@ -28,7 +28,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Game {
     // Initialize variables
     private Gson gson;
-    private int levelNumber;
+    private int levelNumber, requiredItems, stolenItems;
     private TileMap map;
     private String levelName;
     private JSONLevel level;
@@ -37,7 +37,7 @@ public class Game {
     private ArrayList<Item> items;
     private GameStates currentGameState, prevGameState;
     private UI ui, gameEndUI;
-    private TextBlock fpsDisplay, timeDisplay, blank, alarmTimer;
+    private TextBlock fpsDisplay, timeDisplay, blank, alarmTimer, requiredItemsStolen;
     private Timer timeOnLevel, internalAlarmTimer;
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
@@ -59,9 +59,11 @@ public class Game {
         fpsDisplay = new TextBlock(ui, "fps", "", 924, 4, 24f, Color.gray);
         timeDisplay = new TextBlock(ui, "time", "", 4, 4, 24f, Color.white);
         alarmTimer = new TextBlock(ui, "alarm", "", 0, 38, 40f, Color.red);
+        requiredItemsStolen = new TextBlock(ui, "itemsStolen", "", 0, 0, 32f, Color.red);
         ui.drawString(fpsDisplay);
         ui.drawString(timeDisplay);
         ui.drawString(alarmTimer);
+        ui.drawString(requiredItemsStolen);
         ui.drawString(blank);
         ui.showString("alarm", false);
         redScreen = Drawer.LoadPNG("backgrounds/red_screen");
@@ -71,6 +73,13 @@ public class Game {
         internalAlarmTimer = new Timer(level.getAlarmSeconds());
         timeOnLevel.unpause();
         redScreen = Drawer.LoadPNG("backgrounds/red_screen");
+        requiredItems = 0;
+        for (Item item : items) {
+            if (item.isRequired()) {
+                requiredItems++;
+            }
+        }
+        stolenItems = 0;
 
         switch (level.getScroll()) {
             case "none":
@@ -245,6 +254,8 @@ public class Game {
     private void updateText() {
         ui.changeString("fps", Lang.get("game.ui.fps") + MenuRun.framesInLastSecond);
         ui.changeString("time", Lang.get("game.ui.time") + timeOnLevel.getString());
+        ui.changeString("itemsStolen", Lang.get("game.ui.stolen_items") + stolenItems + "/" + requiredItems);
+        ui.setStringPos("itemsStolen", ((float) WIDTH / 2) - (ui.getString("itemsStolen").getWidth() / 2), HEIGHT - 112);
         if (timeOnLevel.getHours() == 0 && timeOnLevel.getSeconds() == 0) {
             ui.changeStringColor("time", Color.green);
         } else {
@@ -264,7 +275,7 @@ public class Game {
         items.add(item);
     }
 
-    private void endGame(boolean win) {
+    public void endGame(boolean win) {
         String sWin = "lose";
         if (win) {
             sWin = "win";
@@ -277,6 +288,10 @@ public class Game {
         gameEndUI.setStringPos("GameOver", ((float) WIDTH / 2) - (gameEndUI.getString("GameOver").getX() / 2), 256);
         gameEndUI.drawAllStrings();
         gameEndUI.draw();
+    }
+
+    public void stealItem() {
+        stolenItems++;
     }
 
     private void drawMap() {
@@ -301,5 +316,13 @@ public class Game {
 
     public ArrayList<Item> getItems() {
         return items;
+    }
+
+    public int getRequiredItems() {
+        return requiredItems;
+    }
+
+    public int getStolenItems() {
+        return stolenItems;
     }
 }
