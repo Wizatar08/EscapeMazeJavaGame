@@ -110,6 +110,15 @@ public class Game {
         MOVE
     }
 
+    public void switchPauseState() {
+        if (currentGameState == Game.GameStates.NORMAL || currentGameState == Game.GameStates.ALARM) {
+        prevGameState = currentGameState;
+        currentGameState = Game.GameStates.PAUSED;
+    } else if (currentGameState == Game.GameStates.PAUSED) {
+        currentGameState = prevGameState;
+    }
+    }
+
     public void update() {
         if (currentGameState == GameStates.GAME_END) {
             detectIfButtonHitOnGameEnd();
@@ -198,22 +207,7 @@ public class Game {
     }
 
     private void detectKey() {
-        while (Keyboard.next()) {
-            if (currentGameState == GameStates.NORMAL || currentGameState == GameStates.ALARM) {
-                player.playerTapKeyDetection();
-            }
-            if (keyDown(Keyboard.KEY_ESCAPE)) {
-                if (currentGameState == GameStates.NORMAL || currentGameState == GameStates.ALARM) {
-                    prevGameState = currentGameState;
-                    currentGameState = GameStates.PAUSED;
-                } else if (currentGameState == GameStates.PAUSED) {
-                    currentGameState = prevGameState;
-                }
-            }
-        }
-        if (currentGameState == GameStates.NORMAL || currentGameState == GameStates.ALARM) {
-            player.playerPressAndHoldKeyDetection();
-        }
+
     }
 
     private boolean keyDown(int key) {

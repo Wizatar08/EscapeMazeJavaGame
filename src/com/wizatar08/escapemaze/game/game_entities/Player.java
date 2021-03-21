@@ -46,12 +46,12 @@ public class Player implements Entity {
 
 
     // Detects if Player is near a safe spot, return true if so and false if not
-    private boolean isAtSecurityComputer() {
+    public boolean isAtSecurityComputer() {
         return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isSecurityComputer();
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not
-    private boolean isNearSafeSpot() {
+    public boolean isNearSafeSpot() {
         if (map.getSafeSpots() != null) {
             int i = 0;
             for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
@@ -69,19 +69,43 @@ public class Player implements Entity {
 
     // Code that detects whether a *certain* key is pressed
     public void playerTapKeyDetection() {
-        if (keyDown(Keyboard.KEY_SPACE)) {
-            if (isNearSafeSpot() && !isSafe) {
-                goIntoSafeSpot();
-            } else if (isSafe){
-                isSafe = false;
-            }
-            if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
-                gameController.setState(Game.GameStates.NORMAL);
-            }
-        }
+
     }
 
-    public void playerPressAndHoldKeyDetection() {
+    public void detectKey() {
+        while (Keyboard.next()) {
+            if (keyDown(Keyboard.KEY_1)) {
+                useItem(0);
+            }
+            if (keyDown(Keyboard.KEY_2)) {
+                useItem(1);
+            }
+            if (keyDown(Keyboard.KEY_3)) {
+                useItem(2);
+            }
+            if (keyDown(Keyboard.KEY_4)) {
+                useItem(3);
+            }
+            if (keyDown(Keyboard.KEY_5)) {
+                useItem(4);
+            }
+
+            if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
+                if (keyDown(Keyboard.KEY_SPACE)) {
+                    if (isNearSafeSpot() && !isSafe) {
+                        goIntoSafeSpot();
+                    } else if (isSafe){
+                        isSafe = false;
+                    }
+                    if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
+                        gameController.setState(Game.GameStates.NORMAL);
+                    }
+                }
+            }
+            if (keyDown(Keyboard.KEY_ESCAPE)) {
+                gameController.switchPauseState();
+            }
+        }
         if (!isSafe) {
             if (keyDown(Keyboard.KEY_W)) {
                 moveCharacter(0, -1 / weightInfluence);
@@ -96,10 +120,14 @@ public class Player implements Entity {
                 moveCharacter(1 / weightInfluence, 0);
             }
         }
+
+        while (Keyboard.next()) {
+
+        }
     }
 
     // Go into a safe spot. Make yourself immune to anything and set your position to where you will appear when exiting the safe spot
-    private void goIntoSafeSpot() {
+    public void goIntoSafeSpot() {
         isSafe = true;
         for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
             Tile tile = tileDetectionSpot.getDetectTile();
@@ -177,24 +205,6 @@ public class Player implements Entity {
                 inventory.remove(slot);
             }
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {}
-    }
-
-    private void detectKey() {
-        if (keyDown(Keyboard.KEY_1)) {
-            useItem(0);
-        }
-        if (keyDown(Keyboard.KEY_2)) {
-            useItem(1);
-        }
-        if (keyDown(Keyboard.KEY_3)) {
-            useItem(2);
-        }
-        if (keyDown(Keyboard.KEY_4)) {
-            useItem(3);
-        }
-        if (keyDown(Keyboard.KEY_5)) {
-            useItem(4);
-        }
     }
 
     // Draw the player if not in a safe spot
@@ -286,8 +296,10 @@ public class Player implements Entity {
     }
 
     public void update() {
+        if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
+            detectKey();
+        }
         detectIfAtLockedDoor();
-        detectKey();
         detectIfHitItem();
         calculateWeight();
     }
@@ -336,5 +348,9 @@ public class Player implements Entity {
 
     public boolean isSafe() {
         return isSafe;
+    }
+    
+    public void setIsSafe(boolean isSafe) {
+        this.isSafe = isSafe;
     }
 }
