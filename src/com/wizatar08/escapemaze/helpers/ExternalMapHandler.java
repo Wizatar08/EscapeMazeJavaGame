@@ -27,7 +27,7 @@ public class ExternalMapHandler {
             }
         }
         try {
-            File file = new File(mapName);
+            File file = new File(mapName + ".wtremm");
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             for (int i = 0; i < mapData.length; i++) {
                 if (mapData[i] != null) {
@@ -46,7 +46,7 @@ public class ExternalMapHandler {
         String map = "";
         String[] mapAsArray = new String[]{};
         try {
-            mapAsArray = getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName));
+            mapAsArray = getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName + ".wtremm"));
             map = getMapAsString(mapAsArray);
         } catch (IOException e) {
             e.printStackTrace();

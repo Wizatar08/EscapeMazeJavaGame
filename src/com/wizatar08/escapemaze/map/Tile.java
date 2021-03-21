@@ -12,13 +12,13 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
-    private Texture texture, unlockedTexture[];
+    private Texture texture, unlockedTexture[], unsecureTexture[];
     private Texture overlapTexture[];
-    private int overlapTexRot[], unlockedTexRot[];
+    private int overlapTexRot[], unlockedTexRot[], unsecureTexRot[];
     private TileType type;
     private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
     private ItemType unlockableBy;
-    private boolean isPassable, isLocked, isDoor;
+    private boolean isPassable, isLocked, isDoor, isSecureTile, isSecure;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -37,6 +37,10 @@ public class Tile implements Entity, TileEntity {
         this.unlockableBy = type.unlockableBy();
         this.unlockedTexture = type.getUnlockedTileTexture();
         this.unlockedTexRot = type.getUnlockedTileTextureRots();
+        this.unsecureTexture = type.getDeactivatedTileTexture();
+        this.unsecureTexRot = type.getDeactivatedTextureRots();
+        this.isSecureTile = type.isSecure();
+        this.isSecure = isSecureTile;
         this.isDoor = this.unlockableBy != ItemType.NULL;
     }
 
@@ -46,7 +50,13 @@ public class Tile implements Entity, TileEntity {
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
             drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
             canBeSeen = true;
-            if (!isDoor || (isDoor && !isPassable)) {
+            if (isSecureTile && !isSecure) {
+                if (unsecureTexture != null) {
+                    for (int i = 0; i < unsecureTexture.length; i++) {
+                        drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
+                    }
+                }
+            } else if (!isDoor || (isDoor && !isPassable)) {
                 if (overlapTexture != null) {
                     for (int i = 0; i < overlapTexture.length; i++) {
                         drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
@@ -141,5 +151,16 @@ public class Tile implements Entity, TileEntity {
 
     public ItemType unlockableBy() {
         return unlockableBy;
+    }
+
+    public boolean isSecureTile() {
+        return isSecureTile;
+    }
+
+    public boolean isSecure() {
+        return isSecure;
+    }
+    public void setSecurity(boolean set) {
+        isSecure = set;
     }
 }

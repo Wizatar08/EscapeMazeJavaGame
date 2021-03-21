@@ -51,7 +51,7 @@ public class Editor {
         buttonPressed = false;
         createMenus();
         try {
-            map = ExternalMapHandler.LoadMap("level1.wtremm");
+            map = ExternalMapHandler.LoadMap("map_default");
         } catch (NullPointerException e) {
             map = new TileMap();
         }
@@ -79,7 +79,7 @@ public class Editor {
     private void detectKey() {
         while (Keyboard.next()) {
             if (keyDown(Keyboard.KEY_S)) {
-                ExternalMapHandler.SaveMap("map.wtremm", map);
+                ExternalMapHandler.SaveMap("map", map);
             }
             if (keyDown(Keyboard.KEY_EQUALS)) {
                 try {

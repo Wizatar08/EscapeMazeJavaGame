@@ -75,7 +75,8 @@ public enum TileType {
     DEFAULT_FLOOR_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "05"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).unlockableBy(ItemType.BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
     DEFAULT_FLOOR_DARK_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "06"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/dark_blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).unlockableBy(ItemType.DARK_BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
     DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/purple_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).unlockableBy(ItemType.PURPLE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/pink_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).unlockableBy(ItemType.PINK_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0}));
+    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/pink_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).unlockableBy(ItemType.PINK_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_SECURE_PODIUM(new VariationID(IDTypes.TILE, "007", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/default_activated_secure_podium")}, new int[]{0}).isPassable().secure(new Texture[]{LoadPNG("tile_overlays/default_deactivated_secure_podium")}, new int[]{0}));
 
     // Initialize variables
     private String id;
@@ -90,6 +91,9 @@ public enum TileType {
     private ItemType unlockableBy;
     private Texture unlockedTexture[];
     private int unlockedTextureRots[];
+    private Texture deactivatedTexture[];
+    private int deactivatedTextureRots[];
+    private boolean isSecure;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
 
@@ -108,6 +112,9 @@ public enum TileType {
         this.unlockableBy = builder.unlockableBy();
         this.unlockedTexture = builder.getUnlockedTileTexture();
         this.unlockedTextureRots = builder.getUnlockedTileTextureRots();
+        this.deactivatedTexture = builder.getDeactivatedTileTexture();
+        this.deactivatedTextureRots = builder.getDeactivatedTileTextureRots();
+        this.isSecure = builder.isSecure();
     }
 
     private void createIdMapAndArrays() {
@@ -158,6 +165,15 @@ public enum TileType {
     public int[] getUnlockedTileTextureRots() {
         return unlockedTextureRots;
     }
+    public Texture[] getDeactivatedTileTexture() {
+        return deactivatedTexture;
+    }
+    public int[] getDeactivatedTextureRots() {
+        return deactivatedTextureRots;
+    }
+    public boolean isSecure() {
+        return isSecure;
+    }
 
     /**
      * Tile builder class
@@ -172,6 +188,9 @@ public enum TileType {
         public static ItemType unlockableBy;
         public static Texture unlockedTex[];
         public static int[] unlockedTexRots;
+        public static Texture daTex[];
+        public static int[] daTexRots;
+        public static boolean isSecure;
 
 
         /**
@@ -188,6 +207,9 @@ public enum TileType {
             unlockableBy = ItemType.NULL;
             unlockedTex = null;
             unlockedTexRots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            daTex = null;
+            daTexRots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            isSecure = false;
         }
 
         /**
@@ -240,6 +262,17 @@ public enum TileType {
         private Builder unlockableBy(ItemType key, Texture[] unlockedTileTexture, int[] unlockedTileTextureRots) {
             unlockableBy = key;
             unlockedTex = unlockedTileTexture;
+            unlockedTexRots = unlockedTileTextureRots;
+            return this;
+        }
+
+        /**
+         * Set if this door can be unlocked
+         */
+        private Builder secure(Texture[] deactivatedTileTexture, int[] deactivatedTileTextureRots) {
+            daTex = deactivatedTileTexture;
+            daTexRots = deactivatedTileTextureRots;
+            isSecure = true;
             return this;
         }
 
@@ -281,6 +314,15 @@ public enum TileType {
         }
         public int[] getUnlockedTileTextureRots() {
             return unlockedTexRots;
+        }
+        public Texture[] getDeactivatedTileTexture() {
+            return daTex;
+        }
+        public int[] getDeactivatedTileTextureRots() {
+            return daTexRots;
+        }
+        public boolean isSecure() {
+            return isSecure;
         }
     }
 }

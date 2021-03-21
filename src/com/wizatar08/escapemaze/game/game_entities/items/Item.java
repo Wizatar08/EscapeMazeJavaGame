@@ -129,10 +129,22 @@ public class Item implements Entity {
         return weight;
     }
 
+    private void keyAbility(Tile tile) {
+        tile.unlock();
+    }
+
+    private void laserDeactivatorAbility(Tile tile) {
+        tile.setSecurity(false);
+    }
+
     public boolean doUse(Game game, Item item) {
         for (Tile tile : game.getPlayer().getAllSurroundingTiles()) {
             if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
-                tile.unlock();
+                keyAbility(tile);
+                return true;
+            }
+            if (tile.isSecureTile() && tile.isSecure() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
+                laserDeactivatorAbility(tile);
                 return true;
             }
         }

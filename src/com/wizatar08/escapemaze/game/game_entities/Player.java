@@ -23,7 +23,7 @@ public class Player implements Entity {
     private float width, height;
     private TileMap map;
     private boolean isSafe;
-    private Texture tex, detectTex, detectLockedDoorTex;
+    private Texture tex, detectTex;
     private Game gameController;
     private Inventory inventory;
     private float weightInfluence;
@@ -39,7 +39,6 @@ public class Player implements Entity {
         this.isSafe = false;
         this.tex = LoadPNG("entities/player");
         this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
-        this.detectLockedDoorTex = LoadPNG("tiles/selectors/safe_space_selector");
         this.inventory = new Inventory(5);
     }
 
@@ -248,6 +247,9 @@ public class Player implements Entity {
             }
         }
         if (hitItem != null) {
+            if (gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getX() == hitItem.getX() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getY() == hitItem.getY() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).isSecure()) {
+                gameController.setState(Game.GameStates.ALARM);
+            }
             addItemToInventory(hitItem);
         }
     }
@@ -276,7 +278,6 @@ public class Player implements Entity {
     }
 
     private boolean nextToTile(Tile tile) {
-        //drawQuadTex(LoadPNG("game/items/null"), tileDown.getX() + Game.DIS_X, tileDown.getY() + Game.DIS_Y);
         return getUpTile() == tile || getLeftTile() == tile || getRightTile() == tile || getDownTile() == tile;
     }
     public ArrayList<Tile> getAllSurroundingTiles() {
@@ -288,26 +289,30 @@ public class Player implements Entity {
         return list;
     }
 
-    private void detectIfAtLockedDoor() {
+    private void detectIfAtSpecificTile() {
         ArrayList<Tile> list = getAllSurroundingTiles();
         for (Tile tile : list) {
-            if (tile.isLockedDoor() && !tile.canPass()) {
-                for (Item item : inventory.getItems()) {
-                    if (item != null) {
+            for (Item item : inventory.getItems()) {
+                if (item != null) {
+                    if (tile.isLockedDoor() && !tile.canPass()) {
                         if (ItemType.getType(item.getId()) == tile.unlockableBy()) {
-                            drawQuadTex(detectLockedDoorTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
+                            drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                         }
+                    }
+                    if (tile.isSecure() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
+                        drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                     }
                 }
             }
         }
+        //drawQuadTex(LoadPNG("tiles/null"), (int) Math.floor((x + 16) / 64) * 64 + Game.DIS_X, (int) Math.floor((y + 16) / 64) * 64 + Game.DIS_Y);
     }
 
     public void update() {
         if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
             detectKey();
         }
-        detectIfAtLockedDoor();
+        detectIfAtSpecificTile();
         detectIfHitItem();
         calculateWeight();
     }
@@ -358,7 +363,7 @@ public class Player implements Entity {
         return isSafe;
     }
     
-    public void setIsSafe(boolean isSafe) {
+    public void setIfSafe(boolean isSafe) {
         this.isSafe = isSafe;
     }
 }
