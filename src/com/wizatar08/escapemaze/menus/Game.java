@@ -8,6 +8,7 @@ import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.*;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.helpers.ui.UI;
+import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.render.Renderer;
@@ -123,6 +124,13 @@ public class Game {
                 player.update();
                 for (Item item : items) {
                     item.update();
+                }
+                for (Tile[] tileRow : map.getMapAsArray()) {
+                    for (Tile tile : tileRow) {
+                        if (tile.isSeen()) {
+                            tile.update();
+                        }
+                    }
                 }
             }
             if (internalAlarmTimer.getTotalSeconds() <= 0) {

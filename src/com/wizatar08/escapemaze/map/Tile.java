@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.map;
 
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
@@ -11,11 +12,13 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
-    private Texture texture;
+    private Texture texture, unlockedTexture[];
     private Texture overlapTexture[];
-    private int overlapTexRot[];
+    private int overlapTexRot[], unlockedTexRot[];
     private TileType type;
-    private boolean isSecurityComputer;
+    private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
+    private ItemType unlockableBy;
+    private boolean isPassable, isLocked, isDoor;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -25,10 +28,16 @@ public class Tile implements Entity, TileEntity {
         this.height = height;
         this.width = width;
         this.type = type;
+        this.isPassable = type.isPassable();
         this.texture = LoadPNG("tiles/" + type.getTexture());
         this.overlapTexture = type.getOverlayTex();
         this.overlapTexRot = type.getOverlayTexRot();
         this.isSecurityComputer = type.isSecurityComputer();
+        this.isEscapeDoor = type.isEscapeDoor();
+        this.unlockableBy = type.unlockableBy();
+        this.unlockedTexture = type.getUnlockedTileTexture();
+        this.unlockedTexRot = type.getUnlockedTileTextureRots();
+        this.isDoor = this.unlockableBy != ItemType.NULL;
     }
 
     public void draw(){
@@ -36,15 +45,33 @@ public class Tile implements Entity, TileEntity {
         setY(initialY + Editor.displacementY);
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
             drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
-            if (overlapTexture != null) {
-                for (int i = 0; i < overlapTexture.length; i++) {
-                    drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
+            canBeSeen = true;
+            if (!isDoor || (isDoor && !isPassable)) {
+                if (overlapTexture != null) {
+                    for (int i = 0; i < overlapTexture.length; i++) {
+                        drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
+                    }
+                }
+            } else {
+                if (unlockedTexture != null) {
+                    for (int i = 0; i < unlockedTexture.length; i++) {
+                        drawQuadTex(unlockedTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unlockedTexRot[i]);
+                    }
                 }
             }
+        } else {
+            canBeSeen = false;
         }
     }
 
     public void update() {
+    }
+
+    public void unlock() {
+        isPassable = true;
+    }
+    public void lock() {
+        isPassable = false;
     }
 
     // Getters
@@ -88,7 +115,7 @@ public class Tile implements Entity, TileEntity {
          this.height = (int) height;
     }
     public boolean canPass() {
-        return this.type.isPassable();
+        return this.isPassable;
     }
     public boolean isHarmful() {
         return false;
@@ -98,5 +125,21 @@ public class Tile implements Entity, TileEntity {
     }
     public boolean isSecurityComputer() {
         return isSecurityComputer;
+    }
+    public boolean isEscapeDoor() {
+        return isEscapeDoor;
+    }
+    public boolean isLockedDoor() {
+        return this.type.unlockableBy() != ItemType.NULL;
+    }
+    public ItemType getKeyToDoor() {
+        return this.type.unlockableBy();
+    }
+    public boolean isSeen() {
+        return canBeSeen;
+    }
+
+    public ItemType unlockableBy() {
+        return unlockableBy;
     }
 }

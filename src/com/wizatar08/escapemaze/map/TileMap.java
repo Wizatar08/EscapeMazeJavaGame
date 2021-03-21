@@ -7,7 +7,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class TileMap {
     private Tile[][] map;
     public static int tilesWide, tilesHigh;
-    private ArrayList<SafeSpot> safeSpots;
+    private ArrayList<TileDetectionSpot> tileDetectionSpots;
 
     public TileMap(){
         this.tilesWide = 16;
@@ -51,11 +51,11 @@ public class TileMap {
         }
     }
 
-    public void addSafeSpot(SafeSpot safeSpot) {
-        if (safeSpots == null) {
-            safeSpots = new ArrayList<>();
+    public void addSafeSpot(TileDetectionSpot tileDetectionSpot) {
+        if (tileDetectionSpots == null) {
+            tileDetectionSpots = new ArrayList<>();
         }
-        safeSpots.add(safeSpot);
+        tileDetectionSpots.add(tileDetectionSpot);
     }
 
     public int getTilesHigh() {
@@ -70,7 +70,7 @@ public class TileMap {
         return map;
     }
 
-    public ArrayList<SafeSpot> getSafeSpots() {
-        return safeSpots;
+    public ArrayList<TileDetectionSpot> getSafeSpots() {
+        return tileDetectionSpots;
     }
 }

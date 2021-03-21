@@ -2,20 +2,16 @@ package com.wizatar08.escapemaze.game.game_entities;
 
 import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
-import com.wizatar08.escapemaze.helpers.Lang;
-import com.wizatar08.escapemaze.map.SafeSpot;
+import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.Game;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
-import org.omg.SendingContext.RunTime;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
@@ -27,9 +23,10 @@ public class Player implements Entity {
     private float width, height;
     private TileMap map;
     private boolean isSafe;
-    private Texture tex, safeSpotTex;
+    private Texture tex, detectTex, detectLockedDoorTex;
     private Game gameController;
     private Inventory inventory;
+    private float weightInfluence;
 
     // Constructor for Player object
     public Player(Game game, float startXTile, float startYTile, TileMap map) {
@@ -41,7 +38,8 @@ public class Player implements Entity {
         this.map = map;
         this.isSafe = false;
         this.tex = LoadPNG("entities/player");
-        this.safeSpotTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.detectLockedDoorTex = LoadPNG("tiles/selectors/safe_space_selector");
         this.inventory = new Inventory(5);
     }
 
@@ -56,10 +54,10 @@ public class Player implements Entity {
     private boolean isNearSafeSpot() {
         if (map.getSafeSpots() != null) {
             int i = 0;
-            for (SafeSpot safeSpot : map.getSafeSpots()) {
-                Tile tile = safeSpot.getDetectTile();
-                float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
-                float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
+            for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
+                Tile tile = tileDetectionSpot.getDetectTile();
+                float distX = tileDetectionSpot.getDetectTile().getX() - tileDetectionSpot.getSafeTile().getX();
+                float distY = tileDetectionSpot.getDetectTile().getY() - tileDetectionSpot.getSafeTile().getY();
                 if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
                     i++;
                 }
@@ -86,16 +84,16 @@ public class Player implements Entity {
     public void playerPressAndHoldKeyDetection() {
         if (!isSafe) {
             if (keyDown(Keyboard.KEY_W)) {
-                moveCharacter(0, -1);
+                moveCharacter(0, -1 / weightInfluence);
             }
             if (keyDown(Keyboard.KEY_S)) {
-                moveCharacter(0, 1);
+                moveCharacter(0, 1 / weightInfluence);
             }
             if (keyDown(Keyboard.KEY_A)) {
-                moveCharacter(-1, 0);
+                moveCharacter(-1 / weightInfluence, 0);
             }
             if (keyDown(Keyboard.KEY_D)) {
-                moveCharacter(1, 0);
+                moveCharacter(1 / weightInfluence, 0);
             }
         }
     }
@@ -103,15 +101,23 @@ public class Player implements Entity {
     // Go into a safe spot. Make yourself immune to anything and set your position to where you will appear when exiting the safe spot
     private void goIntoSafeSpot() {
         isSafe = true;
-        for (SafeSpot safeSpot : map.getSafeSpots()) {
-            Tile tile = safeSpot.getDetectTile();
-            float distX = tile.getX() - safeSpot.getSafeTile().getX();
-            float distY = tile.getY() - safeSpot.getSafeTile().getY();
+        for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
+            Tile tile = tileDetectionSpot.getDetectTile();
+            float distX = tile.getX() - tileDetectionSpot.getSafeTile().getX();
+            float distY = tile.getY() - tileDetectionSpot.getSafeTile().getY();
             if (checkCollision(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), x, y, width, height)) {
                 x = tile.getX() - (distX / 4) + ((float) TILE_SIZE / 2) - 16;
                 y = tile.getY() - (distY / 4) + ((float) TILE_SIZE / 2) - 16;
+                System.out.println(tileDetectionSpot.getSafeTile().isEscapeDoor());
+                if (tileDetectionSpot.getSafeTile().isEscapeDoor()) {
+                    escapeDoor();
+                }
             }
         }
+    }
+
+    private void escapeDoor() {
+        // Update escape door stuffs
     }
 
     // Check if a key is pressed
@@ -120,7 +126,7 @@ public class Player implements Entity {
     }
 
     // Move the player and detect if the player hit any walls
-    private void moveCharacter(int xDir, int yDir) {
+    private void moveCharacter(float xDir, float yDir) {
         Tile leftTile = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.floor(y / TILE_SIZE));
         Tile rightTile = map.getTile((int) Math.floor(x / TILE_SIZE) + 1, (int) Math.floor(y / TILE_SIZE));
         Tile upTile = map.getTile((int) Math.floor(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE) - 1);
@@ -132,29 +138,29 @@ public class Player implements Entity {
 
         if (xDir < 0) {
             x += xDir * Clock.Delta() * Clock.FPS;
-            if (!leftTile.getType().isPassable() && checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
-                (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.getType().isPassable())) {
+            if (!leftTile.canPass() && checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
+                (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.canPass())) {
                 x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (xDir > 0) {
             x += xDir * Clock.Delta() * Clock.FPS;
-            if (!rightTile.getType().isPassable() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.getType().isPassable())) {
+            if (!rightTile.canPass() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
+                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.canPass())) {
                 x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir < 0) {
             y += yDir * Clock.Delta() * Clock.FPS;
-            if (!upTile.getType().isPassable() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
-                    (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.getType().isPassable())) {
+            if (!upTile.canPass() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
+                    (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.canPass())) {
                 y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir > 0) {
             y += yDir * Clock.Delta() * Clock.FPS;
-            if ((!downTile.getType().isPassable() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.getType().isPassable())) {
+            if ((!downTile.canPass() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
+                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.canPass())) {
                 y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
@@ -163,11 +169,13 @@ public class Player implements Entity {
     private void useItem(int slot) {
         try {
             Item item = inventory.getItems().get(slot);
-            item.setX(x - (item.getWidth() / 2));
-            item.setY(y - (item.getHeight() / 2));
-            gameController.addItemToGame(item);
-            item.setIsInInventory(false);
-            inventory.remove(slot);
+            if (!item.doUse(gameController, item)) {
+                item.setX(x - (item.getWidth() / 2));
+                item.setY(y - (item.getHeight() / 2));
+                gameController.addItemToGame(item);
+                item.setIsInInventory(false);
+                inventory.remove(slot);
+            }
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {}
     }
 
@@ -195,13 +203,13 @@ public class Player implements Entity {
             drawQuadTex(tex, x + Game.DIS_X, y + Game.DIS_Y);
         }
         if (isNearSafeSpot()) {
-            for (SafeSpot safeSpot : map.getSafeSpots()) {
-                Tile tile = safeSpot.getDetectTile();
-                Tile safeTile = safeSpot.getSafeTile();
-                float distX = safeSpot.getDetectTile().getX() - safeSpot.getSafeTile().getX();
-                float distY = safeSpot.getDetectTile().getY() - safeSpot.getSafeTile().getY();
+            for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
+                Tile tile = tileDetectionSpot.getDetectTile();
+                Tile safeTile = tileDetectionSpot.getSafeTile();
+                float distX = tileDetectionSpot.getDetectTile().getX() - tileDetectionSpot.getSafeTile().getX();
+                float distY = tileDetectionSpot.getDetectTile().getY() - tileDetectionSpot.getSafeTile().getY();
                 if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
-                    drawQuadTex(safeSpotTex, safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y, safeTile.getWidth(), safeTile.getHeight());
+                    drawQuadTex(detectTex, safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y, safeTile.getWidth(), safeTile.getHeight());
                 }
             }
         }
@@ -226,9 +234,62 @@ public class Player implements Entity {
         }
     }
 
+    private void calculateWeight() {
+        float weightSum = 1;
+        for (Item item : inventory.getItems()) {
+            if (item != null) {
+                weightSum += item.getWeight();
+            }
+        }
+        weightInfluence = weightSum;
+    }
+
+    private Tile getUpTile() {
+        return gameController.getMap().getTile((int) Math.floor((x + (TILE_SIZE / 4)) / TILE_SIZE), (int) Math.floor((y + (TILE_SIZE / 2) - 1) / TILE_SIZE) - 1);
+    }
+    private Tile getLeftTile() {
+        return gameController.getMap().getTile((int) Math.floor((x + (TILE_SIZE / 2) - 1) / TILE_SIZE) - 1, (int) Math.floor((y + (TILE_SIZE / 4)) / TILE_SIZE));
+    }
+    private Tile getRightTile() {
+        return gameController.getMap().getTile((int) Math.floor((x + 1) / TILE_SIZE) + 1, (int) Math.floor((y + (TILE_SIZE / 4)) / TILE_SIZE));
+    }
+    private Tile getDownTile() {
+        return gameController.getMap().getTile((int) Math.floor((x + (TILE_SIZE / 4)) / TILE_SIZE), (int) Math.floor((y + 1) / TILE_SIZE) + 1);
+    }
+
+    private boolean nextToTile(Tile tile) {
+        //drawQuadTex(LoadPNG("game/items/null"), tileDown.getX() + Game.DIS_X, tileDown.getY() + Game.DIS_Y);
+        return getUpTile() == tile || getLeftTile() == tile || getRightTile() == tile || getDownTile() == tile;
+    }
+    public ArrayList<Tile> getAllSurroundingTiles() {
+        ArrayList<Tile> list = new ArrayList<>();
+        list.add(getUpTile());
+        list.add(getRightTile());
+        list.add(getDownTile());
+        list.add(getLeftTile());
+        return list;
+    }
+
+    private void detectIfAtLockedDoor() {
+        ArrayList<Tile> list = getAllSurroundingTiles();
+        for (Tile tile : list) {
+            if (tile.isLockedDoor() && !tile.canPass()) {
+                for (Item item : inventory.getItems()) {
+                    if (item != null) {
+                        if (ItemType.getType(item.getId()) == tile.unlockableBy()) {
+                            drawQuadTex(detectLockedDoorTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void update() {
+        detectIfAtLockedDoor();
         detectKey();
         detectIfHitItem();
+        calculateWeight();
     }
 
 

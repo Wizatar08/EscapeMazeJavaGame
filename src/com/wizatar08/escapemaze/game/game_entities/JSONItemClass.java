@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.game.game_entities.items.ItemTypes;
 import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.menus.Game;
 

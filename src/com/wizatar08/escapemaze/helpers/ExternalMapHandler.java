@@ -2,8 +2,8 @@ package com.wizatar08.escapemaze.helpers;
 
 import com.wizatar08.escapemaze.menus.Menus;
 import com.wizatar08.escapemaze.map.TileType;
-import com.wizatar08.escapemaze.map.SafeSpot;
-import com.wizatar08.escapemaze.map.SafeSpots;
+import com.wizatar08.escapemaze.map.TileDetectionSpot;
+import com.wizatar08.escapemaze.map.EntityDetectDirection;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.MenuRun;
@@ -58,8 +58,8 @@ public class ExternalMapHandler {
                     grid.setTile(i, j, getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)));
 
                     if (MenuRun.MENU == Menus.GAME) {
-                        if (grid.getTile(i, j).getType().getSafeSpot() != SafeSpots.NONE) {
-                            grid.addSafeSpot(new SafeSpot(SafeSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j)));
+                        if (grid.getTile(i, j).getType().getSafeSpot() != EntityDetectDirection.NONE) {
+                            grid.addSafeSpot(new TileDetectionSpot(TileDetectionSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j), grid.getTile(i, j).isEscapeDoor()));
                         }
                     }
                 }

@@ -1,14 +1,18 @@
 package com.wizatar08.escapemaze.game.game_entities.items;
 
+import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
+import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.newdawn.slick.opengl.Texture;
 
+import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
+
 public class Item implements Entity {
-    private float x, y, texX, texY, width, height;
+    private float x, y, texX, texY, width, height, weight;
     private Texture texture;
     private ItemType type;
     private String id;
@@ -26,6 +30,7 @@ public class Item implements Entity {
         this.texY = y + ((Renderer.TILE_SIZE - height) / 2);
         this.id = type.getId();
         this.inInventory = false;
+        this.weight = type.getWeight();
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
     }
 
@@ -117,5 +122,19 @@ public class Item implements Entity {
     public void setIsInInventory(boolean inInventory) {
         this.cooldownPickupTimer.setTime(5);
         this.inInventory = inInventory;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public boolean doUse(Game game, Item item) {
+        for (Tile tile : game.getPlayer().getAllSurroundingTiles()) {
+            if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
+                tile.unlock();
+                return true;
+            }
+        }
+        return false;
     }
 }

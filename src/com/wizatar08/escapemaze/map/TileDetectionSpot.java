@@ -2,18 +2,19 @@ package com.wizatar08.escapemaze.map;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SafeSpot {
+public class TileDetectionSpot {
     // Initialize variables
     private Tile safeTile;
     private Tile detectTile;
+    private boolean isEscape;
 
-
-    public SafeSpot(Tile detectTile, Tile goToTile) {
+    public TileDetectionSpot(Tile detectTile, Tile goToTile, boolean isEscapeTile) {
         this.detectTile = detectTile;
         this.safeTile = goToTile;
+        this.isEscape = isEscapeTile;
     }
 
-    public static Tile detectAt(TileMap map, Tile tile, @NotNull SafeSpots dir) {
+    public static Tile detectAt(TileMap map, Tile tile, @NotNull EntityDetectDirection dir) {
         switch (dir) {
             default:
                 return tile;
@@ -34,5 +35,9 @@ public class SafeSpot {
 
     public Tile getSafeTile() {
         return safeTile;
+    }
+
+    public boolean isEscapeDoor() {
+        return isEscape;
     }
 }

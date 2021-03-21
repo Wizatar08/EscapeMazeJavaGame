@@ -1,6 +1,6 @@
 package com.wizatar08.escapemaze.map;
 
-public enum SafeSpots {
+public enum EntityDetectDirection {
     NONE,
     UP,
     DOWN,
