@@ -37,9 +37,12 @@ public class JSONLevel {
     @SerializedName("alarm_seconds")
     private int alarmSeconds;
 
+    @SerializedName("inventory_slots")
+    private int inventorySlots;
+
     private Gson gson;
 
-    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies, String items, String scroll, int alarmSeconds) {
+    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots) {
         this.map = map;
         this.levelName = levelName;
         this.playerStartPos = playerStartPos;
@@ -47,10 +50,13 @@ public class JSONLevel {
         this.itemsFileName = items;
         this.scroll = scroll;
         this.alarmSeconds = alarmSeconds;
+        this.inventorySlots = inventorySlots;
     }
 
     public ArrayList<Enemy> getEnemies(Game game) {
+        System.out.println(enemyFileName);
         this.gson = new Gson();
+        System.out.println(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json"));
         InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json")));
         JSONEnemyClass enemies = gson.fromJson(reader, JSONEnemyClass.class);
         return enemies.getEnemies(game);
@@ -85,5 +91,9 @@ public class JSONLevel {
 
     public int getAlarmSeconds() {
         return alarmSeconds;
+    }
+
+    public int getInventorySlots() {
+        return inventorySlots;
     }
 }

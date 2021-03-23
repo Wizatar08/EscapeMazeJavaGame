@@ -1,0 +1,10 @@
+{
+  "level_name": "Level 8",
+  "map": "level8",
+  "player_start":[13, 3],
+  "enemies": "lvl8",
+  "items": "lvl8",
+  "scroll": "none",
+  "alarm_seconds": 35,
+  "inventory_slots": 5
+}

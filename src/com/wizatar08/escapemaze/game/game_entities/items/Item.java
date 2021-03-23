@@ -9,6 +9,11 @@ import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.newdawn.slick.opengl.Texture;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
@@ -18,6 +23,7 @@ public class Item implements Entity {
     private String id;
     private boolean inInventory, required;
     private Timer cooldownPickupTimer;
+    private Class<?> clazz;
 
     public Item(ItemType type, Texture texture, float x, float y) {
         this.texture = texture;
@@ -33,6 +39,16 @@ public class Item implements Entity {
         this.weight = type.getWeight();
         this.required = type.isRequired();
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
+        if (type.getClassname() != null) {
+            try {
+                this.clazz = type.getClassname();
+                clazz.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.clazz = null;
+        }
     }
 
     private void updateTimer() {
@@ -46,6 +62,13 @@ public class Item implements Entity {
 
     @Override
     public void update() {
+        try {
+            if (clazz != null) {
+                clazz.getMethod("update").invoke(clazz.newInstance());
+            }
+        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            e.printStackTrace();
+        }
         updateTimer();
     }
 

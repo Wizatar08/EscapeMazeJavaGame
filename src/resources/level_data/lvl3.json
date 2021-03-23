@@ -1,0 +1,10 @@
+{
+  "level_name": "Level 3",
+  "map": "level3",
+  "player_start":[8, 3],
+  "enemies": "lvl3",
+  "items": "lvl3",
+  "scroll": "none",
+  "alarm_seconds": 45,
+  "inventory_slots": 5
+}

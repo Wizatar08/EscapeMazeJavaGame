@@ -1,0 +1,10 @@
+{
+  "level_name": "Level 6",
+  "map": "level6",
+  "player_start":[8, 1],
+  "enemies": "lvl6",
+  "items": "lvl6",
+  "scroll": "none",
+  "alarm_seconds": 30,
+  "inventory_slots": 5
+}

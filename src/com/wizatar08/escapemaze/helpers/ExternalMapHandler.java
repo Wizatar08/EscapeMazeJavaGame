@@ -46,28 +46,32 @@ public class ExternalMapHandler {
         String map = "";
         String[] mapAsArray = new String[]{};
         try {
-            mapAsArray = getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName + ".wtremm"));
-            map = getMapAsString(mapAsArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TileMap grid = new TileMap(mapAsArray.length, (int) Math.floor(mapAsArray[0].length() / 6));
-        try {
-            for (int i = 0; i < grid.getTilesWide(); i++) {
-                for (int j = 0; j < grid.getTilesHigh(); j++) {
-                    grid.setTile(i, j, getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)));
+            try {
+                mapAsArray = getMapAsArray(Project.class.getClassLoader().getResourceAsStream("resources/maps/" + mapName + ".wtremm"));
+                map = getMapAsString(mapAsArray);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            TileMap grid = new TileMap(mapAsArray.length, (int) Math.floor(mapAsArray[0].length() / 6));
+            try {
+                for (int i = 0; i < grid.getTilesWide(); i++) {
+                    for (int j = 0; j < grid.getTilesHigh(); j++) {
+                        grid.setTile(i, j, getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)));
 
-                    if (MenuRun.MENU == Menus.GAME) {
-                        if (grid.getTile(i, j).getType().getSafeSpot() != EntityDetectDirection.NONE) {
-                            grid.addSafeSpot(new TileDetectionSpot(TileDetectionSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j), grid.getTile(i, j).isEscapeDoor()));
+                        if (MenuRun.MENU == Menus.GAME) {
+                            if (grid.getTile(i, j).getType().getSafeSpot() != EntityDetectDirection.NONE) {
+                                grid.addSafeSpot(new TileDetectionSpot(TileDetectionSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j), grid.getTile(i, j).isEscapeDoor()));
+                            }
                         }
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            return grid;
+        } catch (NullPointerException e) {
+            return null;
         }
-        return grid;
     }
 
     public static TileType getTileType(String ID) {

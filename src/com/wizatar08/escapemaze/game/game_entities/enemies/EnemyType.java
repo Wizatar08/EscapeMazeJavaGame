@@ -6,6 +6,7 @@ import com.wizatar08.escapemaze.helpers.VariationID;
 import java.util.*;
 
 public enum EnemyType {
+    // IDTYPE: 2
     CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60));
 
     // Initialize variables

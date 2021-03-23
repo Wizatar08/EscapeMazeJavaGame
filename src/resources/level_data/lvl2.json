@@ -1,0 +1,10 @@
+{
+  "level_name": "Level 2",
+  "map": "level2",
+  "player_start":[5, 3],
+  "enemies": "lvl2",
+  "items": "lvl2",
+  "scroll": "none",
+  "alarm_seconds": 45,
+  "inventory_slots": 5
+}

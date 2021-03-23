@@ -1,0 +1,10 @@
+{
+  "level_name": "Level 7",
+  "map": "level7",
+  "player_start":[7, 5],
+  "enemies": "lvl7",
+  "items": "lvl7",
+  "scroll": "none",
+  "alarm_seconds": 45,
+  "inventory_slots": 5
+}

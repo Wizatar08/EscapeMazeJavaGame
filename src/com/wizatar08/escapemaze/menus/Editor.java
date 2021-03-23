@@ -81,6 +81,15 @@ public class Editor {
             if (keyDown(Keyboard.KEY_S)) {
                 ExternalMapHandler.SaveMap("map", map);
             }
+            if (keyDown(Keyboard.KEY_LSHIFT)) {
+                String mapName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
+                TileMap newMap = ExternalMapHandler.LoadMap(mapName);
+                if (newMap != null) {
+                    map = newMap;
+                } else {
+                    JOptionPane.showMessageDialog(null, Lang.get("editor.load_map.error") + mapName + ".wtremm");
+                }
+            }
             if (keyDown(Keyboard.KEY_EQUALS)) {
                 try {
                     int size = Integer.parseInt(JOptionPane.showInputDialog(Lang.get("editor.change_map.width.popup")));
@@ -141,10 +150,10 @@ public class Editor {
                 }
             }
         }
-        if (keyDown(Keyboard.KEY_UP)) displacementY -= 1;
-        if (keyDown(Keyboard.KEY_DOWN)) displacementY += 1;
-        if (keyDown(Keyboard.KEY_LEFT)) displacementX += 1;
-        if (keyDown(Keyboard.KEY_RIGHT)) displacementX -= 1;
+        if (keyDown(Keyboard.KEY_UP)) displacementY += 6;
+        if (keyDown(Keyboard.KEY_DOWN)) displacementY -= 6;
+        if (keyDown(Keyboard.KEY_LEFT)) displacementX += 6;
+        if (keyDown(Keyboard.KEY_RIGHT)) displacementX -= 6;
     }
 
     private boolean keyDown(int key) {

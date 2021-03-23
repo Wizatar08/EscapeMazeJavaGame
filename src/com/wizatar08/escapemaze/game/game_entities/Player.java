@@ -39,7 +39,8 @@ public class Player implements Entity {
         this.isSafe = false;
         this.tex = LoadPNG("entities/player");
         this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
-        this.inventory = new Inventory(5);
+        this.inventory = new Inventory(gameController.getMaxInventorySlots());
+        System.out.println("INV: " + gameController.getMaxInventorySlots());
     }
 
 
@@ -82,6 +83,18 @@ public class Player implements Entity {
             }
             if (keyDown(Keyboard.KEY_5)) {
                 useItem(4);
+            }
+            if (keyDown(Keyboard.KEY_6)) {
+                useItem(5);
+            }
+            if (keyDown(Keyboard.KEY_7)) {
+                useItem(6);
+            }
+            if (keyDown(Keyboard.KEY_8)) {
+                useItem(7);
+            }
+            if (keyDown(Keyboard.KEY_9)) {
+                useItem(8);
             }
 
             if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {

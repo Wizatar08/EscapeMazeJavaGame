@@ -1,9 +1,10 @@
 {
   "level_name": "Level 1",
-  "map": "level1.wtremm",
-  "player_start":[15, 11],
+  "map": "level1",
+  "player_start":[5, 5],
   "enemies": "lvl1",
   "items": "lvl1",
-  "scroll": "move_with_player",
-  "alarm_seconds": 45
+  "scroll": "none",
+  "alarm_seconds": 45,
+  "inventory_slots": 5
 }

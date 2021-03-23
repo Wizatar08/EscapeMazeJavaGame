@@ -28,7 +28,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Game {
     // Initialize variables
     private Gson gson;
-    private int levelNumber, requiredItems, stolenItems;
+    private int levelNumber, requiredItems, stolenItems, inventorySlots;
     private TileMap map;
     private String levelName;
     private JSONLevel level;
@@ -49,7 +49,8 @@ public class Game {
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
         level = gson.fromJson(reader, JSONLevel.class);
         map = ExternalMapHandler.LoadMap(level.getMap());
-        player = new Player(this, level.getPlayerStartPos()[0], level.getPlayerStartPos()[1], map);
+        inventorySlots = level.getInventorySlots();
+        player = new Player(this, level.getPlayerStartPos()[0] + 1, level.getPlayerStartPos()[1] + 1, map);
         enemies = level.getEnemies(this);
         items = level.getItems(this);
         currentGameState = GameStates.NORMAL;
@@ -324,5 +325,9 @@ public class Game {
 
     public int getStolenItems() {
         return stolenItems;
+    }
+
+    public int getMaxInventorySlots() {
+        return inventorySlots;
     }
 }
