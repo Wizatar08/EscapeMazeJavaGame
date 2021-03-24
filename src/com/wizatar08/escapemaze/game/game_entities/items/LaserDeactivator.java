@@ -31,7 +31,6 @@ public class LaserDeactivator implements ItemClass{
         for (Tile tile : player.getAllSurroundingTiles()) {
             if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
                 this.tile = tile;
-                use(item, game, player);
                 return true;
             }
         }
