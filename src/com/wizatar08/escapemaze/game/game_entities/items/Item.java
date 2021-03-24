@@ -24,8 +24,11 @@ public class Item implements Entity {
     private boolean inInventory, required;
     private Timer cooldownPickupTimer;
     private Class<?> clazz;
+    private Object itemClass;
+    private Game gameController;
 
-    public Item(ItemType type, Texture texture, float x, float y) {
+    public Item(Game game, ItemType type, Texture texture, float x, float y) {
+        this.gameController = game;
         this.texture = texture;
         this.type = type;
         this.x = x;
@@ -39,10 +42,11 @@ public class Item implements Entity {
         this.weight = type.getWeight();
         this.required = type.isRequired();
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
+        itemClass = null;
         if (type.getClassname() != null) {
             try {
                 this.clazz = type.getClassname();
-                clazz.newInstance();
+                itemClass = clazz.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -64,9 +68,14 @@ public class Item implements Entity {
     public void update() {
         try {
             if (clazz != null) {
-                clazz.getMethod("update").invoke(clazz.newInstance());
+                System.out.println(!this.isInInventory());
+                if (!this.isInInventory()) {
+                    clazz.getMethod("update", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
+                } else {
+                    clazz.getMethod("updateInven", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
+                }
             }
-        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         updateTimer();
@@ -144,7 +153,7 @@ public class Item implements Entity {
     }
 
     public void setIsInInventory(boolean inInventory) {
-        this.cooldownPickupTimer.setTime(5);
+        this.cooldownPickupTimer.setTime(3);
         this.inInventory = inInventory;
     }
 
@@ -152,24 +161,32 @@ public class Item implements Entity {
         return weight;
     }
 
-    private void keyAbility(Tile tile) {
-        tile.unlock();
-    }
-
     private void laserDeactivatorAbility(Tile tile) {
         tile.setSecurity(false);
     }
 
-    public boolean doUse(Game game, Item item) {
-        for (Tile tile : game.getPlayer().getAllSurroundingTiles()) {
-            if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
-                keyAbility(tile);
-                return true;
+    public void hitItem(Game gameController) {
+        try {
+            if (clazz != null) {
+                clazz.getMethod("onHit", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
             }
-            if (tile.isSecureTile() && tile.isSecure() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
-                laserDeactivatorAbility(tile);
-                return true;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean doUse(Item item) {
+        try {
+            if (clazz != null) {
+                if ((boolean) clazz.getMethod("canUseItem", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer())) {
+                    clazz.getMethod("use", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer());
+                    return true;
+                } else {
+                    return false;
+                }
             }
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
         return false;
     }

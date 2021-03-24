@@ -29,7 +29,7 @@ public class JSONItemClass {
             int x = items.get(i).getAsJsonObject().get("x").getAsInt();
             int y = items.get(i).getAsJsonObject().get("y").getAsInt();
             System.out.println(id + ", " + x + ", " + y);
-            itemList.add(new Item(ItemType.getType(id),
+            itemList.add(new Item(game, ItemType.getType(id),
                     Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()),
                     x, y));
         }

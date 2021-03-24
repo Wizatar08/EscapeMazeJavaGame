@@ -70,6 +70,14 @@ public class Inventory {
         }
     }
 
+    public void update() {
+        for (Item item : items) {
+            if (item != null) {
+                item.update();
+            }
+        }
+    }
+
     public int getMaxSlots() {
         return slots;
     }

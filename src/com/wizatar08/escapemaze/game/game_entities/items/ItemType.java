@@ -16,10 +16,10 @@ public enum ItemType {
     DARK_BLUE_KEY(new VariationID(IDTypes.ITEM, "001", "06"), "dark_blue_key", new Builder().weight(0.1f).className(Key.class)),
     PURPLE_KEY(new VariationID(IDTypes.ITEM, "001", "07"), "purple_key", new Builder().weight(0.1f).className(Key.class)),
     PINK_KEY(new VariationID(IDTypes.ITEM, "001", "08"), "pink_key", new Builder().weight(0.1f).className(Key.class)),
-    DIAMOND(new VariationID(IDTypes.ITEM, "002", "01"), "diamond", new Builder().weight(0.2f).required().className(Gem.class)),
-    LARGE_DIAMOND(new VariationID(IDTypes.ITEM, "002", "02"), "large_diamond", new Builder().weight(0.65f).required().className(Gem.class)),
-    RUBY(new VariationID(IDTypes.ITEM, "002", "03"), "ruby", new Builder().weight(0.3f).required().className(Gem.class)),
-    LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f));
+    DIAMOND(new VariationID(IDTypes.ITEM, "002", "01"), "diamond", new Builder().weight(0.2f).required()),
+    LARGE_DIAMOND(new VariationID(IDTypes.ITEM, "002", "02"), "large_diamond", new Builder().weight(0.65f).required()),
+    RUBY(new VariationID(IDTypes.ITEM, "002", "03"), "ruby", new Builder().weight(0.3f).required()),
+    LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class));
 
     // Initialize variables
     private String id;

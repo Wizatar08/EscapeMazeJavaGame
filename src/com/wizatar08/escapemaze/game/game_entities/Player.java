@@ -215,14 +215,18 @@ public class Player implements Entity {
     private void useItem(int slot) {
         try {
             Item item = inventory.getItems().get(slot);
-            if (!item.doUse(gameController, item)) {
-                item.setX(x - (item.getWidth() / 2));
-                item.setY(y - (item.getHeight() / 2));
-                gameController.addItemToGame(item);
-                item.setIsInInventory(false);
-                inventory.remove(slot);
+            if (!item.doUse(item)) {
+                drop(item, slot);
             }
         } catch (IndexOutOfBoundsException | NullPointerException ignored) {}
+    }
+
+    private void drop(Item item, int fromSlot) {
+        item.setX(x - (item.getWidth() / 2));
+        item.setY(y - (item.getHeight() / 2));
+        gameController.addItemToGame(item);
+        item.setIsInInventory(false);
+        inventory.remove(fromSlot);
     }
 
     // Draw the player if not in a safe spot
@@ -241,6 +245,7 @@ public class Player implements Entity {
                 }
             }
         }
+        inventory.update();
         inventory.draw();
     }
 
@@ -264,6 +269,7 @@ public class Player implements Entity {
                 gameController.setState(Game.GameStates.ALARM);
             }
             addItemToInventory(hitItem);
+            hitItem.hitItem(gameController);
         }
     }
 

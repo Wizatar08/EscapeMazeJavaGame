@@ -189,7 +189,7 @@ public class Editor {
                         items.remove(ind);
                     } else {
                         System.out.println(ItemType.getType(id) + ", " + id);
-                        items.add(new Item(ItemType.getType(id), LoadPNG("game/items/" + ItemType.getType(id).getTexture()), (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
+                        items.add(new Item(null, ItemType.getType(id), LoadPNG("game/items/" + ItemType.getType(id).getTexture()), (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
                     }
                 }
             } else {
