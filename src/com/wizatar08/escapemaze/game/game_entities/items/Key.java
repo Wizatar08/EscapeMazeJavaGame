@@ -13,24 +13,26 @@ public class Key implements ItemClass {
 
     @Override
     public void update(Item item, Game game, Player player) {
-        System.out.println("UPDATE");
+    }
+
+    @Override
+    public boolean canPickUp(Item item, Game game, Player player) {
+        return true;
     }
 
     @Override
     public void onHit(Item item, Game game, Player player) {
-        System.out.println("HIT");
     }
 
     @Override
     public void updateInven(Item item, Game game, Player player) {
-        System.out.println("UPDATEINVEN");
 
     }
 
     @Override
     public boolean canUseItem(Item item, Game game, Player player) {
         for (Tile tile : player.getAllSurroundingTiles()) {
-            if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
+            if (ItemType.getType(item.getId()) == tile.unlockableBy() && tile.isKeyDoorLocked()) {
                 this.tile = tile;
                 return true;
             }
@@ -40,6 +42,11 @@ public class Key implements ItemClass {
 
     @Override
     public void use(Item item, Game game, Player player) {
-        tile.unlock();
+        tile.unlockDoor();
+    }
+
+    @Override
+    public void onDropItem(Item item, Game game, Player player) {
+
     }
 }

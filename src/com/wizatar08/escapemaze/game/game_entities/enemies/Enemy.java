@@ -9,18 +9,20 @@ import org.lwjgl.Sys;
 import org.newdawn.slick.opengl.Texture;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import java.util.ArrayList;
+
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {
     private int currentPathPoint, distanceView;
-    private float x, y, width, height, rot, hypotenuse;
+    private float x, y, width, height, rot, hypotenuse, alarmSpeed;
     private String id;
     private int[][] pathCoords;
     private Texture texture;
     private EnemyType type;
     private EnemyPathfinder pathfinder;
-    private Player player;
+    private ArrayList<Player> playerInstances;
     private Game gameController;
 
     public Enemy(Game game, int id, int[][] path) {
@@ -36,8 +38,9 @@ public class Enemy implements Entity {
         this.hypotenuse = 0;
         this.pathfinder = new EnemyPathfinder(this);
         this.distanceView = type.getViewDistance();
-        this.player = game.getPlayer();
+        this.playerInstances = game.getPlayer();
         this.gameController = game;
+        this.alarmSpeed = type.getAlarmSpeed();
         multiplyPaths();
     }
 
@@ -79,8 +82,12 @@ public class Enemy implements Entity {
         }
         float diffX = x;
         float diffY = y;
-        x += pathfinder.getAddedCoords(rot)[0] * Clock.Delta() * Clock.Delta() * Clock.FPS * type.getSpeed();
-        y += pathfinder.getAddedCoords(rot)[1] * Clock.Delta() * Clock.Delta() * Clock.FPS * type.getSpeed();
+        float aSpeed = 1.0f;
+        if (gameController.currentState() == Game.GameStates.ALARM) {
+            aSpeed = alarmSpeed;
+        }
+        x += pathfinder.getAddedCoords(rot)[0] * Clock.Delta() * Clock.Delta() * Clock.FPS * type.getSpeed() * aSpeed;
+        y += pathfinder.getAddedCoords(rot)[1] * Clock.Delta() * Clock.Delta() * Clock.FPS * type.getSpeed() * aSpeed;
         diffX -= x;
         diffY -= y;
         hypotenuse -= Math.sqrt((diffX * diffX) + (diffY * diffY));
@@ -94,13 +101,19 @@ public class Enemy implements Entity {
     }
 
     private void detectPlayer() {
-        if (pathfinder.scanForWalls(distanceView) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !player.isSafe()) {
-            gameController.setState(Game.GameStates.ALARM);
+        playerInstances.forEach((p) -> {
+            if (pathfinder.scanForWalls(distanceView, p) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !playerInstances.get(gameController.CURRENT_PLAYER).isSafe()) {
+                gameController.setState(Game.GameStates.ALARM);
+            }
+        });
+        if (checkCollision(x, y, width, height, playerInstances.get(gameController.CURRENT_PLAYER).getX(), playerInstances.get(gameController.CURRENT_PLAYER).getY(), playerInstances.get(gameController.CURRENT_PLAYER).getWidth(), playerInstances.get(gameController.CURRENT_PLAYER).getHeight())) {
+            gameController.setState(Game.GameStates.GAME_END);
+            gameController.endGame(false);
         }
     }
 
     public float getAngleOfPlayerRelativeToEnemy() {
-        float rotComparison = pathfinder.getRotInDegrees(x, y, player.getX(), player.getY());
+        float rotComparison = pathfinder.getRotInDegrees(x, y, playerInstances.get(gameController.CURRENT_PLAYER).getX(), playerInstances.get(gameController.CURRENT_PLAYER).getY());
         return rotComparison - rot;
     }
 
@@ -150,8 +163,8 @@ public class Enemy implements Entity {
         return type;
     }
 
-    public Player getPlayer() {
-        return player;
+    public ArrayList<Player> getPlayer() {
+        return playerInstances;
     }
 
     public Game getGameController() {

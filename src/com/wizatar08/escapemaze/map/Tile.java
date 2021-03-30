@@ -12,13 +12,14 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
+    private String id;
     private Texture texture, unlockedTexture[], unsecureTexture[];
     private Texture overlapTexture[];
-    private int overlapTexRot[], unlockedTexRot[], unsecureTexRot[];
+    private int overlapTexRot[], unlockedTexRot[], unsecureTexRot[], requiredPassLevels[];
     private TileType type;
     private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
     private ItemType unlockableBy;
-    private boolean isPassable, isLocked, isDoor, isSecureTile, isSecure;
+    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -34,14 +35,30 @@ public class Tile implements Entity, TileEntity {
         this.overlapTexRot = type.getOverlayTexRot();
         this.isSecurityComputer = type.isSecurityComputer();
         this.isEscapeDoor = type.isEscapeDoor();
-        this.unlockableBy = type.unlockableBy();
         this.unlockedTexture = type.getUnlockedTileTexture();
         this.unlockedTexRot = type.getUnlockedTileTextureRots();
+
+        // SECURE: Determines if an alarm can be tripped
         this.unsecureTexture = type.getDeactivatedTileTexture();
         this.unsecureTexRot = type.getDeactivatedTextureRots();
         this.isSecureTile = type.isSecure();
         this.isSecure = isSecureTile;
-        this.isDoor = this.unlockableBy != ItemType.NULL;
+
+        // DOOR STUFF
+        this.unlockableBy = type.unlockableBy();
+        this.isKeyDoor = this.unlockableBy != ItemType.NULL;
+        this.doorLocked = type.isDoorLocked();
+        this.isAuthorityDoor = type.isAuthorityDoor();
+        this.authorityDoorLocked = isAuthorityDoor;
+
+        this.requiredPassLevels = type.cardPassesNeeded();
+
+        this.id = type.getId();
+
+    }
+
+    public boolean testIfPassable() {
+        return isPassable && !doorLocked && !authorityDoorLocked;
     }
 
     public void draw(){
@@ -56,16 +73,22 @@ public class Tile implements Entity, TileEntity {
                         drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
                     }
                 }
-            } else if (!isDoor || (isDoor && !isPassable)) {
-                if (overlapTexture != null) {
-                    for (int i = 0; i < overlapTexture.length; i++) {
-                        drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
-                    }
-                }
-            } else {
+            } else if ((isKeyDoor && !doorLocked)) {
                 if (unlockedTexture != null) {
                     for (int i = 0; i < unlockedTexture.length; i++) {
                         drawQuadTex(unlockedTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unlockedTexRot[i]);
+                    }
+                }
+            } else if ((isAuthorityDoor && !authorityDoorLocked)) {
+                if (unlockedTexture != null) {
+                    for (int i = 0; i < unlockedTexture.length; i++) {
+                        drawQuadTex(unlockedTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unlockedTexRot[i]);
+                    }
+                }
+            } else {
+                if (overlapTexture != null) {
+                    for (int i = 0; i < overlapTexture.length; i++) {
+                        drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
                     }
                 }
             }
@@ -77,11 +100,11 @@ public class Tile implements Entity, TileEntity {
     public void update() {
     }
 
-    public void unlock() {
-        isPassable = true;
+    public void unlockDoor() {
+        doorLocked = false;
     }
-    public void lock() {
-        isPassable = false;
+    public void lockDoor() {
+        doorLocked = true;
     }
 
     // Getters
@@ -142,6 +165,13 @@ public class Tile implements Entity, TileEntity {
     public boolean isLockedDoor() {
         return this.type.unlockableBy() != ItemType.NULL;
     }
+    public boolean isAuthorityDoor() {
+        return isAuthorityDoor;
+    }
+    public boolean isAuthorityDoorLocked() {
+        return authorityDoorLocked;
+    }
+
     public ItemType getKeyToDoor() {
         return this.type.unlockableBy();
     }
@@ -162,5 +192,21 @@ public class Tile implements Entity, TileEntity {
     }
     public void setSecurity(boolean set) {
         isSecure = set;
+    }
+
+    public boolean isKeyDoorLocked() {
+        return doorLocked;
+    }
+
+    public int[] getRequiredPassLevels() {
+        return requiredPassLevels;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setAuthorityDoorLock(boolean lock) {
+        this.authorityDoorLocked = lock;
     }
 }

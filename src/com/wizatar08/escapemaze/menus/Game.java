@@ -21,6 +21,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import javax.swing.*;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
@@ -32,7 +33,7 @@ public class Game {
     private TileMap map;
     private String levelName;
     private JSONLevel level;
-    private Player player;
+    private ArrayList<Player> playerInstances;
     private ArrayList<Enemy> enemies;
     private ArrayList<Item> items;
     private GameStates currentGameState, prevGameState;
@@ -42,6 +43,7 @@ public class Game {
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
     private Texture redScreen, alertBox, gameEndTex;
+    public int CURRENT_PLAYER;
 
     public Game() {
         gson = new Gson();
@@ -50,7 +52,13 @@ public class Game {
         level = gson.fromJson(reader, JSONLevel.class);
         map = ExternalMapHandler.LoadMap(level.getMap());
         inventorySlots = level.getInventorySlots();
-        player = new Player(this, level.getPlayerStartPos()[0] + 1, level.getPlayerStartPos()[1] + 1, map);
+        playerInstances = new ArrayList<>();
+        for (int i = 0; i < level.getPlayerStartPos().length; i++) {
+            playerInstances.add(new Player(this,
+                    level.getPlayerStartPos()[i][0] + 1,
+                    level.getPlayerStartPos()[i][1] + 1,
+                    map));
+        }
         enemies = level.getEnemies(this);
         items = level.getItems(this);
         currentGameState = GameStates.NORMAL;
@@ -81,6 +89,7 @@ public class Game {
             }
         }
         stolenItems = 0;
+        CURRENT_PLAYER = 0;
 
         switch (level.getScroll()) {
             case "none":
@@ -122,25 +131,39 @@ public class Game {
 
     public void switchPauseState() {
         if (currentGameState == Game.GameStates.NORMAL || currentGameState == Game.GameStates.ALARM) {
-        prevGameState = currentGameState;
-        currentGameState = Game.GameStates.PAUSED;
-    } else if (currentGameState == Game.GameStates.PAUSED) {
-        currentGameState = prevGameState;
+            prevGameState = currentGameState;
+            currentGameState = Game.GameStates.PAUSED;
+        } else if (currentGameState == Game.GameStates.PAUSED) {
+            currentGameState = prevGameState;
+        }
     }
+
+    public void changePlayer() {
+        CURRENT_PLAYER++;
+        if (CURRENT_PLAYER >= playerInstances.size()) {
+            CURRENT_PLAYER = 0;
+        }
     }
 
     public void update() {
         if (currentGameState == GameStates.GAME_END) {
             detectIfButtonHitOnGameEnd();
         } else {
+            for (int i = 0; i < playerInstances.size(); i++) {
+                if (i != CURRENT_PLAYER) {
+                    playerInstances.get(i).setSelected(false);
+                } else {
+                    playerInstances.get(i).setSelected(true);
+                }
+            }
             updateDisplacement();
             drawAll();
-            player.draw();
+            playerInstances.forEach((p) -> p.draw());
             detectKey();
             if (currentGameState != GameStates.PAUSED) {
                 updateEnemies();
                 updateTime();
-                player.update();
+                playerInstances.forEach((p) -> p.update());
                 for (Item item : items) {
                     item.update();
                 }
@@ -174,17 +197,17 @@ public class Game {
                 DIS_Y = 0;
                 break;
             case MOVE:
-                if (player.getX() > (map.getTilesWide() * TILE_SIZE - (WIDTH / 2))) {
+                if (playerInstances.get(CURRENT_PLAYER).getX() > (map.getTilesWide() * TILE_SIZE - (WIDTH / 2))) {
                     DIS_X = -(map.getTilesWide() * TILE_SIZE - WIDTH);
-                } else if (-player.getX() + WIDTH / 2 < 0) {
-                    DIS_X = -player.getX() + WIDTH / 2;
+                } else if (-playerInstances.get(CURRENT_PLAYER).getX() + WIDTH / 2 < 0) {
+                    DIS_X = -playerInstances.get(CURRENT_PLAYER).getX() + WIDTH / 2;
                 } else {
                     DIS_X = 0;
                 }
-                if (player.getY() > (map.getTilesHigh() * TILE_SIZE - (HEIGHT / 2))) {
+                if (playerInstances.get(CURRENT_PLAYER).getY() > (map.getTilesHigh() * TILE_SIZE - (HEIGHT / 2))) {
                     DIS_Y = -(map.getTilesHigh() * TILE_SIZE - HEIGHT);
-                } else if (-player.getY() + Renderer.HEIGHT / 2 < 0) {
-                    DIS_Y = -player.getY() + Renderer.HEIGHT / 2;
+                } else if (-playerInstances.get(CURRENT_PLAYER).getY() + Renderer.HEIGHT / 2 < 0) {
+                    DIS_Y = -playerInstances.get(CURRENT_PLAYER).getY() + Renderer.HEIGHT / 2;
                 } else {
                     DIS_Y = 0;
                 }
@@ -232,7 +255,7 @@ public class Game {
         for (Item item : items) {
             item.draw();
         }
-        player.draw();
+        playerInstances.forEach((p) -> p.draw());
         ui.draw();
         updateText();
         if (currentGameState == GameStates.ALARM) {
@@ -299,8 +322,8 @@ public class Game {
         map.draw();
     }
 
-    public Player getPlayer() {
-        return player;
+    public ArrayList<Player> getPlayer() {
+        return playerInstances;
     }
 
     public TileMap getMap() {

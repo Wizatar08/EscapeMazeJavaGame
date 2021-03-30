@@ -27,6 +27,7 @@ public class Player implements Entity {
     private Game gameController;
     private Inventory inventory;
     private float weightInfluence;
+    private boolean selected;
 
     // Constructor for Player object
     public Player(Game game, float startXTile, float startYTile, TileMap map) {
@@ -68,68 +69,70 @@ public class Player implements Entity {
     }
 
     public void detectKey() {
-        while (Keyboard.next()) {
-            if (keyDown(Keyboard.KEY_1)) {
-                useItem(0);
-            }
-            if (keyDown(Keyboard.KEY_2)) {
-                useItem(1);
-            }
-            if (keyDown(Keyboard.KEY_3)) {
-                useItem(2);
-            }
-            if (keyDown(Keyboard.KEY_4)) {
-                useItem(3);
-            }
-            if (keyDown(Keyboard.KEY_5)) {
-                useItem(4);
-            }
-            if (keyDown(Keyboard.KEY_6)) {
-                useItem(5);
-            }
-            if (keyDown(Keyboard.KEY_7)) {
-                useItem(6);
-            }
-            if (keyDown(Keyboard.KEY_8)) {
-                useItem(7);
-            }
-            if (keyDown(Keyboard.KEY_9)) {
-                useItem(8);
-            }
+        if (selected) {
+            while (Keyboard.next()) {
+                if (keyDown(Keyboard.KEY_1)) {
+                    useItem(0);
+                }
+                if (keyDown(Keyboard.KEY_2)) {
+                    useItem(1);
+                }
+                if (keyDown(Keyboard.KEY_3)) {
+                    useItem(2);
+                }
+                if (keyDown(Keyboard.KEY_4)) {
+                    useItem(3);
+                }
+                if (keyDown(Keyboard.KEY_5)) {
+                    useItem(4);
+                }
+                if (keyDown(Keyboard.KEY_6)) {
+                    useItem(5);
+                }
+                if (keyDown(Keyboard.KEY_7)) {
+                    useItem(6);
+                }
+                if (keyDown(Keyboard.KEY_8)) {
+                    useItem(7);
+                }
+                if (keyDown(Keyboard.KEY_9)) {
+                    useItem(8);
+                }
 
-            if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
-                if (keyDown(Keyboard.KEY_SPACE)) {
-                    if (isNearSafeSpot() && !isSafe) {
-                        goIntoSafeSpot();
-                    } else if (isSafe){
-                        isSafe = false;
-                    }
-                    if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
-                        gameController.setState(Game.GameStates.NORMAL);
+                if (keyDown(Keyboard.KEY_E)) {
+                    gameController.changePlayer();
+                }
+
+                if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
+                    if (keyDown(Keyboard.KEY_SPACE)) {
+                        if (isNearSafeSpot() && !isSafe) {
+                            goIntoSafeSpot();
+                        } else if (isSafe) {
+                            isSafe = false;
+                        }
+                        if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
+                            gameController.setState(Game.GameStates.NORMAL);
+                        }
                     }
                 }
+                if (keyDown(Keyboard.KEY_ESCAPE)) {
+                    gameController.switchPauseState();
+                }
             }
-            if (keyDown(Keyboard.KEY_ESCAPE)) {
-                gameController.switchPauseState();
+            if (!isSafe) {
+                if (keyDown(Keyboard.KEY_W)) {
+                    moveCharacter(0, -1.5f / weightInfluence);
+                }
+                if (keyDown(Keyboard.KEY_S)) {
+                    moveCharacter(0, 1.5f / weightInfluence);
+                }
+                if (keyDown(Keyboard.KEY_A)) {
+                    moveCharacter(-1.5f / weightInfluence, 0);
+                }
+                if (keyDown(Keyboard.KEY_D)) {
+                    moveCharacter(1.5f / weightInfluence, 0);
+                }
             }
-        }
-        if (!isSafe) {
-            if (keyDown(Keyboard.KEY_W)) {
-                moveCharacter(0, -1.5f / weightInfluence);
-            }
-            if (keyDown(Keyboard.KEY_S)) {
-                moveCharacter(0, 1.5f / weightInfluence);
-            }
-            if (keyDown(Keyboard.KEY_A)) {
-                moveCharacter(-1.5f / weightInfluence, 0);
-            }
-            if (keyDown(Keyboard.KEY_D)) {
-                moveCharacter(1.5f / weightInfluence, 0);
-            }
-        }
-
-        while (Keyboard.next()) {
-
         }
     }
 
@@ -184,29 +187,29 @@ public class Player implements Entity {
 
         if (xDir < 0) {
             x += xDir * Clock.Delta() * Clock.FPS;
-            if (!leftTile.canPass() && checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
-                (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.canPass())) {
+            if (!leftTile.testIfPassable()&& checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
+                (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.testIfPassable())) {
                 x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (xDir > 0) {
             x += xDir * Clock.Delta() * Clock.FPS;
-            if (!rightTile.canPass() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.canPass())) {
+            if (!rightTile.testIfPassable() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
+                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.testIfPassable())) {
                 x -= xDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir < 0) {
             y += yDir * Clock.Delta() * Clock.FPS;
-            if (!upTile.canPass() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
-                    (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.canPass())) {
+            if (!upTile.testIfPassable() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
+                    (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.testIfPassable())) {
                 y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
         if (yDir > 0) {
             y += yDir * Clock.Delta() * Clock.FPS;
-            if ((!downTile.canPass() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.canPass())) {
+            if ((!downTile.testIfPassable() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
+                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.testIfPassable())) {
                 y -= yDir * Clock.Delta() * Clock.FPS;
             }
         }
@@ -246,7 +249,9 @@ public class Player implements Entity {
             }
         }
         inventory.update();
-        inventory.draw();
+        if (selected) {
+            inventory.draw();
+        }
     }
 
     private void addItemToInventory(Item item) {
@@ -313,10 +318,13 @@ public class Player implements Entity {
         for (Tile tile : list) {
             for (Item item : inventory.getItems()) {
                 if (item != null) {
-                    if (tile.isLockedDoor() && !tile.canPass()) {
+                    if (tile.isLockedDoor() && tile.isKeyDoorLocked()) {
                         if (ItemType.getType(item.getId()) == tile.unlockableBy()) {
                             drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                         }
+                    }
+                    if (tile.isAuthorityDoor() && tile.isAuthorityDoorLocked()) {
+                        drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                     }
                     if (tile.isSecure() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
                         drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
@@ -384,5 +392,16 @@ public class Player implements Entity {
     
     public void setIfSafe(boolean isSafe) {
         this.isSafe = isSafe;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    public void setSelected(boolean select) {
+        this.selected = select;
     }
 }

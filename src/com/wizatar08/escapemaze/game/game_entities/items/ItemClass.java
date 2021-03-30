@@ -10,6 +10,11 @@ public interface ItemClass {
     void update(Item item, Game game, Player player);
 
     /**
+     * Determine whether this item can be picked up (not due to inventory, but due to special item effects)
+     */
+    boolean canPickUp(Item item, Game game, Player player);
+
+    /**
      * This method is used when a player hits the item
      */
     void onHit(Item item, Game game, Player player);
@@ -28,4 +33,9 @@ public interface ItemClass {
      * This method carries out an item's use ability
      */
     void use(Item item, Game game, Player player);
+
+    /**
+     * This method is used to run code when the item is dropped
+     */
+    void onDropItem(Item item, Game game, Player player);
 }

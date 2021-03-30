@@ -17,16 +17,36 @@ public enum ItemType {
     PURPLE_KEY(new VariationID(IDTypes.ITEM, "001", "07"), "purple_key", new Builder().weight(0.1f).className(Key.class)),
     PINK_KEY(new VariationID(IDTypes.ITEM, "001", "08"), "pink_key", new Builder().weight(0.1f).className(Key.class)),
     DIAMOND(new VariationID(IDTypes.ITEM, "002", "01"), "diamond", new Builder().weight(0.2f).required()),
-    LARGE_DIAMOND(new VariationID(IDTypes.ITEM, "002", "02"), "large_diamond", new Builder().weight(0.65f).required()),
+    LARGE_DIAMOND(new VariationID(IDTypes.ITEM, "002", "02"), "large_diamond", new Builder().weight(0.65f).required()), // Must always be surrounded by lasers
     RUBY(new VariationID(IDTypes.ITEM, "002", "03"), "ruby", new Builder().weight(0.3f).required()),
-    LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class));
+    LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class)),
+    PASS_1(new VariationID(IDTypes.ITEM, "004", "01"), "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
+    PASS_2(new VariationID(IDTypes.ITEM, "004", "02"), "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
+    PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class));
+
+    /* IDEAS FOR ITEMS:
+     * - Pass: Can unlock vaults
+     * - Admin pass: Can unlock special things.
+     * - Gas can: Can enable other items to be used. Has only certain amount of time before gas runs out.
+     * - Extra battery: Can enable other items to be used Has only certain amount of time before electricity runs out.
+     * - Jetpack: Must have gas can to use. Can let the player fly, avoiding certain security issues
+     * - Booster: Must have extra battery to use. Increases player speed. Uses 2% battery per second.
+     * - Small EMP: Must have 10% extra battery to use. Will shut down the nearest enemy robot or camera for 10 seconds.
+     * - EMP: Must have 40% extra battery to use. Shuts down all enemy robots and cameras for 20 seconds (cannot move or sound alarm). Afterwards, alarm will activate. One time use.
+     * - Hacked computer: Immediately turns off alarm no matter where you are. One time use.
+     * - Smoke machine: Must have 30% gas can to use. This halves the vision of all robots for 20 seconds.
+     * - Gas spot: Must have 40% gas can to use. Puts gas on the ground. The next enemy to step in it gets debuffed (loses half its speed and vision). Does not work on cameras or atoms bots. This clears the gas spot.
+     * - Blockade: Item cannot be picked up, but instead pushed (This is considered an item because it shouldn't spawn as a tile). This prevents enemies from seeing you through it. If an enemy bumps into it, alarm will be set off.
+     */
+
 
     // Initialize variables
     private String id;
     private String texture;
     private float weight;
-    private boolean required;
+    private boolean required, isPass;
     private Class className;
+    private int passLevel;
 
     private static HashMap<String, ItemType> ITEM_IDS;
 
@@ -38,6 +58,8 @@ public enum ItemType {
         this.weight = builder.getWeight();
         this.required = builder.getRequired();
         this.className = builder.getClassName();
+        this.passLevel = builder.isPass();
+        this.isPass = passLevel > 0;
     }
 
     private void createIdMapAndArrays() {
@@ -65,6 +87,12 @@ public enum ItemType {
     public Class getClassname() {
         return className;
     }
+    public int passLevel() {
+        return passLevel;
+    }
+    public boolean isPass() {
+        return isPass;
+    }
 
     public static ItemType getType(String type) {
         if (ITEM_IDS.get(type) != null) {
@@ -81,11 +109,13 @@ public enum ItemType {
         private float weight;
         private boolean required;
         private Class className;
+        private int passLevel;
 
         private Builder() {
             this.weight = 0.0f;
             this.required = false;
             this.className = null;
+            this.passLevel = 0;
         }
 
         public Builder weight(float weight) {
@@ -103,6 +133,11 @@ public enum ItemType {
             return this;
         }
 
+        public Builder pass(int level) {
+            this.passLevel = level;
+            return this;
+        }
+
         public float getWeight() {
             return weight;
         }
@@ -111,6 +146,9 @@ public enum ItemType {
         }
         public Class getClassName() {
             return className;
+        }
+        public int isPass() {
+            return passLevel;
         }
     }
 }

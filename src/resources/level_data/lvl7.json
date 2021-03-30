@@ -1,7 +1,13 @@
 {
   "level_name": "Level 7",
   "map": "level7",
-  "player_start":[7, 5],
+  "player_start": [
+    {
+      "color": "red",
+      "x": 7,
+      "y": 5
+    }
+  ],
   "enemies": "lvl7",
   "items": "lvl7",
   "scroll": "none",

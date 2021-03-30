@@ -1,6 +1,8 @@
 package com.wizatar08.escapemaze.game;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.wizatar08.escapemaze.game.game_entities.JSONItemClass;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
@@ -23,7 +25,7 @@ public class JSONLevel {
     private String levelName;
 
     @SerializedName("player_start")
-    private int[] playerStartPos;
+    private JsonArray playerStartPos;
 
     @SerializedName("enemies")
     private String enemyFileName;
@@ -42,7 +44,7 @@ public class JSONLevel {
 
     private Gson gson;
 
-    public JSONLevel(String map, String levelName, int[] playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots) {
+    public JSONLevel(String map, String levelName, JsonArray playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots) {
         this.map = map;
         this.levelName = levelName;
         this.playerStartPos = playerStartPos;
@@ -81,8 +83,13 @@ public class JSONLevel {
         return map;
     }
 
-    public int[] getPlayerStartPos() {
-        return playerStartPos;
+    public int[][] getPlayerStartPos() {
+        int[][] poss = new int[playerStartPos.size()][2];
+        for (int i = 0; i < playerStartPos.getAsJsonArray().size(); i++) {
+            poss[i][0] = playerStartPos.get(i).getAsJsonObject().get("x").getAsInt();
+            poss[i][1] = playerStartPos.get(i).getAsJsonObject().get("y").getAsInt();
+        }
+        return poss;
     }
 
     public String getScroll() {

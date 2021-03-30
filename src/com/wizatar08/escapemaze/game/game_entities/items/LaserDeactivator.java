@@ -17,6 +17,11 @@ public class LaserDeactivator implements ItemClass{
     }
 
     @Override
+    public boolean canPickUp(Item item, Game game, Player player) {
+        return true;
+    }
+
+    @Override
     public void onHit(Item item, Game game, Player player) {
 
     }
@@ -31,7 +36,6 @@ public class LaserDeactivator implements ItemClass{
         for (Tile tile : player.getAllSurroundingTiles()) {
             if (ItemType.getType(item.getId()) == tile.unlockableBy() && !tile.canPass()) {
                 this.tile = tile;
-                use(item, game, player);
                 return true;
             }
         }
@@ -41,5 +45,10 @@ public class LaserDeactivator implements ItemClass{
     @Override
     public void use(Item item, Game game, Player player) {
         tile.setSecurity(false);
+    }
+
+    @Override
+    public void onDropItem(Item item, Game game, Player player) {
+
     }
 }

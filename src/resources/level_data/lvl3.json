@@ -1,7 +1,13 @@
 {
   "level_name": "Level 3",
   "map": "level3",
-  "player_start":[8, 3],
+  "player_start": [
+    {
+      "color": "red",
+      "x": 8,
+      "y": 3
+    }
+  ],
   "enemies": "lvl3",
   "items": "lvl3",
   "scroll": "none",

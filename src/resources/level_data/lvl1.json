@@ -1,10 +1,21 @@
 {
   "level_name": "Level 1",
   "map": "level1",
-  "player_start":[5, 5],
+  "player_start": [
+    {
+      "color": "red",
+      "x": 5,
+      "y": 5
+    },
+    {
+      "color": "red",
+      "x": 6,
+      "y": 7
+    }
+  ],
   "enemies": "lvl1",
   "items": "lvl1",
-  "scroll": "none",
+  "scroll": "move_with_player",
   "alarm_seconds": 45,
   "inventory_slots": 5
 }

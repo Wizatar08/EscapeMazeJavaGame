@@ -18,10 +18,11 @@ import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
     private float x, y, texX, texY, width, height, weight;
+    private int passLevel;
     private Texture texture;
     private ItemType type;
     private String id;
-    private boolean inInventory, required;
+    private boolean inInventory, required, isPass;
     private Timer cooldownPickupTimer;
     private Class<?> clazz;
     private Object itemClass;
@@ -41,6 +42,8 @@ public class Item implements Entity {
         this.inInventory = false;
         this.weight = type.getWeight();
         this.required = type.isRequired();
+        this.isPass = type.isPass();
+        this.passLevel = type.passLevel();
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         itemClass = null;
         if (type.getClassname() != null) {
@@ -68,11 +71,10 @@ public class Item implements Entity {
     public void update() {
         try {
             if (clazz != null) {
-                System.out.println(!this.isInInventory());
                 if (!this.isInInventory()) {
-                    clazz.getMethod("update", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
+                    clazz.getMethod("update", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
                 } else {
-                    clazz.getMethod("updateInven", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
+                    clazz.getMethod("updateInven", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
                 }
             }
         } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -168,7 +170,7 @@ public class Item implements Entity {
     public void hitItem(Game gameController) {
         try {
             if (clazz != null) {
-                clazz.getMethod("onHit", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer());
+                clazz.getMethod("onHit", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -178,10 +180,12 @@ public class Item implements Entity {
     public boolean doUse(Item item) {
         try {
             if (clazz != null) {
-                if ((boolean) clazz.getMethod("canUseItem", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer())) {
-                    clazz.getMethod("use", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer());
+                if ((boolean) clazz.getMethod("canUseItem", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER))) {
+                    clazz.getMethod("use", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
+                    System.out.println("CAN USE");
                     return true;
                 } else {
+                    System.out.println("CANNOT USE");
                     return false;
                 }
             }
@@ -193,5 +197,12 @@ public class Item implements Entity {
 
     public boolean isRequired() {
         return required;
+    }
+
+    public boolean isPass() {
+        return isPass;
+    }
+    public int getPassLevel() {
+        return passLevel;
     }
 }
