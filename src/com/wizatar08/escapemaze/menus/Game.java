@@ -54,10 +54,7 @@ public class Game {
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
         for (int i = 0; i < level.getPlayerStartPos().length; i++) {
-            playerInstances.add(new Player(this,
-                    level.getPlayerStartPos()[i][0] + 1,
-                    level.getPlayerStartPos()[i][1] + 1,
-                    map));
+            playerInstances.add(new Player(this, level.getPlayerTexNames()[i], level.getPlayerStartPos()[i][0] + 1, level.getPlayerStartPos()[i][1] + 1, map));
         }
         enemies = level.getEnemies(this);
         items = level.getItems(this);

@@ -6,16 +6,11 @@
       "color": "red",
       "x": 5,
       "y": 5
-    },
-    {
-      "color": "red",
-      "x": 6,
-      "y": 7
     }
   ],
   "enemies": "lvl1",
   "items": "lvl1",
-  "scroll": "move_with_player",
+  "scroll": "none",
   "alarm_seconds": 45,
   "inventory_slots": 5
 }

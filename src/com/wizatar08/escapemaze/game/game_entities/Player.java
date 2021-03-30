@@ -30,7 +30,7 @@ public class Player implements Entity {
     private boolean selected;
 
     // Constructor for Player object
-    public Player(Game game, float startXTile, float startYTile, TileMap map) {
+    public Player(Game game, String texColor, float startXTile, float startYTile, TileMap map) {
         this.gameController = game;
         setX(startXTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         setY(startYTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
@@ -38,7 +38,7 @@ public class Player implements Entity {
         this.height = 32;
         this.map = map;
         this.isSafe = false;
-        this.tex = LoadPNG("entities/player");
+        this.tex = LoadPNG("players/player_" + texColor);
         this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         System.out.println("INV: " + gameController.getMaxInventorySlots());

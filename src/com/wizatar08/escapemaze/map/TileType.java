@@ -77,10 +77,14 @@ public enum TileType {
     DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/purple_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().unlockableBy(ItemType.PURPLE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
     DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/pink_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().unlockableBy(ItemType.PINK_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
     DEFAULT_FLOOR_SECURE_PODIUM(new VariationID(IDTypes.TILE, "007", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/default_activated_secure_podium")}, new int[]{0}).isPassable().laserSecure(new Texture[]{LoadPNG("tile_overlays/default_deactivated_secure_podium")}, new int[]{0})),
-    AUTHORITY_DOOR(new VariationID(IDTypes.TILE, "008", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/vault_locked")}, new int[]{0}).isPassable().authorityLock(new int[]{3, 2, 1}, new Texture[]{LoadPNG("tile_overlays/vault_unlocked")}, new int[]{0}));
+    AUTHORITY_DOOR(new VariationID(IDTypes.TILE, "008", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/vault_locked")}, new int[]{0}).isPassable().authorityLock(new int[]{3, 2, 1}, new Texture[]{LoadPNG("tile_overlays/vault_unlocked")}, new int[]{0})),
+    PRES_PLATE_DEF_FLOOR_COMP(new VariationID(IDTypes.TILE, "009", "01"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{0}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{0})),
+    PRES_PLATE_DEF_FLOOR_COMP_90(new VariationID(IDTypes.TILE, "009", "02"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{90}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{90})),
+    PRES_PLATE_DEF_FLOOR_COMP_180(new VariationID(IDTypes.TILE, "009", "03"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
+    PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270}));
 
     /* IDEAS FOR TILES:
-     * - Secure door: Must have multiple PASSES to unlock
+     * - Authority door: Must have multiple PASSES to unlock
      * - Pressure plate floor: Activates alarm when player hits it. Can be deactivated it by overriding pressure plate management computer or fly over it
      * - Recharge station: Can recharge battery there.
      * - Refuel station: Can refuel gas tank there.
@@ -102,7 +106,7 @@ public enum TileType {
 
     // Initialize variables
     private String id, texture;
-    private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked;
+    private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked, isPressurePlateComputer;
     private EntityDetectDirection safeSpot;
     private Texture overlayTex[], unlockedTexture[], deactivatedTexture[];
     private ItemType unlockableBy;
@@ -131,6 +135,7 @@ public enum TileType {
         this.doorLocked = builder.isDoorLocked();
         this.cardPassesNeeded = builder.getCardPassesNeeded();
         this.authorityLocked = builder.isAuthorityDoor();
+        this.isPressurePlateComputer = builder.isPressurePlateComputer();
     }
 
     private void createIdMapAndArrays() {
@@ -172,6 +177,9 @@ public enum TileType {
     public boolean isSecurityComputer() {
         return isSecurityComputer;
     }
+    public boolean isPressurePlateComputer() {
+        return isPressurePlateComputer;
+    }
     public ItemType unlockableBy() {
         return unlockableBy;
     }
@@ -208,7 +216,7 @@ public enum TileType {
         public static ItemType unlockableBy;
         public static Texture unlockedTex[], daTex[], overlayTex[];
         public static int unlockedTexRots[], daTexRots[], overlayTexRot[], cardPassesNeeded[];
-        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked;
+        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer;
 
         /**
          * Builder constructor. Defines all variables to its default value.
@@ -230,6 +238,7 @@ public enum TileType {
             doorLocked = false;
             authorityLocked = false;
             cardPassesNeeded = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            isPressurePlateComputer = false;
         }
 
         /**
@@ -316,6 +325,13 @@ public enum TileType {
             return this;
         }
 
+        private Builder isPressurePlateComputer(Texture[] overlayTex, int[] rots) {
+            isPressurePlateComputer = true;
+            daTex = overlayTex;
+            daTexRots = rots;
+            return this;
+        }
+
         // Getters
         public boolean getIsPassable() {
             return isPassable;
@@ -337,6 +353,9 @@ public enum TileType {
         }
         public boolean isSecurityComputer() {
             return isSecurityComputer;
+        }
+        public boolean isPressurePlateComputer() {
+            return isPressurePlateComputer;
         }
         public ItemType unlockableBy() {
             return unlockableBy;

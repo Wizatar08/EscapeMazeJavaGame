@@ -19,7 +19,7 @@ public class Tile implements Entity, TileEntity {
     private TileType type;
     private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
     private ItemType unlockableBy;
-    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked;
+    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked, computerActivated, isPressurePlateComputer;
 
     public Tile(float x, float y, int width, int height, TileType type){
         this.x = x;
@@ -53,6 +53,10 @@ public class Tile implements Entity, TileEntity {
 
         this.requiredPassLevels = type.cardPassesNeeded();
 
+        this.isPressurePlateComputer = type.isPressurePlateComputer();
+
+        this.computerActivated = isPressurePlateComputer; // Add other computers here
+
         this.id = type.getId();
 
     }
@@ -67,6 +71,16 @@ public class Tile implements Entity, TileEntity {
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
             drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
             canBeSeen = true;
+            // Add computer textures here
+            if (isPressurePlateComputer && !computerActivated) {
+                if (unsecureTexture != null) {
+                    for (int i = 0; i < unsecureTexture.length; i++) {
+                        drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
+                    }
+                }
+            }
+
+            // Add door textures here
             if (isSecureTile && !isSecure) {
                 if (unsecureTexture != null) {
                     for (int i = 0; i < unsecureTexture.length; i++) {

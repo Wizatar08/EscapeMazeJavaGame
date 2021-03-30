@@ -25,7 +25,7 @@ public class JSONLevel {
     private String levelName;
 
     @SerializedName("player_start")
-    private JsonArray playerStartPos;
+    private JsonArray playerSettings;
 
     @SerializedName("enemies")
     private String enemyFileName;
@@ -47,7 +47,7 @@ public class JSONLevel {
     public JSONLevel(String map, String levelName, JsonArray playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots) {
         this.map = map;
         this.levelName = levelName;
-        this.playerStartPos = playerStartPos;
+        this.playerSettings = playerStartPos;
         this.enemyFileName = enemies;
         this.itemsFileName = items;
         this.scroll = scroll;
@@ -84,10 +84,10 @@ public class JSONLevel {
     }
 
     public int[][] getPlayerStartPos() {
-        int[][] poss = new int[playerStartPos.size()][2];
-        for (int i = 0; i < playerStartPos.getAsJsonArray().size(); i++) {
-            poss[i][0] = playerStartPos.get(i).getAsJsonObject().get("x").getAsInt();
-            poss[i][1] = playerStartPos.get(i).getAsJsonObject().get("y").getAsInt();
+        int[][] poss = new int[playerSettings.size()][2];
+        for (int i = 0; i < playerSettings.getAsJsonArray().size(); i++) {
+            poss[i][0] = playerSettings.get(i).getAsJsonObject().get("x").getAsInt();
+            poss[i][1] = playerSettings.get(i).getAsJsonObject().get("y").getAsInt();
         }
         return poss;
     }
@@ -102,5 +102,13 @@ public class JSONLevel {
 
     public int getInventorySlots() {
         return inventorySlots;
+    }
+
+    public String[] getPlayerTexNames() {
+        String[] names = new String[playerSettings.size()];
+        for (int i = 0; i < playerSettings.getAsJsonArray().size(); i++) {
+            names[i] = playerSettings.get(i).getAsJsonObject().get("color").getAsString();
+        }
+        return names;
     }
 }
