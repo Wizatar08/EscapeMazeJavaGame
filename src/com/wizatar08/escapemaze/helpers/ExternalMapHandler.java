@@ -53,7 +53,7 @@ public class ExternalMapHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            TileMap grid = new TileMap(mapAsArray.length, (int) Math.floor(mapAsArray[0].length() / 6));
+            TileMap grid = new TileMap(game, mapAsArray.length, (int) Math.floor(mapAsArray[0].length() / 6));
             try {
                 for (int i = 0; i < grid.getTilesWide(); i++) {
                     for (int j = 0; j < grid.getTilesHigh(); j++) {

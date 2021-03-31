@@ -164,7 +164,7 @@ public class Item implements Entity {
     }
 
     private void laserDeactivatorAbility(Tile tile) {
-        tile.setSecurity(false);
+        tile.setActive(false);
     }
 
     public void hitItem(Game gameController) {
@@ -182,10 +182,8 @@ public class Item implements Entity {
             if (clazz != null) {
                 if ((boolean) clazz.getMethod("canUseItem", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER))) {
                     clazz.getMethod("use", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
-                    System.out.println("CAN USE");
                     return true;
                 } else {
-                    System.out.println("CANNOT USE");
                     return false;
                 }
             }

@@ -53,7 +53,7 @@ public class Editor {
         try {
             map = ExternalMapHandler.LoadMap(null, "map_default");
         } catch (NullPointerException e) {
-            map = new TileMap();
+            map = new TileMap(null);
         }
         displacementX = 0;
         displacementY = 0;
@@ -64,7 +64,7 @@ public class Editor {
 
     private void changeMapSize(int width, int height) {
         TileMap oldMap = map;
-        map = new TileMap(width, height);
+        map = new TileMap(null, width, height);
         for(int i = 0; i < map.getMapAsArray().length; i++){
             for(int j = 0; j < map.getMapAsArray()[i].length; j++){
                 map.setTile(i, j, TileType.DEFAULT_FLOOR);

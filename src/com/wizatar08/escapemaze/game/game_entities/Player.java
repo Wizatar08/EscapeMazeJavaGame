@@ -8,6 +8,7 @@ import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
@@ -42,10 +43,6 @@ public class Player implements Entity {
         this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         System.out.println("INV: " + gameController.getMaxInventorySlots());
-    }
-
-    public boolean hitPressurePlate() {
-        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isPressurePlate();
     }
 
 
@@ -278,7 +275,7 @@ public class Player implements Entity {
             }
         }
         if (hitItem != null) {
-            if (gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getX() == hitItem.getX() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getY() == hitItem.getY() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).isSecure()) {
+            if (gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getX() == hitItem.getX() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getY() == hitItem.getY() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).isActive()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
             addItemToInventory(hitItem);
@@ -327,15 +324,15 @@ public class Player implements Entity {
         for (Tile tile : list) {
             for (Item item : inventory.getItems()) {
                 if (item != null) {
-                    if (tile.isLockedDoor() && tile.isKeyDoorLocked()) {
-                        if (ItemType.getType(item.getId()) == tile.unlockableBy()) {
+                    if (tile.isLockedDoor() && tile.isActive()) {
+                        if (ItemType.getType(item.getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy()) {
                             drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                         }
                     }
                     if (tile.isAuthorityDoor() && tile.isAuthorityDoorLocked()) {
                         drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                     }
-                    if (tile.isSecure() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
+                    if (tile.isActive() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
                         drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                     }
                 }
@@ -344,18 +341,11 @@ public class Player implements Entity {
         //drawQuadTex(LoadPNG("tiles/null"), (int) Math.floor((x + 16) / 64) * 64 + Game.DIS_X, (int) Math.floor((y + 16) / 64) * 64 + Game.DIS_Y);
     }
 
-    private void detectIfHitTile() {
-        if (hitPressurePlate() && gameController.PRESSURE_PLATES_ACTIVE) {
-            gameController.setState(Game.GameStates.ALARM);
-        }
-    }
-
     public void update() {
         if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
             detectKey();
         }
         detectIfAtSpecificTile();
-        detectIfHitTile();
         detectIfHitItem();
         calculateWeight();
     }

@@ -2,6 +2,7 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
 import com.wizatar08.escapemaze.menus.Game;
 
 public class Key implements ItemClass {
@@ -32,9 +33,11 @@ public class Key implements ItemClass {
     @Override
     public boolean canUseItem(Item item, Game game, Player player) {
         for (Tile tile : player.getAllSurroundingTiles()) {
-            if (ItemType.getType(item.getId()) == tile.unlockableBy() && tile.isKeyDoorLocked()) {
-                this.tile = tile;
-                return true;
+            if (tile instanceof ItemUnlocksDoorTile) {
+                if (ItemType.getType(item.getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy() && tile.isActive()) {
+                    this.tile = tile;
+                    return true;
+                }
             }
         }
         return false;

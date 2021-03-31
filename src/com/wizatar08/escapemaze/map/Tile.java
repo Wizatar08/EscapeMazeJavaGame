@@ -1,11 +1,16 @@
 package com.wizatar08.escapemaze.map;
 
+import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 import org.newdawn.slick.opengl.Texture;
+
+import java.lang.reflect.InvocationTargetException;
+
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -13,15 +18,16 @@ public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
     private String id;
-    private Texture texture, unlockedTexture[], unsecureTexture[];
-    private Texture overlapTexture[];
-    private int overlapTexRot[], unlockedTexRot[], unsecureTexRot[], requiredPassLevels[];
-    private TileType type;
-    private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
-    private ItemType unlockableBy;
-    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked, isPressurePlateComputer, isPressurePlate;
+    private final Texture defaultTexture;
+    private final Texture[] activeTexture, defaultOverlapTexture;
+    private final int[] defaultOverlapTexRots, activeTextureRots, requiredPassLevels;
+    private final TileType type;
+    private boolean isActive, canBeSeen;
+    private final boolean canPass;
+    private final Function function;
+    private Game game;
 
-    public Tile(float x, float y, int width, int height, TileType type) {
+    public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.x = x;
         this.y = y;
         this.initialX = x;
@@ -29,79 +35,65 @@ public class Tile implements Entity, TileEntity {
         this.height = height;
         this.width = width;
         this.type = type;
-        this.isPassable = type.isPassable();
-        this.texture = LoadPNG("tiles/" + type.getTexture());
-        this.overlapTexture = type.getOverlayTex();
-        this.overlapTexRot = type.getOverlayTexRot();
-        this.isSecurityComputer = type.isSecurityComputer();
-        this.isEscapeDoor = type.isEscapeDoor();
-        this.unlockedTexture = type.getUnlockedTileTexture();
-        this.unlockedTexRot = type.getUnlockedTileTextureRots();
-
-        // SECURE: Determines if an alarm can be tripped
-        this.unsecureTexture = type.getDeactivatedTileTexture();
-        this.unsecureTexRot = type.getDeactivatedTextureRots();
-        this.isSecureTile = type.isSecure();
-        this.isSecure = isSecureTile;
-
-        // DOOR STUFF
-        this.unlockableBy = type.unlockableBy();
-        this.isKeyDoor = this.unlockableBy != ItemType.NULL;
-        this.doorLocked = type.isDoorLocked();
-        this.isAuthorityDoor = type.isAuthorityDoor();
-        this.authorityDoorLocked = isAuthorityDoor;
+        this.function = type.getFunction();
+        this.canPass = type.isPassable();
+        this.defaultTexture = LoadPNG("tiles/" + type.getTexture());
+        this.defaultOverlapTexture = type.getOverlayTex();
+        this.defaultOverlapTexRots = type.getOverlayTexRot();
+        this.activeTexture = type.getActiveTileTexture();
+        this.activeTextureRots = type.getActiveTileTextureRots();
+        this.isActive = function.STARTS_ACTIVE;
 
         this.requiredPassLevels = type.cardPassesNeeded();
-
-        this.isPressurePlateComputer = type.isPressurePlateComputer();
-        this.isPressurePlate = type.isPressurePlate();
 
         this.id = type.getId();
 
     }
 
+    public enum Function {
+        SIMPLE_WALL(false, false),
+        SAFE_SPOT(false, false),
+        EXIT_SPOT(false, false),
+        ITEM_UNLOCK_DOOR(true, true),
+        AUTHORITY_DOOR(true, true),
+        LASER_SECURE(true, false),
+        PRESSURE_PLATE(true, false),
+        MAIN_COMPUTER(false, false),
+        PRESSURE_PLATE_COMPUTER(true, false);
+
+        public final boolean STARTS_ACTIVE, ACTIVE_INFLUENCES_PASSABLE;
+
+        Function(boolean startsActive, boolean activeInfluencesPassable) {
+            this.STARTS_ACTIVE = startsActive;
+            this.ACTIVE_INFLUENCES_PASSABLE = activeInfluencesPassable;
+        }
+    }
+
     public boolean testIfPassable() {
-        return isPassable && !doorLocked && !authorityDoorLocked;
+        return canPass && (!function.ACTIVE_INFLUENCES_PASSABLE || !isActive);
     }
 
     public void draw(){
         setX(initialX + Editor.displacementX);
         setY(initialY + Editor.displacementY);
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
-            drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
+            drawQuadTex(defaultTexture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
             canBeSeen = true;
             // Add computer textures here
-            if (isPressurePlateComputer && !Game.PRESSURE_PLATES_ACTIVE) {
-                if (unsecureTexture != null) {
-                    for (int i = 0; i < unsecureTexture.length; i++) {
-                        drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
-                    }
-                }
-            }
-
-            // Add door textures here
-            else if (isSecureTile && !isSecure) {
-                if (unsecureTexture != null) {
-                    for (int i = 0; i < unsecureTexture.length; i++) {
-                        drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
-                    }
-                }
-            } else if ((isKeyDoor && !doorLocked)) {
-                if (unlockedTexture != null) {
-                    for (int i = 0; i < unlockedTexture.length; i++) {
-                        drawQuadTex(unlockedTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unlockedTexRot[i]);
-                    }
-                }
-            } else if ((isAuthorityDoor && !authorityDoorLocked)) {
-                if (unlockedTexture != null) {
-                    for (int i = 0; i < unlockedTexture.length; i++) {
-                        drawQuadTex(unlockedTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unlockedTexRot[i]);
+            if ((function == Function.PRESSURE_PLATE_COMPUTER && !Game.PRESSURE_PLATES_ACTIVE) ||
+                    // Door functionality here
+                    (function == Function.LASER_SECURE && !isActive) ||
+                    (function == Function.ITEM_UNLOCK_DOOR && !isActive) ||
+                    (function == Function.AUTHORITY_DOOR && !isActive)) {
+                if (activeTexture != null) {
+                    for (int i = 0; i < activeTexture.length; i++) {
+                        drawQuadTex(activeTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, activeTextureRots[i]);
                     }
                 }
             } else {
-                if (overlapTexture != null) {
-                    for (int i = 0; i < overlapTexture.length; i++) {
-                        drawQuadTex(overlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, overlapTexRot[i]);
+                if (defaultOverlapTexture != null) {
+                    for (int i = 0; i < defaultOverlapTexture.length; i++) {
+                        drawQuadTex(defaultOverlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, defaultOverlapTexRots[i]);
                     }
                 }
             }
@@ -114,10 +106,10 @@ public class Tile implements Entity, TileEntity {
     }
 
     public void unlockDoor() {
-        doorLocked = false;
+        isActive = false;
     }
     public void lockDoor() {
-        doorLocked = true;
+        isActive = true;
     }
 
     // Getters
@@ -137,7 +129,7 @@ public class Tile implements Entity, TileEntity {
         return y;
     }
     public Texture getTexture() {
-        return texture;
+        return defaultTexture;
     }
     public TileType getType() {
         return type;
@@ -161,7 +153,7 @@ public class Tile implements Entity, TileEntity {
          this.height = (int) height;
     }
     public boolean canPass() {
-        return this.isPassable;
+        return canPass;
     }
     public boolean isHarmful() {
         return false;
@@ -170,19 +162,19 @@ public class Tile implements Entity, TileEntity {
         return false;
     }
     public boolean isSecurityComputer() {
-        return isSecurityComputer;
+        return function == Function.MAIN_COMPUTER;
     }
     public boolean isEscapeDoor() {
-        return isEscapeDoor;
+        return function == Function.EXIT_SPOT;
     }
     public boolean isLockedDoor() {
-        return this.type.unlockableBy() != ItemType.NULL;
+        return function == Function.ITEM_UNLOCK_DOOR;
     }
     public boolean isAuthorityDoor() {
-        return isAuthorityDoor;
+        return function == Function.AUTHORITY_DOOR;
     }
     public boolean isAuthorityDoorLocked() {
-        return authorityDoorLocked;
+        return isActive;
     }
 
     public ItemType getKeyToDoor() {
@@ -192,23 +184,8 @@ public class Tile implements Entity, TileEntity {
         return canBeSeen;
     }
 
-    public ItemType unlockableBy() {
-        return unlockableBy;
-    }
-
     public boolean isSecureTile() {
-        return isSecureTile;
-    }
-
-    public boolean isSecure() {
-        return isSecure;
-    }
-    public void setSecurity(boolean set) {
-        isSecure = set;
-    }
-
-    public boolean isKeyDoorLocked() {
-        return doorLocked;
+        return function == Function.LASER_SECURE;
     }
 
     public int[] getRequiredPassLevels() {
@@ -219,14 +196,22 @@ public class Tile implements Entity, TileEntity {
         return id;
     }
 
-    public void setAuthorityDoorLock(boolean lock) {
-        this.authorityDoorLocked = lock;
+    public Function getFunction() {
+        return function;
+    }
+
+    public void setActive(boolean lock) {
+        this.isActive = lock;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public boolean isPressurePlateComputer() {
-        return isPressurePlateComputer;
+        return function == Function.PRESSURE_PLATE_COMPUTER;
     }
     public boolean isPressurePlate() {
-        return isPressurePlate;
+        return function == Function.PRESSURE_PLATE;
     }
 }

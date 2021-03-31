@@ -65,7 +65,7 @@ public class Pass implements ItemClass {
 
     @Override
     public void use(Item item, Game game, Player player) {
-        tile.setAuthorityDoorLock(false);
+        tile.setActive(false);
     }
 
     @Override
