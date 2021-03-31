@@ -51,7 +51,7 @@ public class Editor {
         buttonPressed = false;
         createMenus();
         try {
-            map = ExternalMapHandler.LoadMap("map_default");
+            map = ExternalMapHandler.LoadMap(null, "map_default");
         } catch (NullPointerException e) {
             map = new TileMap();
         }
@@ -83,7 +83,7 @@ public class Editor {
             }
             if (keyDown(Keyboard.KEY_LSHIFT)) {
                 String mapName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
-                TileMap newMap = ExternalMapHandler.LoadMap(mapName);
+                TileMap newMap = ExternalMapHandler.LoadMap(null, mapName);
                 if (newMap != null) {
                     map = newMap;
                 } else {

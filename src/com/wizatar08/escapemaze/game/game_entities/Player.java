@@ -44,11 +44,16 @@ public class Player implements Entity {
         System.out.println("INV: " + gameController.getMaxInventorySlots());
     }
 
+    public boolean hitPressurePlate() {
+        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isPressurePlate();
+    }
 
 
-    // Detects if Player is near a safe spot, return true if so and false if not
     public boolean isAtSecurityComputer() {
         return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isSecurityComputer();
+    }
+    public boolean isAtPressurePlateComputer() {
+        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isPressurePlateComputer();
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not
@@ -112,6 +117,9 @@ public class Player implements Entity {
                         }
                         if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
                             gameController.setState(Game.GameStates.NORMAL);
+                        }
+                        if (isAtPressurePlateComputer()) {
+                            gameController.setPressurePlateActive(false);
                         }
                     }
                 }
@@ -315,6 +323,7 @@ public class Player implements Entity {
 
     private void detectIfAtSpecificTile() {
         ArrayList<Tile> list = getAllSurroundingTiles();
+
         for (Tile tile : list) {
             for (Item item : inventory.getItems()) {
                 if (item != null) {
@@ -335,11 +344,18 @@ public class Player implements Entity {
         //drawQuadTex(LoadPNG("tiles/null"), (int) Math.floor((x + 16) / 64) * 64 + Game.DIS_X, (int) Math.floor((y + 16) / 64) * 64 + Game.DIS_Y);
     }
 
+    private void detectIfHitTile() {
+        if (hitPressurePlate() && gameController.PRESSURE_PLATES_ACTIVE) {
+            gameController.setState(Game.GameStates.ALARM);
+        }
+    }
+
     public void update() {
         if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
             detectKey();
         }
         detectIfAtSpecificTile();
+        detectIfHitTile();
         detectIfHitItem();
         calculateWeight();
     }

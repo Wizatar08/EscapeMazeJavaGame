@@ -19,9 +19,9 @@ public class Tile implements Entity, TileEntity {
     private TileType type;
     private boolean isSecurityComputer, isEscapeDoor, canBeSeen;
     private ItemType unlockableBy;
-    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked, computerActivated, isPressurePlateComputer;
+    private boolean isPassable, isKeyDoor, isSecureTile, isSecure, doorLocked, isAuthorityDoor, authorityDoorLocked, isPressurePlateComputer, isPressurePlate;
 
-    public Tile(float x, float y, int width, int height, TileType type){
+    public Tile(float x, float y, int width, int height, TileType type) {
         this.x = x;
         this.y = y;
         this.initialX = x;
@@ -54,8 +54,7 @@ public class Tile implements Entity, TileEntity {
         this.requiredPassLevels = type.cardPassesNeeded();
 
         this.isPressurePlateComputer = type.isPressurePlateComputer();
-
-        this.computerActivated = isPressurePlateComputer; // Add other computers here
+        this.isPressurePlate = type.isPressurePlate();
 
         this.id = type.getId();
 
@@ -72,7 +71,7 @@ public class Tile implements Entity, TileEntity {
             drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
             canBeSeen = true;
             // Add computer textures here
-            if (isPressurePlateComputer && !computerActivated) {
+            if (isPressurePlateComputer && !Game.PRESSURE_PLATES_ACTIVE) {
                 if (unsecureTexture != null) {
                     for (int i = 0; i < unsecureTexture.length; i++) {
                         drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
@@ -81,7 +80,7 @@ public class Tile implements Entity, TileEntity {
             }
 
             // Add door textures here
-            if (isSecureTile && !isSecure) {
+            else if (isSecureTile && !isSecure) {
                 if (unsecureTexture != null) {
                     for (int i = 0; i < unsecureTexture.length; i++) {
                         drawQuadTex(unsecureTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, unsecureTexRot[i]);
@@ -222,5 +221,12 @@ public class Tile implements Entity, TileEntity {
 
     public void setAuthorityDoorLock(boolean lock) {
         this.authorityDoorLocked = lock;
+    }
+
+    public boolean isPressurePlateComputer() {
+        return isPressurePlateComputer;
+    }
+    public boolean isPressurePlate() {
+        return isPressurePlate;
     }
 }

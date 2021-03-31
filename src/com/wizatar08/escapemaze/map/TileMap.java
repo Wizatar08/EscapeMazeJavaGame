@@ -1,5 +1,7 @@
 package com.wizatar08.escapemaze.map;
 
+import com.wizatar08.escapemaze.menus.Game;
+
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;

@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -44,13 +45,14 @@ public class Game {
     public static float DIS_X, DIS_Y;
     private Texture redScreen, alertBox, gameEndTex;
     public int CURRENT_PLAYER;
+    public static boolean PRESSURE_PLATES_ACTIVE;
 
     public Game() {
         gson = new Gson();
         levelNumber = MenuRun.getLevel();
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
         level = gson.fromJson(reader, JSONLevel.class);
-        map = ExternalMapHandler.LoadMap(level.getMap());
+        map = ExternalMapHandler.LoadMap(this, level.getMap());
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
         for (int i = 0; i < level.getPlayerStartPos().length; i++) {
@@ -87,6 +89,7 @@ public class Game {
         }
         stolenItems = 0;
         CURRENT_PLAYER = 0;
+        PRESSURE_PLATES_ACTIVE = true;
 
         switch (level.getScroll()) {
             case "none":
@@ -349,5 +352,9 @@ public class Game {
 
     public int getMaxInventorySlots() {
         return inventorySlots;
+    }
+
+    public void setPressurePlateActive(boolean active) {
+        PRESSURE_PLATES_ACTIVE = active;
     }
 }

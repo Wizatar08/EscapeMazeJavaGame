@@ -81,7 +81,8 @@ public enum TileType {
     PRES_PLATE_DEF_FLOOR_COMP(new VariationID(IDTypes.TILE, "009", "01"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{0}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{0})),
     PRES_PLATE_DEF_FLOOR_COMP_90(new VariationID(IDTypes.TILE, "009", "02"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{90}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{90})),
     PRES_PLATE_DEF_FLOOR_COMP_180(new VariationID(IDTypes.TILE, "009", "03"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
-    PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270}));
+    PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
+    PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0}));
 
     /* IDEAS FOR TILES:
      * - Authority door: Must have multiple PASSES to unlock
@@ -106,7 +107,7 @@ public enum TileType {
 
     // Initialize variables
     private String id, texture;
-    private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked, isPressurePlateComputer;
+    private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked, isPressurePlateComputer, pressurePlate;
     private EntityDetectDirection safeSpot;
     private Texture overlayTex[], unlockedTexture[], deactivatedTexture[];
     private ItemType unlockableBy;
@@ -136,6 +137,7 @@ public enum TileType {
         this.cardPassesNeeded = builder.getCardPassesNeeded();
         this.authorityLocked = builder.isAuthorityDoor();
         this.isPressurePlateComputer = builder.isPressurePlateComputer();
+        this.pressurePlate = builder.isPressurePlate();
     }
 
     private void createIdMapAndArrays() {
@@ -207,6 +209,9 @@ public enum TileType {
     public int[] cardPassesNeeded() {
         return cardPassesNeeded;
     }
+    public boolean isPressurePlate() {
+        return pressurePlate;
+    }
 
     /**
      * Tile builder class
@@ -216,7 +221,7 @@ public enum TileType {
         public static ItemType unlockableBy;
         public static Texture unlockedTex[], daTex[], overlayTex[];
         public static int unlockedTexRots[], daTexRots[], overlayTexRot[], cardPassesNeeded[];
-        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer;
+        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate;
 
         /**
          * Builder constructor. Defines all variables to its default value.
@@ -239,6 +244,7 @@ public enum TileType {
             authorityLocked = false;
             cardPassesNeeded = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             isPressurePlateComputer = false;
+            pressurePlate = false;
         }
 
         /**
@@ -332,6 +338,11 @@ public enum TileType {
             return this;
         }
 
+        private Builder pressurePlate() {
+            pressurePlate = true;
+            return this;
+        }
+
         // Getters
         public boolean getIsPassable() {
             return isPassable;
@@ -383,6 +394,9 @@ public enum TileType {
         }
         public int[] getCardPassesNeeded() {
             return cardPassesNeeded;
+        }
+        public boolean isPressurePlate() {
+            return pressurePlate;
         }
     }
 }

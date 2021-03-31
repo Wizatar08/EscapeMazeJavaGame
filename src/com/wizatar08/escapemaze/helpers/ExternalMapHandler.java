@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.helpers;
 
+import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.menus.Menus;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
@@ -42,7 +43,7 @@ public class ExternalMapHandler {
         }
     }
 
-    public static TileMap LoadMap(String mapName) {
+    public static TileMap LoadMap(Game game, String mapName) {
         String map = "";
         String[] mapAsArray = new String[]{};
         try {
