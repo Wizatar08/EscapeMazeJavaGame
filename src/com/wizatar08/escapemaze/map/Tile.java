@@ -176,10 +176,6 @@ public class Tile implements Entity, TileEntity {
     public boolean isAuthorityDoorLocked() {
         return isActive;
     }
-
-    public ItemType getKeyToDoor() {
-        return this.type.unlockableBy();
-    }
     public boolean isSeen() {
         return canBeSeen;
     }

@@ -70,14 +70,14 @@ public enum TileType {
     METAL_WALL_LE_DOOR(new VariationID(IDTypes.TILE, "005", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}, new int[]{90, 90}).safeSpot(EntityDetectDirection.LEFT).escapeDoor()),
     METAL_WALL_TE_DOOR(new VariationID(IDTypes.TILE, "005", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}, new int[]{180, 180}).safeSpot(EntityDetectDirection.UP).escapeDoor()),
     METAL_WALL_RE_DOOR(new VariationID(IDTypes.TILE, "005", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}, new int[]{270, 270}).safeSpot(EntityDetectDirection.RIGHT).escapeDoor()),
-    DEFAULT_FLOOR_RED_LOCK(new VariationID(IDTypes.TILE, "006", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/red_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.RED_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_ORANGE_LOCK(new VariationID(IDTypes.TILE, "006", "02"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/orange_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.ORANGE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_YELLOW_LOCK(new VariationID(IDTypes.TILE, "006", "03"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/yellow_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.YELLOW_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_GREEN_LOCK(new VariationID(IDTypes.TILE, "006", "04"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/green_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.GREEN_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "05"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_DARK_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "06"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/dark_blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.DARK_BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/purple_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.PURPLE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/pink_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().subclass(ItemUnlocksDoorTile.class).unlockableBy(ItemType.PINK_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_RED_LOCK(new VariationID(IDTypes.TILE, "006", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/red_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.RED_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_ORANGE_LOCK(new VariationID(IDTypes.TILE, "006", "02"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/orange_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.ORANGE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_YELLOW_LOCK(new VariationID(IDTypes.TILE, "006", "03"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/yellow_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.YELLOW_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_GREEN_LOCK(new VariationID(IDTypes.TILE, "006", "04"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/green_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.GREEN_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "05"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_DARK_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "06"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/dark_blue_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.DARK_BLUE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/purple_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PURPLE_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/pink_tint"), LoadPNG("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PINK_KEY, new Texture[]{LoadPNG("tile_overlays/lock")}, new int[]{0})),
     DEFAULT_FLOOR_SECURE_PODIUM(new VariationID(IDTypes.TILE, "007", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/default_activated_secure_podium")}, new int[]{0}).isPassable().laserSecure(new Texture[]{LoadPNG("tile_overlays/default_deactivated_secure_podium")}, new int[]{0})),
     AUTHORITY_DOOR(new VariationID(IDTypes.TILE, "008", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/vault_locked")}, new int[]{0}).isPassable().authorityLock(new int[]{3, 2, 1}, new Texture[]{LoadPNG("tile_overlays/vault_unlocked")}, new int[]{0})),
     PRES_PLATE_DEF_FLOOR_COMP(new VariationID(IDTypes.TILE, "009", "01"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{0}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{0})),
@@ -87,13 +87,13 @@ public enum TileType {
     PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().subclass(PressurePlateTile.class).pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0}));
 
     /* IDEAS FOR TILES:
-     * - Authority door: Must have multiple PASSES to unlock
-     * - Pressure plate floor: Activates alarm when player hits it. Can be deactivated it by overriding pressure plate management computer or fly over it
+     * - DONE: Authority door: Must have multiple PASSES to unlock
+     * - DONE: Pressure plate floor: Activates alarm when player hits it. Can be deactivated it by overriding pressure plate management computer or fly over it
      * - Recharge station: Can recharge battery there.
      * - Refuel station: Can refuel gas tank there.
      * - Movement detector: Activates alarm when player hits the tile. Can be deactivated by overriding movement detector management computer.
      * - Material detector: Activates alarm when you hold a required item when moving onto this tile. Can be deactivated by overriding material detector computer.
-     * - Pressure plate mamanement computer: Managed pressure plates, can be overridden
+     * - DONE: Pressure plate mamanement computer: Managed pressure plates, can be overridden
      * - Movement detector computer: Manages movement detectors, can be overridden
      * - Material detector computer: Manages material detectors, can be overridden
      *
@@ -111,12 +111,12 @@ public enum TileType {
     private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked, isPressurePlateComputer, pressurePlate;
     private EntityDetectDirection safeSpot;
     private Texture overlayTex[], activeTexture[];
-    private ItemType unlockableBy;
     private int activeTextureRots[], overlayTexRot[], cardPassesNeeded[];
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
     private Tile.Function function;
     private Class subClass;
+    private Object[] subClassArgs;
 
     TileType(VariationID id, String texture, Builder builder) {
         createIdMapAndArrays();
@@ -131,7 +131,7 @@ public enum TileType {
         this.overlayTex = builder.getOverlayTex();
         this.overlayTexRot = builder.getOverlayTexRot();
         this.isSecurityComputer = builder.isSecurityComputer();
-        this.unlockableBy = builder.unlockableBy();
+        this.subClassArgs = builder.getSubClassArgs();
         this.activeTexture = builder.getActiveTileTexture();
         this.activeTextureRots = builder.getActiveTileTextureRots();
         this.isSecure = builder.isSecure();
@@ -188,8 +188,8 @@ public enum TileType {
     public boolean isPressurePlateComputer() {
         return isPressurePlateComputer;
     }
-    public ItemType unlockableBy() {
-        return unlockableBy;
+    public Object[] subClassArgs() {
+        return subClassArgs;
     }
     public Texture[] getActiveTileTexture() {
         return activeTexture;
@@ -212,12 +212,12 @@ public enum TileType {
      */
     private static class Builder {
         public static EntityDetectDirection safeSpot;
-        public static ItemType unlockableBy;
         public static Texture activeTexture[], overlayTex[];
         public static int activeTextureRots[], overlayTexRot[], cardPassesNeeded[];
         public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate;
         public static Tile.Function function;
         public static Class subClass;
+        public static Object[] subClassArgs;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -230,7 +230,7 @@ public enum TileType {
             overlayTex = new Texture[]{LoadPNG("tiles/blank")};
             overlayTexRot = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             isSecurityComputer = false;
-            unlockableBy = ItemType.NULL;
+            subClassArgs = null;
             activeTexture = null;
             activeTextureRots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             isSecure = false;
@@ -244,7 +244,7 @@ public enum TileType {
         }
 
         /**
-         * Define a subclass. This will run a special set of code dedicated for that type of tile only.
+         * Define a custom subclass. This will run a special set of code dedicated for that type of tile only.
          */
         private Builder subclass(Class subclass) {
             this.subClass = subclass;
@@ -300,12 +300,14 @@ public enum TileType {
         /**
          * Set if this door can be unlocked with an item
          */
-        private Builder unlockableBy(ItemType key, Texture[] unlockedTileTexture, int[] unlockedTileTextureRots) {
-            unlockableBy = key;
+        private Builder itemUnlockDoor(ItemType key, Texture[] unlockedTileTexture, int[] unlockedTileTextureRots) {
+            subClassArgs = new Object[1];
+            subClassArgs[0] = key;
             activeTexture = unlockedTileTexture;
             activeTextureRots = unlockedTileTextureRots;
             doorLocked = true;
             function = Tile.Function.ITEM_UNLOCK_DOOR;
+            subclass(ItemUnlocksDoorTile.class);
             return this;
         }
 
@@ -352,6 +354,7 @@ public enum TileType {
         private Builder pressurePlate() {
             pressurePlate = true;
             function = Tile.Function.PRESSURE_PLATE;
+            subclass(PressurePlateTile.class);
             return this;
         }
 
@@ -386,8 +389,8 @@ public enum TileType {
         public boolean isPressurePlateComputer() {
             return isPressurePlateComputer;
         }
-        public ItemType unlockableBy() {
-            return unlockableBy;
+        public Object[] getSubClassArgs() {
+            return subClassArgs;
         }
         public Texture[] getActiveTileTexture() {
             return activeTexture;

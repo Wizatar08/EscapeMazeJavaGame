@@ -22,14 +22,17 @@ public enum ItemType {
     LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class)),
     PASS_1(new VariationID(IDTypes.ITEM, "004", "01"), "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
     PASS_2(new VariationID(IDTypes.ITEM, "004", "02"), "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
-    PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class));
+    PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
+    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource(30)),
+    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource(30)),
+    BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class));
 
     /* IDEAS FOR ITEMS:
-     * - Pass: Can unlock vaults
+     * - DONE: Pass: Can unlock vaults
      * - Admin pass: Can unlock special things.
-     * - Gas can: Can enable other items to be used. Has only certain amount of time before gas runs out.
-     * - Extra battery: Can enable other items to be used Has only certain amount of time before electricity runs out.
-     * - Jetpack: Must have gas can to use. Can let the player fly, avoiding certain security issues
+     * - DONE: Gas can: Can enable other items to be used. Has only certain amount of time before gas runs out.
+     * - DONE: Simple battery: Can enable other items to be used Has only certain amount of time before electricity runs out.
+     * - Jetpack: Must have gas can to use. Can let the player fly, avoiding certain security issues (pressure plates)
      * - Booster: Must have extra battery to use. Increases player speed. Uses 2% battery per second.
      * - Small EMP: Must have 10% extra battery to use. Will shut down the nearest enemy robot or camera for 10 seconds.
      * - EMP: Must have 40% extra battery to use. Shuts down all enemy robots and cameras for 20 seconds (cannot move or sound alarm). Afterwards, alarm will activate. One time use.
@@ -46,7 +49,7 @@ public enum ItemType {
     private float weight;
     private boolean required, isPass;
     private Class className;
-    private int passLevel;
+    private int passLevel, powerSecs, gasSecs;
 
     private static HashMap<String, ItemType> ITEM_IDS;
 
@@ -60,6 +63,8 @@ public enum ItemType {
         this.className = builder.getClassName();
         this.passLevel = builder.isPass();
         this.isPass = passLevel > 0;
+        this.powerSecs = builder.getPowerSecs();
+        this.gasSecs = builder.getGasSecs();
     }
 
     private void createIdMapAndArrays() {
@@ -94,6 +99,14 @@ public enum ItemType {
         return isPass;
     }
 
+    public int getPowerSecs() {
+        return powerSecs;
+    }
+
+    public int getGasSecs() {
+        return gasSecs;
+    }
+
     public static ItemType getType(String type) {
         if (ITEM_IDS.get(type) != null) {
             return ITEM_IDS.get(type);
@@ -109,13 +122,15 @@ public enum ItemType {
         private float weight;
         private boolean required;
         private Class className;
-        private int passLevel;
+        private int passLevel, powerSecs, gasSecs;
 
         private Builder() {
             this.weight = 0.0f;
             this.required = false;
             this.className = null;
             this.passLevel = 0;
+            this.powerSecs = 0;
+            this.gasSecs = 0;
         }
 
         public Builder weight(float weight) {
@@ -138,6 +153,16 @@ public enum ItemType {
             return this;
         }
 
+        public Builder powerSource(int seconds) {
+            this.powerSecs = seconds;
+            return this;
+        }
+
+        public Builder gasSource(int seconds) {
+            this.gasSecs = seconds;
+            return this;
+        }
+
         public float getWeight() {
             return weight;
         }
@@ -149,6 +174,14 @@ public enum ItemType {
         }
         public int isPass() {
             return passLevel;
+        }
+
+        public int getGasSecs() {
+            return gasSecs;
+        }
+
+        public int getPowerSecs() {
+            return powerSecs;
         }
     }
 }

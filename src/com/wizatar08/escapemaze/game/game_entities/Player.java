@@ -27,7 +27,7 @@ public class Player implements Entity {
     private Texture tex, detectTex;
     private Game gameController;
     private Inventory inventory;
-    private float weightInfluence;
+    private float weightInfluence, speedInfluence;
     private boolean selected;
 
     // Constructor for Player object
@@ -42,7 +42,7 @@ public class Player implements Entity {
         this.tex = LoadPNG("players/player_" + texColor);
         this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
-        System.out.println("INV: " + gameController.getMaxInventorySlots());
+        this.speedInfluence = 0.0f;
     }
 
 
@@ -126,16 +126,16 @@ public class Player implements Entity {
             }
             if (!isSafe) {
                 if (keyDown(Keyboard.KEY_W)) {
-                    moveCharacter(0, -1.5f / weightInfluence);
+                    moveCharacter(0, -1.5f / weightInfluence - speedInfluence);
                 }
                 if (keyDown(Keyboard.KEY_S)) {
-                    moveCharacter(0, 1.5f / weightInfluence);
+                    moveCharacter(0, 1.5f / weightInfluence + speedInfluence);
                 }
                 if (keyDown(Keyboard.KEY_A)) {
-                    moveCharacter(-1.5f / weightInfluence, 0);
+                    moveCharacter(-1.5f / weightInfluence - speedInfluence, 0);
                 }
                 if (keyDown(Keyboard.KEY_D)) {
-                    moveCharacter(1.5f / weightInfluence, 0);
+                    moveCharacter(1.5f / weightInfluence + speedInfluence, 0);
                 }
             }
         }
@@ -270,7 +270,7 @@ public class Player implements Entity {
     private void detectIfHitItem() {
         Item hitItem = null;
         for (Item item : gameController.getItems()) {
-            if (checkCollision(x, y, width, height, item.getTexX(), item.getTexY(), item.getWidth(), item.getHeight()) && !item.isInInventory() && item.canPickUp()) {
+            if (checkCollision(x, y, width, height, item.getTexX(), item.getTexY(), item.getWidth(), item.getHeight()) && !item.isInInventory() && item.canPickUp() && inventory.canAdd()) {
                 hitItem = item;
             }
         }
@@ -283,14 +283,17 @@ public class Player implements Entity {
         }
     }
 
-    private void calculateWeight() {
+    private void calculateSpeed() {
         float weightSum = 1;
+        float speedSum = 0;
         for (Item item : inventory.getItems()) {
             if (item != null) {
                 weightSum += item.getWeight();
+                speedSum += item.getSpeedBoost();
             }
         }
         weightInfluence = weightSum;
+        speedInfluence = speedSum;
     }
 
     private Tile getUpTile() {
@@ -347,7 +350,7 @@ public class Player implements Entity {
         }
         detectIfAtSpecificTile();
         detectIfHitItem();
-        calculateWeight();
+        calculateSpeed();
     }
 
 

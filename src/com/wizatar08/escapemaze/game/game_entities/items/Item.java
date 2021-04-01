@@ -17,12 +17,12 @@ import java.lang.reflect.Method;
 import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
-    private float x, y, texX, texY, width, height, weight;
-    private int passLevel;
+    private float x, y, texX, texY, width, height, weight, speedBoost;
+    private int passLevel, powerSecs, gasSecs;
     private Texture texture;
     private ItemType type;
     private String id;
-    private boolean inInventory, required, isPass;
+    private boolean inInventory, required, isPass, isPowerSource, isGasSource;
     private Timer cooldownPickupTimer;
     private Class<?> clazz;
     private Object itemClass;
@@ -44,6 +44,14 @@ public class Item implements Entity {
         this.required = type.isRequired();
         this.isPass = type.isPass();
         this.passLevel = type.passLevel();
+
+        this.powerSecs = type.getPowerSecs();
+        this.gasSecs = type.getGasSecs();
+        this.isPowerSource = this.powerSecs != 0;
+        this.isGasSource = this.gasSecs != 0;
+
+        this.speedBoost = 0;
+
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         itemClass = null;
         if (type.getClassname() != null) {
@@ -196,11 +204,22 @@ public class Item implements Entity {
     public boolean isRequired() {
         return required;
     }
-
     public boolean isPass() {
         return isPass;
     }
     public int getPassLevel() {
         return passLevel;
+    }
+    public boolean isPowerSource() {
+        return isPowerSource;
+    }
+    public boolean isGasSource() {
+        return isGasSource;
+    }
+    public float getSpeedBoost() {
+        return speedBoost;
+    }
+    public void setSpeedBoost(float speedBoost) {
+        this.speedBoost = speedBoost;
     }
 }

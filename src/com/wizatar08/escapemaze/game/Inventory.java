@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Inventory {
-    private int slots, nextAvailable;
+    private final int slots;
     private ArrayList<Item> items;
     private Texture slotTex;
+    private boolean hasPowerSource, hasGasSource;
 
     public Inventory(int slots) {
         this.slots = slots;
@@ -20,7 +21,8 @@ public class Inventory {
             items.add(i, null);
         }
         slotTex = Drawer.LoadPNG("game/inventory_slot");
-        nextAvailable = 0;
+        this.hasPowerSource = false;
+        this.hasGasSource = false;
     }
 
     public boolean canAdd() {
@@ -35,7 +37,6 @@ public class Inventory {
 
     public boolean add(Item item) {
         if (canAdd()) {
-            nextAvailable++;
             int ind = 0;
             for (int i = 0; i < items.size(); i++) {
                 if (items.get(i) == null) {
@@ -50,12 +51,7 @@ public class Inventory {
     }
 
     public void remove(int item) {
-        nextAvailable--;
         items.set(item, null);
-    }
-
-    public ArrayList<Item> getItems() {
-        return items;
     }
 
     public void draw() {
@@ -71,18 +67,29 @@ public class Inventory {
     }
 
     public void update() {
+        boolean power = false, gas = false;
         for (Item item : items) {
             if (item != null) {
                 item.update();
+                if (item.isPowerSource()) {
+                    power = true;
+                }
+                if (item.isGasSource()) {
+                    gas = true;
+                }
             }
         }
+        hasPowerSource = power;
+        hasGasSource = gas;
     }
 
-    public int getMaxSlots() {
-        return slots;
+    public ArrayList<Item> getItems() {
+        return items;
     }
-
-    public int nextAvailable() {
-        return nextAvailable;
+    public boolean hasPowerSource() {
+        return hasPowerSource;
+    }
+    public boolean hasGasSource() {
+        return hasGasSource;
     }
 }
