@@ -11,6 +11,7 @@ public class ItemUnlocksDoorTile extends Tile {
 
     public ItemUnlocksDoorTile(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
+        System.out.println(type + ", " + this.getId());
         this.unlockableBy = (ItemType) type.subClassArgs()[0];
         this.gameController = game;
     }

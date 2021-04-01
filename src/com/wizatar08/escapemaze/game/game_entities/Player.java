@@ -74,31 +74,31 @@ public class Player implements Entity {
         if (selected) {
             while (Keyboard.next()) {
                 if (keyDown(Keyboard.KEY_1)) {
-                    useItem(0);
+                    inventory.setSelected(0);
                 }
                 if (keyDown(Keyboard.KEY_2)) {
-                    useItem(1);
+                    inventory.setSelected(1);
                 }
                 if (keyDown(Keyboard.KEY_3)) {
-                    useItem(2);
+                    inventory.setSelected(2);
                 }
                 if (keyDown(Keyboard.KEY_4)) {
-                    useItem(3);
+                    inventory.setSelected(3);
                 }
                 if (keyDown(Keyboard.KEY_5)) {
-                    useItem(4);
+                    inventory.setSelected(4);
                 }
                 if (keyDown(Keyboard.KEY_6)) {
-                    useItem(5);
+                    inventory.setSelected(5);
                 }
                 if (keyDown(Keyboard.KEY_7)) {
-                    useItem(6);
+                    inventory.setSelected(6);
                 }
                 if (keyDown(Keyboard.KEY_8)) {
-                    useItem(7);
+                    inventory.setSelected(7);
                 }
                 if (keyDown(Keyboard.KEY_9)) {
-                    useItem(8);
+                    inventory.setSelected(8);
                 }
 
                 if (keyDown(Keyboard.KEY_E)) {
@@ -106,7 +106,7 @@ public class Player implements Entity {
                 }
 
                 if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
-                    if (keyDown(Keyboard.KEY_SPACE)) {
+                    if (keyDown(Keyboard.KEY_LSHIFT)) {
                         if (isNearSafeSpot() && !isSafe) {
                             goIntoSafeSpot();
                         } else if (isSafe) {
@@ -118,6 +118,9 @@ public class Player implements Entity {
                         if (isAtPressurePlateComputer()) {
                             gameController.setPressurePlateActive(false);
                         }
+                    }
+                    if (keyDown(Keyboard.KEY_SPACE)) {
+                        useItem(inventory.getCurrentSelected());
                     }
                 }
                 if (keyDown(Keyboard.KEY_ESCAPE)) {
@@ -325,19 +328,17 @@ public class Player implements Entity {
         ArrayList<Tile> list = getAllSurroundingTiles();
 
         for (Tile tile : list) {
-            for (Item item : inventory.getItems()) {
-                if (item != null) {
-                    if (tile.isLockedDoor() && tile.isActive()) {
-                        if (ItemType.getType(item.getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy()) {
-                            drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
-                        }
-                    }
-                    if (tile.isAuthorityDoor() && tile.isAuthorityDoorLocked()) {
+            if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
+                if (tile.isLockedDoor() && tile.isActive()) {
+                    if (ItemType.getType(inventory.getItems().get(inventory.getCurrentSelected()).getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy()) {
                         drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                     }
-                    if (tile.isActive() && ItemType.getType(item.getId()) == ItemType.LASER_DEACTIVATOR) {
-                        drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
-                    }
+                }
+                if (tile.isAuthorityDoor() && tile.isAuthorityDoorLocked()) {
+                    drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
+                }
+                if (tile.isActive() && ItemType.getType(inventory.getItems().get(inventory.getCurrentSelected()).getId()) == ItemType.LASER_DEACTIVATOR) {
+                    drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
                 }
             }
         }

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Inventory {
-    private final int slots;
+    private int slots, currentSelected;
     private ArrayList<Item> items;
-    private Texture slotTex;
+    private Texture slotTex, selectedTex;
     private boolean hasPowerSource, hasGasSource;
 
     public Inventory(int slots) {
@@ -21,8 +21,10 @@ public class Inventory {
             items.add(i, null);
         }
         slotTex = Drawer.LoadPNG("game/inventory_slot");
+        selectedTex = Drawer.LoadPNG("game/inventory_slot_selected");
         this.hasPowerSource = false;
         this.hasGasSource = false;
+        this.currentSelected = 0;
     }
 
     public boolean canAdd() {
@@ -59,6 +61,7 @@ public class Inventory {
         for (int i = 0; i < slots; i++) {
             Drawer.drawQuadTex(slotTex, ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
         }
+        Drawer.drawQuadTex(selectedTex, ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (currentSelected * 64) - 4, HEIGHT - 81);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i) != null) {
                 Drawer.drawQuadTex(items.get(i).getTexture(), ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
@@ -83,6 +86,12 @@ public class Inventory {
         hasGasSource = gas;
     }
 
+    public void setSelected(int selected) {
+        if (selected < slots) {
+            this.currentSelected = selected;
+        }
+    }
+
     public ArrayList<Item> getItems() {
         return items;
     }
@@ -91,5 +100,8 @@ public class Inventory {
     }
     public boolean hasGasSource() {
         return hasGasSource;
+    }
+    public int getCurrentSelected() {
+        return currentSelected;
     }
 }

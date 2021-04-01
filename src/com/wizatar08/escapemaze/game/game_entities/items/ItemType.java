@@ -65,6 +65,7 @@ public enum ItemType {
         this.isPass = passLevel > 0;
         this.powerSecs = builder.getPowerSecs();
         this.gasSecs = builder.getGasSecs();
+        System.out.println("INIT ITEMS");
     }
 
     private void createIdMapAndArrays() {
@@ -72,7 +73,6 @@ public enum ItemType {
     }
 
     private void addToMap(String id, ItemType type) {
-        System.out.println("Added to map: " + id + ", " + type);
         ITEM_IDS.put(id, type);
     }
     // Getters
@@ -116,7 +116,7 @@ public enum ItemType {
     }
 
     /**
-     * Tile builder class
+     * Item builder class
      */
     private static class Builder {
         private float weight;

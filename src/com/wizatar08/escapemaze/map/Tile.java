@@ -28,6 +28,7 @@ public class Tile implements Entity, TileEntity {
     private Game game;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
+        this.id = type.getId();
         this.x = x;
         this.y = y;
         this.initialX = x;
@@ -45,8 +46,6 @@ public class Tile implements Entity, TileEntity {
         this.isActive = function.STARTS_ACTIVE;
 
         this.requiredPassLevels = type.cardPassesNeeded();
-
-        this.id = type.getId();
 
     }
 

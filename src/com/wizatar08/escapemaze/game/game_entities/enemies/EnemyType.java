@@ -7,6 +7,7 @@ import java.util.*;
 
 public enum EnemyType {
     // IDTYPE: 2
+    NULL(new VariationID(IDTypes.ENEMY), "null", new Builder()),
     CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60)),
     SPEED_GUARD(new VariationID(IDTypes.ENEMY, "002", "00"), "speed_guard", new Builder().speed(72.0f).viewDistance(128).angleOfView(60));
 

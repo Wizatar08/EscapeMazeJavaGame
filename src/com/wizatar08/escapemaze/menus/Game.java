@@ -5,6 +5,7 @@ import com.wizatar08.escapemaze.game.JSONLevel;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.*;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.helpers.ui.UI;
@@ -48,6 +49,7 @@ public class Game {
     public static boolean PRESSURE_PLATES_ACTIVE;
 
     public Game() {
+        ItemType nullItem = ItemType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
         gson = new Gson();
         levelNumber = MenuRun.getLevel();
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
@@ -110,6 +112,10 @@ public class Game {
                 break;
         }
         createMenu();
+    }
+
+    private void initEnums() {
+
     }
 
     private void createMenu() {

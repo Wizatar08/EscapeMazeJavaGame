@@ -50,7 +50,6 @@ public class MainMenu {
         draw();
         detectIfButtonHit();
         cooldownTimer.update();
-        System.out.println(cooldownTimer.getTotalSeconds() + ", " + (cooldownTimer.getTotalSeconds() >= 1));
         if (cooldownTimer.getTotalSeconds() >= 1) {
             cooldownTimer.pause();
         }
