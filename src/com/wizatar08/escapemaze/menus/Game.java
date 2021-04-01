@@ -363,4 +363,8 @@ public class Game {
     public void setPressurePlateActive(boolean active) {
         PRESSURE_PLATES_ACTIVE = active;
     }
+
+    public Player getCurrentPlayer() {
+        return playerInstances.get(CURRENT_PLAYER);
+    }
 }

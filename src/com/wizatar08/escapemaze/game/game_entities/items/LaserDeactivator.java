@@ -3,37 +3,21 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.Game;
+import org.newdawn.slick.opengl.Texture;
 
-public class LaserDeactivator implements ItemClass{
+public class LaserDeactivator extends Item{
+    private Game gameController;
     private Tile tile;
 
-    public LaserDeactivator() {
+    public LaserDeactivator(Game game, ItemType type, Texture texture, float x, float y) {
+        super(game, type, texture, x, y);
+        gameController = game;
         this.tile = null;
     }
 
     @Override
-    public void update(Item item, Game game, Player player) {
-
-    }
-
-    @Override
-    public boolean canPickUp(Item item, Game game, Player player) {
-        return true;
-    }
-
-    @Override
-    public void onHit(Item item, Game game, Player player) {
-
-    }
-
-    @Override
-    public void updateInven(Item item, Game game, Player player) {
-
-    }
-
-    @Override
-    public boolean canUseItem(Item item, Game game, Player player) {
-        for (Tile tile : player.getAllSurroundingTiles()) {
+    public boolean canUse() {
+        for (Tile tile : gameController.getCurrentPlayer().getAllSurroundingTiles()) {
             if (tile.getFunction() == Tile.Function.LASER_SECURE) {
                 this.tile = tile;
                 return true;
@@ -43,12 +27,7 @@ public class LaserDeactivator implements ItemClass{
     }
 
     @Override
-    public void use(Item item, Game game, Player player) {
+    public void use() {
         tile.setActive(false);
-    }
-
-    @Override
-    public void onDropItem(Item item, Game game, Player player) {
-
     }
 }

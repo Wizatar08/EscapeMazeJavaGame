@@ -7,7 +7,9 @@ import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.menus.Game;
+import org.newdawn.slick.opengl.Texture;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class JSONItemClass {
@@ -28,10 +30,17 @@ public class JSONItemClass {
             String id = items.get(i).getAsJsonObject().get("id").getAsString();
             int x = items.get(i).getAsJsonObject().get("x").getAsInt();
             int y = items.get(i).getAsJsonObject().get("y").getAsInt();
-            System.out.println(id + ", " + x + ", " + y);
-            itemList.add(new Item(game, ItemType.getType(id),
-                    Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()),
-                    x, y));
+
+            Class clazz = ItemType.getType(id).getClassname();
+            if (clazz != null) {
+                try {
+                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Texture.class, float.class, float.class).newInstance(game, ItemType.getType(id), Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()), x, y));
+                } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                itemList.add(new Item(game, ItemType.getType(id), Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()), x, y));
+            }
         }
         return itemList;
     }

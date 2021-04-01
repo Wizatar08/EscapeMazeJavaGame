@@ -4,37 +4,22 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
 import com.wizatar08.escapemaze.menus.Game;
+import org.newdawn.slick.opengl.Texture;
 
-public class Key implements ItemClass {
+public class Key extends Item {
+    private Game gameController;
     private Tile tile;
 
-    public Key() {
-        tile = null;
+    public Key(Game game, ItemType type, Texture texture, float x, float y) {
+        super(game, type, texture, x, y);
+        gameController = game;
     }
 
     @Override
-    public void update(Item item, Game game, Player player) {
-    }
-
-    @Override
-    public boolean canPickUp(Item item, Game game, Player player) {
-        return true;
-    }
-
-    @Override
-    public void onHit(Item item, Game game, Player player) {
-    }
-
-    @Override
-    public void updateInven(Item item, Game game, Player player) {
-
-    }
-
-    @Override
-    public boolean canUseItem(Item item, Game game, Player player) {
-        for (Tile tile : player.getAllSurroundingTiles()) {
+    public boolean canUse() {
+        for (Tile tile : gameController.getCurrentPlayer().getAllSurroundingTiles()) {
             if (tile instanceof ItemUnlocksDoorTile) {
-                if (ItemType.getType(item.getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy() && tile.isActive()) {
+                if (ItemType.getType(super.getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy() && tile.isActive()) {
                     this.tile = tile;
                     return true;
                 }
@@ -44,12 +29,7 @@ public class Key implements ItemClass {
     }
 
     @Override
-    public void use(Item item, Game game, Player player) {
+    public void use() {
         tile.unlockDoor();
-    }
-
-    @Override
-    public void onDropItem(Item item, Game game, Player player) {
-
     }
 }

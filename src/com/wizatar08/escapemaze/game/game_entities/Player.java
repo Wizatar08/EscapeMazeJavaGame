@@ -226,13 +226,19 @@ public class Player implements Entity {
     private void useItem(int slot) {
         try {
             Item item = inventory.getItems().get(slot);
-            if (!item.doUse(item)) {
-                drop(item, slot);
+            if (item != null) {
+                if (!item.canUse()) {
+                    dropItem(item, slot);
+                } else {
+                    item.use();
+                }
             }
-        } catch (IndexOutOfBoundsException | NullPointerException ignored) {}
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void drop(Item item, int fromSlot) {
+    private void dropItem(Item item, int fromSlot) {
         item.setX(x - (item.getWidth() / 2));
         item.setY(y - (item.getHeight() / 2));
         gameController.addItemToGame(item);

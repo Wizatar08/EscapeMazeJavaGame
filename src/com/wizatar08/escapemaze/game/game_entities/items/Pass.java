@@ -4,41 +4,27 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
+import org.newdawn.slick.opengl.Texture;
 
 import java.util.ArrayList;
 
-public class Pass implements ItemClass {
+public class Pass extends Item {
+    private Game gameController;
     private Tile tile;
 
-    public Pass() {
+    public Pass(Game game, ItemType type, Texture texture, float x, float y) {
+        super(game, type, texture, x, y);
+        gameController = game;
         tile = null;
     }
 
     @Override
-    public void update(Item item, Game game, Player player) {
-    }
-
-    @Override
-    public boolean canPickUp(Item item, Game game, Player player) {
-        return true;
-    }
-
-    @Override
-    public void onHit(Item item, Game game, Player player) {
-    }
-
-    @Override
-    public void updateInven(Item item, Game game, Player player) {
-
-    }
-
-    @Override
-    public boolean canUseItem(Item item, Game game, Player player) {
-        for (Tile tile : player.getAllSurroundingTiles()) {
+    public boolean canUse() {
+        for (Tile tile : gameController.getCurrentPlayer().getAllSurroundingTiles()) {
             if (TileType.TILE_IDS.get(tile.getId()).isAuthorityDoor()) {
                 int[] passLevel = new int[]{0, 0, 0, 0, 0};
-                for (int i = 0; i < player.getInventory().getItems().size(); i++) {
-                    Item item1 = player.getInventory().getItems().get(i);
+                for (int i = 0; i < gameController.getCurrentPlayer().getInventory().getItems().size(); i++) {
+                    Item item1 = gameController.getCurrentPlayer().getInventory().getItems().get(i);
                     if (item1 != null && item1.isPass()) {
                         passLevel[i] = item1.getPassLevel();
                     }
@@ -48,7 +34,7 @@ public class Pass implements ItemClass {
                 for (int k : passLevel) {
                     hasChecked = false;
                     for (int i = 0; i < tile.getRequiredPassLevels().length; i++) {
-                        if (tile.getRequiredPassLevels()[i] == k && !hasChecked) {
+                        if ((tile.getRequiredPassLevels()[i] == k || k == -1) && !hasChecked) {
                             hasChecked = true;
                             matches++;
                         }
@@ -64,12 +50,7 @@ public class Pass implements ItemClass {
     }
 
     @Override
-    public void use(Item item, Game game, Player player) {
+    public void use() {
         tile.setActive(false);
-    }
-
-    @Override
-    public void onDropItem(Item item, Game game, Player player) {
-
     }
 }

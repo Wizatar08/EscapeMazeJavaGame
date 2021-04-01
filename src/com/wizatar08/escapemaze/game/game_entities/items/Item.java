@@ -22,14 +22,10 @@ public class Item implements Entity {
     private Texture texture;
     private ItemType type;
     private String id;
-    private boolean inInventory, required, isPass, isPowerSource, isGasSource;
+    private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor;
     private Timer cooldownPickupTimer;
-    private Class<?> clazz;
-    private Object itemClass;
-    private Game gameController;
 
     public Item(Game game, ItemType type, Texture texture, float x, float y) {
-        this.gameController = game;
         this.texture = texture;
         this.type = type;
         this.x = x;
@@ -44,6 +40,7 @@ public class Item implements Entity {
         this.required = type.isRequired();
         this.isPass = type.isPass();
         this.passLevel = type.passLevel();
+        this.isAdminAccessor = type.isAdminAccessor();
 
         this.powerSecs = type.getPowerSecs();
         this.gasSecs = type.getGasSecs();
@@ -53,17 +50,6 @@ public class Item implements Entity {
         this.speedBoost = 0;
 
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
-        itemClass = null;
-        if (type.getClassname() != null) {
-            try {
-                this.clazz = type.getClassname();
-                itemClass = clazz.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.clazz = null;
-        }
     }
 
     private void updateTimer() {
@@ -77,17 +63,6 @@ public class Item implements Entity {
 
     @Override
     public void update() {
-        try {
-            if (clazz != null) {
-                if (!this.isInInventory()) {
-                    clazz.getMethod("update", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
-                } else {
-                    clazz.getMethod("updateInven", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
-                }
-            }
-        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
         updateTimer();
     }
 
@@ -176,30 +151,13 @@ public class Item implements Entity {
     }
 
     public void hitItem(Game gameController) {
-        try {
-            if (clazz != null) {
-                clazz.getMethod("onHit", Item.class, Game.class, Player.class).invoke(itemClass, this, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
-            }
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
 
-    public boolean doUse(Item item) {
-        try {
-            if (clazz != null) {
-                if ((boolean) clazz.getMethod("canUseItem", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER))) {
-                    clazz.getMethod("use", Item.class, Game.class, Player.class).invoke(itemClass, item, gameController, gameController.getPlayer().get(gameController.CURRENT_PLAYER));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public boolean canUse() {
         return false;
     }
+
+    public void use() {}
 
     public boolean isRequired() {
         return required;
@@ -221,5 +179,8 @@ public class Item implements Entity {
     }
     public void setSpeedBoost(float speedBoost) {
         this.speedBoost = speedBoost;
+    }
+    public boolean isAdminAccessor() {
+        return isAdminAccessor;
     }
 }
