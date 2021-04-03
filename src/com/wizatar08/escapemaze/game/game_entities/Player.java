@@ -10,13 +10,26 @@ import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
 import com.wizatar08.escapemaze.menus.Game;
+import javafx.scene.input.MouseButton;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 import static com.wizatar08.escapemaze.helpers.Drawer.*;
+
+/*
+PLAYER CONTROLS:
+- WASD: Movement
+- E: Change player instance
+- Space: Interact with tile
+- Number 1-9: Change inventory slot
+- Left click: Use item
+- Right click: Drop item
+- Escape: Pause/unpause game
+ */
 
 public class Player implements Entity {
     // Initialize variables
@@ -25,7 +38,7 @@ public class Player implements Entity {
     private TileMap map;
     private boolean isSafe;
     private Texture tex, detectTex;
-    private Game gameController;
+    private final Game gameController;
     private Inventory inventory;
     private float weightInfluence, speedInfluence;
     private boolean selected;
@@ -102,11 +115,11 @@ public class Player implements Entity {
                 }
 
                 if (keyDown(Keyboard.KEY_E)) {
-                    gameController.changePlayer();
+                    gameController.changePlayerInstance();
                 }
 
                 if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
-                    if (keyDown(Keyboard.KEY_LSHIFT)) {
+                    if (keyDown(Keyboard.KEY_SPACE)) {
                         if (isNearSafeSpot() && !isSafe) {
                             goIntoSafeSpot();
                         } else if (isSafe) {
@@ -119,12 +132,17 @@ public class Player implements Entity {
                             gameController.setPressurePlateActive(false);
                         }
                     }
-                    if (keyDown(Keyboard.KEY_SPACE)) {
-                        useItem(inventory.getCurrentSelected());
-                    }
                 }
                 if (keyDown(Keyboard.KEY_ESCAPE)) {
                     gameController.switchPauseState();
+                }
+            }
+            if (Mouse.isButtonDown(0)) {
+                useItem(inventory.getCurrentSelected());
+            }
+            if (Mouse.isButtonDown(1)) {
+                if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
+                    dropItem(inventory.getItems().get(inventory.getCurrentSelected()), inventory.getCurrentSelected());
                 }
             }
             if (!isSafe) {
@@ -226,12 +244,8 @@ public class Player implements Entity {
     private void useItem(int slot) {
         try {
             Item item = inventory.getItems().get(slot);
-            if (item != null) {
-                if (!item.canUse()) {
-                    dropItem(item, slot);
-                } else {
-                    item.use();
-                }
+            if (item != null && item.canUse()) {
+                item.use();
             }
         } catch (IndexOutOfBoundsException | NullPointerException e) {
             e.printStackTrace();
@@ -277,18 +291,19 @@ public class Player implements Entity {
     }
 
     private void detectIfHitItem() {
-        Item hitItem = null;
-        for (Item item : gameController.getItems()) {
-            if (checkCollision(x, y, width, height, item.getTexX(), item.getTexY(), item.getWidth(), item.getHeight()) && !item.isInInventory() && item.canPickUp() && inventory.canAdd()) {
-                hitItem = item;
+        Item item = null;
+        for (Item item1 : gameController.getItems()) {
+            if (checkCollision(x, y, width, height, item1.getTexX(), item1.getTexY(), item1.getWidth(), item1.getHeight()) && !item1.isInInventory() && item1.canPickUp() && inventory.canAdd()) {
+                item = item1;
             }
         }
-        if (hitItem != null) {
-            if (gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getX() == hitItem.getX() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).getY() == hitItem.getY() && gameController.getMap().getTile((int) hitItem.getX() / TILE_SIZE, (int) hitItem.getY() / TILE_SIZE).isActive()) {
+        if (item != null) {
+            Tile tile = gameController.getMap().getTile((int) item.getX() / TILE_SIZE, (int) item.getY() / TILE_SIZE);
+            if (tile.getX() == item.getX() && tile.getY() == item.getY() && tile.isPressurePlate() && tile.isActive()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
-            addItemToInventory(hitItem);
-            hitItem.hitItem(gameController);
+            addItemToInventory(item);
+            item.hitItem(gameController);
         }
     }
 
@@ -318,9 +333,6 @@ public class Player implements Entity {
         return gameController.getMap().getTile((int) Math.floor((x + (TILE_SIZE / 4)) / TILE_SIZE), (int) Math.floor((y + 1) / TILE_SIZE) + 1);
     }
 
-    private boolean nextToTile(Tile tile) {
-        return getUpTile() == tile || getLeftTile() == tile || getRightTile() == tile || getDownTile() == tile;
-    }
     public ArrayList<Tile> getAllSurroundingTiles() {
         ArrayList<Tile> list = new ArrayList<>();
         list.add(getUpTile());
@@ -332,7 +344,6 @@ public class Player implements Entity {
 
     private void detectIfAtSpecificTile() {
         ArrayList<Tile> list = getAllSurroundingTiles();
-
         for (Tile tile : list) {
             if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
                 if (tile.isLockedDoor() && tile.isActive()) {
@@ -348,7 +359,6 @@ public class Player implements Entity {
                 }
             }
         }
-        //drawQuadTex(LoadPNG("tiles/null"), (int) Math.floor((x + 16) / 64) * 64 + Game.DIS_X, (int) Math.floor((y + 16) / 64) * 64 + Game.DIS_Y);
     }
 
     public void update() {
@@ -366,56 +376,42 @@ public class Player implements Entity {
     public float getX() {
         return x;
     }
-
     @Override
     public float getY() {
         return y;
     }
-
     @Override
     public float getWidth() {
         return width;
     }
-
     @Override
     public float getHeight() {
         return height;
     }
-
     @Override
     public void setX(float x) {
         this.x = x;
     }
-
     @Override
     public void setY(float y) {
         this.y = y;
     }
-
     @Override
     public void setWidth(float width) {
         this.width = width;
     }
-
     @Override
     public void setHeight(float height) {
         this.height = height;
     }
-
     public boolean isSafe() {
         return isSafe;
     }
-    
     public void setIfSafe(boolean isSafe) {
         this.isSafe = isSafe;
     }
-
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public boolean isSelected() {
-        return selected;
     }
     public void setSelected(boolean select) {
         this.selected = select;

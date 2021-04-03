@@ -28,6 +28,7 @@ public class Tile implements Entity, TileEntity {
     private Game game;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
+        this.game = game;
         this.id = type.getId();
         this.x = x;
         this.y = y;
@@ -44,7 +45,6 @@ public class Tile implements Entity, TileEntity {
         this.activeTexture = type.getActiveTileTexture();
         this.activeTextureRots = type.getActiveTileTextureRots();
         this.isActive = function.STARTS_ACTIVE;
-
         this.requiredPassLevels = type.cardPassesNeeded();
 
     }
@@ -79,7 +79,8 @@ public class Tile implements Entity, TileEntity {
             drawQuadTex(defaultTexture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
             canBeSeen = true;
             // Add computer textures here
-            if ((function == Function.PRESSURE_PLATE_COMPUTER && !Game.PRESSURE_PLATES_ACTIVE) ||
+            if ((function == Function.PRESSURE_PLATE_COMPUTER
+                    && !game.pressurePlatesActive()) ||
                     // Door functionality here
                     (function == Function.LASER_SECURE && !isActive) ||
                     (function == Function.ITEM_UNLOCK_DOOR && !isActive) ||

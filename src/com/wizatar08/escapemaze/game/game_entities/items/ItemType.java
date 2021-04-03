@@ -23,8 +23,8 @@ public enum ItemType {
     PASS_1(new VariationID(IDTypes.ITEM, "004", "01"), "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
     PASS_2(new VariationID(IDTypes.ITEM, "004", "02"), "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
     PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
-    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource(30)),
-    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource(30)),
+    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource().className(DurabilityItem.class, new Object[]{40})),
+    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(DurabilityItem.class, new Object[]{40})),
     BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class)),
     ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f));
 
@@ -48,9 +48,10 @@ public enum ItemType {
     private String id;
     private String texture;
     private float weight;
-    private boolean required, isPass, isAdminAccessor;
-    private Class className;
-    private int passLevel, powerSecs, gasSecs;
+    private boolean required, isPass, isAdminAccessor, power, gas;
+    private Class<? extends Item> className;
+    private int passLevel;
+    private Object[] classArgs;
 
     private static HashMap<String, ItemType> ITEM_IDS;
 
@@ -64,9 +65,10 @@ public enum ItemType {
         this.className = builder.getClassName();
         this.passLevel = builder.isPass();
         this.isPass = passLevel > 0;
-        this.powerSecs = builder.getPowerSecs();
-        this.gasSecs = builder.getGasSecs();
+        this.power = builder.isPower();
+        this.gas = builder.isGas();
         this.isAdminAccessor = builder.isAdminAccessor();
+        this.classArgs = builder.getClassArgs();
     }
 
     private void createIdMapAndArrays() {
@@ -90,7 +92,7 @@ public enum ItemType {
     public boolean isRequired() {
         return required;
     }
-    public Class getClassname() {
+    public Class<? extends Item> getClassname() {
         return className;
     }
     public int passLevel() {
@@ -102,13 +104,14 @@ public enum ItemType {
     public boolean isAdminAccessor() {
         return isAdminAccessor;
     }
-
-    public int getPowerSecs() {
-        return powerSecs;
+    public boolean isPower() {
+        return power;
     }
-
-    public int getGasSecs() {
-        return gasSecs;
+    public boolean isGas() {
+        return gas;
+    }
+    public Object[] getClassArgs() {
+        return classArgs;
     }
 
     public static ItemType getType(String type) {
@@ -124,18 +127,20 @@ public enum ItemType {
      */
     private static class Builder {
         private float weight;
-        private boolean required, isAdminAccessor;
-        private Class className;
-        private int passLevel, powerSecs, gasSecs;
+        private boolean required, isAdminAccessor, power, gas;
+        private Class<? extends Item> className;
+        private int passLevel;
+        private Object[] classArgs;
 
         private Builder() {
             this.weight = 0.0f;
             this.required = false;
             this.className = null;
             this.passLevel = 0;
-            this.powerSecs = 0;
-            this.gasSecs = 0;
+            this.power = false;
+            this.gas = false;
             this.isAdminAccessor = false;
+            this.classArgs = null;
         }
 
         public Builder weight(float weight) {
@@ -148,8 +153,14 @@ public enum ItemType {
             return this;
         }
 
-        public Builder className(Class clazz) {
+        public Builder className(Class<? extends Item> clazz) {
             this.className = clazz;
+            return this;
+        }
+
+        public Builder className(Class<? extends Item> clazz, Object[] args) {
+            this.className = clazz;
+            this.classArgs = args;
             return this;
         }
 
@@ -158,13 +169,13 @@ public enum ItemType {
             return this;
         }
 
-        public Builder powerSource(int seconds) {
-            this.powerSecs = seconds;
+        public Builder powerSource() {
+            this.power = true;
             return this;
         }
 
-        public Builder gasSource(int seconds) {
-            this.gasSecs = seconds;
+        public Builder gasSource() {
+            this.gas = true;
             return this;
         }
 
@@ -179,20 +190,23 @@ public enum ItemType {
         public boolean getRequired() {
             return required;
         }
-        public Class getClassName() {
+        public Class<? extends Item> getClassName() {
             return className;
         }
         public int isPass() {
             return passLevel;
         }
-        public int getGasSecs() {
-            return gasSecs;
+        public boolean isGas() {
+            return gas;
         }
-        public int getPowerSecs() {
-            return powerSecs;
+        public boolean isPower() {
+            return power;
         }
         public boolean isAdminAccessor() {
             return isAdminAccessor;
+        }
+        public Object[] getClassArgs() {
+            return classArgs;
         }
     }
 }

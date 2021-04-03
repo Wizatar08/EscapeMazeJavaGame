@@ -29,12 +29,9 @@ import java.util.Random;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Game {
-    // Initialize variables
-    private Gson gson;
     private int levelNumber, requiredItems, stolenItems, inventorySlots;
     private TileMap map;
     private String levelName;
-    private JSONLevel level;
     private ArrayList<Player> playerInstances;
     private ArrayList<Enemy> enemies;
     private ArrayList<Item> items;
@@ -45,15 +42,16 @@ public class Game {
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
     private Texture redScreen, alertBox, gameEndTex;
-    public int CURRENT_PLAYER;
-    public static boolean PRESSURE_PLATES_ACTIVE;
+    private int currentPlayer;
+    private boolean pressurePlatesActive;
 
     public Game() {
         ItemType nullItem = ItemType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
-        gson = new Gson();
+        // Initialize variables
+        Gson gson = new Gson();
         levelNumber = MenuRun.getLevel();
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
-        level = gson.fromJson(reader, JSONLevel.class);
+        JSONLevel level = gson.fromJson(reader, JSONLevel.class);
         map = ExternalMapHandler.LoadMap(this, level.getMap());
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
@@ -90,8 +88,8 @@ public class Game {
             }
         }
         stolenItems = 0;
-        CURRENT_PLAYER = 0;
-        PRESSURE_PLATES_ACTIVE = true;
+        currentPlayer = 0;
+        pressurePlatesActive = true;
 
         switch (level.getScroll()) {
             case "none":
@@ -111,14 +109,6 @@ public class Game {
                 scrollType = MapScroll.NONE;
                 break;
         }
-        createMenu();
-    }
-
-    private void initEnums() {
-
-    }
-
-    private void createMenu() {
     }
 
     public enum GameStates {
@@ -144,10 +134,10 @@ public class Game {
         }
     }
 
-    public void changePlayer() {
-        CURRENT_PLAYER++;
-        if (CURRENT_PLAYER >= playerInstances.size()) {
-            CURRENT_PLAYER = 0;
+    public void changePlayerInstance() {
+        currentPlayer++;
+        if (currentPlayer >= playerInstances.size()) {
+            currentPlayer = 0;
         }
     }
 
@@ -156,7 +146,7 @@ public class Game {
             detectIfButtonHitOnGameEnd();
         } else {
             for (int i = 0; i < playerInstances.size(); i++) {
-                if (i != CURRENT_PLAYER) {
+                if (i != currentPlayer) {
                     playerInstances.get(i).setSelected(false);
                 } else {
                     playerInstances.get(i).setSelected(true);
@@ -164,12 +154,11 @@ public class Game {
             }
             updateDisplacement();
             drawAll();
-            playerInstances.forEach((p) -> p.draw());
-            detectKey();
+            playerInstances.forEach(Player::draw);
             if (currentGameState != GameStates.PAUSED) {
                 updateEnemies();
                 updateTime();
-                playerInstances.forEach((p) -> p.update());
+                playerInstances.forEach(Player::update);
                 for (Item item : items) {
                     item.update();
                 }
@@ -203,17 +192,17 @@ public class Game {
                 DIS_Y = 0;
                 break;
             case MOVE:
-                if (playerInstances.get(CURRENT_PLAYER).getX() > (map.getTilesWide() * TILE_SIZE - (WIDTH / 2))) {
+                if (playerInstances.get(currentPlayer).getX() > (map.getTilesWide() * TILE_SIZE - (WIDTH / 2))) {
                     DIS_X = -(map.getTilesWide() * TILE_SIZE - WIDTH);
-                } else if (-playerInstances.get(CURRENT_PLAYER).getX() + WIDTH / 2 < 0) {
-                    DIS_X = -playerInstances.get(CURRENT_PLAYER).getX() + WIDTH / 2;
+                } else if (-playerInstances.get(currentPlayer).getX() + WIDTH / 2 < 0) {
+                    DIS_X = -playerInstances.get(currentPlayer).getX() + WIDTH / 2;
                 } else {
                     DIS_X = 0;
                 }
-                if (playerInstances.get(CURRENT_PLAYER).getY() > (map.getTilesHigh() * TILE_SIZE - (HEIGHT / 2))) {
+                if (playerInstances.get(currentPlayer).getY() > (map.getTilesHigh() * TILE_SIZE - (HEIGHT / 2))) {
                     DIS_Y = -(map.getTilesHigh() * TILE_SIZE - HEIGHT);
-                } else if (-playerInstances.get(CURRENT_PLAYER).getY() + Renderer.HEIGHT / 2 < 0) {
-                    DIS_Y = -playerInstances.get(CURRENT_PLAYER).getY() + Renderer.HEIGHT / 2;
+                } else if (-playerInstances.get(currentPlayer).getY() + Renderer.HEIGHT / 2 < 0) {
+                    DIS_Y = -playerInstances.get(currentPlayer).getY() + Renderer.HEIGHT / 2;
                 } else {
                     DIS_Y = 0;
                 }
@@ -243,14 +232,6 @@ public class Game {
         if (Mouse.isButtonDown(0)) {
             if (gameEndUI.isButtonClicked("GoBack")) MenuRun.setState(Menus.MAIN_MENU);
         }
-    }
-
-    private void detectKey() {
-
-    }
-
-    private boolean keyDown(int key) {
-        return (Keyboard.getEventKey() == key) && (Keyboard.getEventKeyState());
     }
 
     private void drawAll() {
@@ -328,7 +309,7 @@ public class Game {
         map.draw();
     }
 
-    public ArrayList<Player> getPlayer() {
+    public ArrayList<Player> getPlayerInstances() {
         return playerInstances;
     }
 
@@ -361,10 +342,16 @@ public class Game {
     }
 
     public void setPressurePlateActive(boolean active) {
-        PRESSURE_PLATES_ACTIVE = active;
+        pressurePlatesActive = active;
     }
 
     public Player getCurrentPlayer() {
-        return playerInstances.get(CURRENT_PLAYER);
+        return playerInstances.get(currentPlayer);
+    }
+    public boolean pressurePlatesActive() {
+        return pressurePlatesActive;
+    }
+    public int getCurrentPlayerIndex() {
+        return currentPlayer;
     }
 }

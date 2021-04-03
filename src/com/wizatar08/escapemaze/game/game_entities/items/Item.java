@@ -18,16 +18,14 @@ import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
     private float x, y, texX, texY, width, height, weight, speedBoost;
-    private int passLevel, powerSecs, gasSecs;
+    private int passLevel;
     private Texture texture;
-    private ItemType type;
     private String id;
     private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor;
     private Timer cooldownPickupTimer;
 
     public Item(Game game, ItemType type, Texture texture, float x, float y) {
         this.texture = texture;
-        this.type = type;
         this.x = x;
         this.y = y;
         this.width = texture.getImageWidth();
@@ -41,11 +39,8 @@ public class Item implements Entity {
         this.isPass = type.isPass();
         this.passLevel = type.passLevel();
         this.isAdminAccessor = type.isAdminAccessor();
-
-        this.powerSecs = type.getPowerSecs();
-        this.gasSecs = type.getGasSecs();
-        this.isPowerSource = this.powerSecs != 0;
-        this.isGasSource = this.gasSecs != 0;
+        this.isPowerSource = type.isPower();
+        this.isGasSource = type.isGas();
 
         this.speedBoost = 0;
 
@@ -144,10 +139,6 @@ public class Item implements Entity {
 
     public float getWeight() {
         return weight;
-    }
-
-    private void laserDeactivatorAbility(Tile tile) {
-        tile.setActive(false);
     }
 
     public void hitItem(Game gameController) {

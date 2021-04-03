@@ -15,12 +15,10 @@ public class Booster extends Item {
     @Override
     public void update() {
         super.update();
-        gameController.getPlayer().forEach((p) -> {
-            if (p.getInventory().hasPowerSource()) {
-                this.setSpeedBoost(1.25f);
-            } else {
-                this.setSpeedBoost(0.0f);
-            }
-        });
+        if (gameController.getCurrentPlayer().getInventory().hasPowerSource()) {
+            this.setSpeedBoost(1.25f);
+        } else {
+            this.setSpeedBoost(0.0f);
+        }
     }
 }

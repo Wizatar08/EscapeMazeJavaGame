@@ -18,8 +18,8 @@ public class PressurePlateTile extends Tile {
 
     @Override
     public void update() {
-        if (Game.PRESSURE_PLATES_ACTIVE) {
-            ArrayList<Player> player = gameController.getPlayer();
+        if (gameController.pressurePlatesActive()) {
+            ArrayList<Player> player = gameController.getPlayerInstances();
             player.forEach((p) -> {
                 if (Drawer.checkCollision(super.getX(), super.getY(), super.getWidth(), super.getHeight(), p.getX(), p.getY(), p.getWidth(), p.getHeight())) {
                     gameController.setState(Game.GameStates.ALARM);

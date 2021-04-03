@@ -62,10 +62,10 @@ public enum TileType {
     METAL_WALL_L_DOOR(new VariationID(IDTypes.TILE, "003", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{90, 90}).safeSpot(EntityDetectDirection.LEFT)),
     METAL_WALL_T_DOOR(new VariationID(IDTypes.TILE, "003", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{180, 180}).safeSpot(EntityDetectDirection.UP)),
     METAL_WALL_R_DOOR(new VariationID(IDTypes.TILE, "003", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(EntityDetectDirection.RIGHT)),
-    COMPUTER_DEF_FLOOR(new VariationID(IDTypes.TILE, "004", "01"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{0})),
-    COMPUTER_DEF_FLOOR_90(new VariationID(IDTypes.TILE, "004", "02"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{90})),
-    COMPUTER_DEF_FLOOR_180(new VariationID(IDTypes.TILE, "004", "03"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{180})),
-    COMPUTER_DEF_FLOOR_270(new VariationID(IDTypes.TILE, "004", "04"), "default_floor", new Builder().isPassable().isSecurityComputer(true).overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{270})),
+    COMPUTER_DEF_FLOOR(new VariationID(IDTypes.TILE, "004", "01"), "default_floor", new Builder().isPassable().securityComputer().overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{0})),
+    COMPUTER_DEF_FLOOR_90(new VariationID(IDTypes.TILE, "004", "02"), "default_floor", new Builder().isPassable().securityComputer().overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{90})),
+    COMPUTER_DEF_FLOOR_180(new VariationID(IDTypes.TILE, "004", "03"), "default_floor", new Builder().isPassable().securityComputer().overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{180})),
+    COMPUTER_DEF_FLOOR_270(new VariationID(IDTypes.TILE, "004", "04"), "default_floor", new Builder().isPassable().securityComputer().overlayTex(new Texture[]{LoadPNG("tile_overlays/security_computers")}, new int[]{270})),
     METAL_WALL_BE_DOOR(new VariationID(IDTypes.TILE, "005", "01"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}).safeSpot(EntityDetectDirection.DOWN).escapeDoor()),
     METAL_WALL_LE_DOOR(new VariationID(IDTypes.TILE, "005", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}, new int[]{90, 90}).safeSpot(EntityDetectDirection.LEFT).escapeDoor()),
     METAL_WALL_TE_DOOR(new VariationID(IDTypes.TILE, "005", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/basic_escape_door")}, new int[]{180, 180}).safeSpot(EntityDetectDirection.UP).escapeDoor()),
@@ -107,16 +107,16 @@ public enum TileType {
      */
 
     // Initialize variables
-    private String id, texture;
-    private boolean isPassable, isSafeSpot, isEscapeDoor, isSecurityComputer, isSecure, doorLocked, authorityLocked, isPressurePlateComputer, pressurePlate;
-    private EntityDetectDirection safeSpot;
-    private Texture overlayTex[], activeTexture[];
-    private int activeTextureRots[], overlayTexRot[], cardPassesNeeded[];
+    private final String id, texture;
+    private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer;
+    private final EntityDetectDirection safeSpot;
+    private final Texture[] overlayTex, activeTexture;
+    private final int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
-    private Tile.Function function;
-    private Class subClass;
-    private Object[] subClassArgs;
+    private final Tile.Function function;
+    private final Class<? extends Tile> subClass;
+    private final Object[] subClassArgs;
 
     TileType(VariationID id, String texture, Builder builder) {
         createIdMapAndArrays();
@@ -126,7 +126,6 @@ public enum TileType {
         this.function = builder.getFunction();
         this.isPassable = builder.getIsPassable();
         this.isSafeSpot = builder.getIsSafeSpot();
-        this.isEscapeDoor = builder.isEscapeDoor();
         this.safeSpot = builder.getSafeSpot();
         this.overlayTex = builder.getOverlayTex();
         this.overlayTexRot = builder.getOverlayTexRot();
@@ -135,13 +134,10 @@ public enum TileType {
         this.activeTexture = builder.getActiveTileTexture();
         this.activeTextureRots = builder.getActiveTileTextureRots();
         this.isSecure = builder.isSecure();
-        this.doorLocked = builder.isDoorLocked();
         this.cardPassesNeeded = builder.getCardPassesNeeded();
         this.authorityLocked = builder.isAuthorityDoor();
         this.isPressurePlateComputer = builder.isPressurePlateComputer();
-        this.pressurePlate = builder.isPressurePlate();
         this.subClass = builder.getSubClass();
-        System.out.println("INIT TILES");
     }
 
     private void createIdMapAndArrays() {
@@ -156,7 +152,7 @@ public enum TileType {
 
 
     // Getters
-    public Class getSubClass() {
+    public Class<? extends Tile> getSubClass() {
         return subClass;
     }
     public String getId() {
@@ -213,11 +209,11 @@ public enum TileType {
      */
     private static class Builder {
         public static EntityDetectDirection safeSpot;
-        public static Texture activeTexture[], overlayTex[];
-        public static int activeTextureRots[], overlayTexRot[], cardPassesNeeded[];
+        public static Texture[] activeTexture, overlayTex;
+        public static int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
         public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate;
         public static Tile.Function function;
-        public static Class subClass;
+        public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
 
         /**
@@ -247,7 +243,7 @@ public enum TileType {
         /**
          * Define a custom subclass. This will run a special set of code dedicated for that type of tile only.
          */
-        private Builder subclass(Class subclass) {
+        private Builder subclass(Class<? extends Tile> subclass) {
             this.subClass = subclass;
             return this;
         }
@@ -338,8 +334,8 @@ public enum TileType {
         /**
          * Determine whether or not this is a security computer (can disable alarms)
          */
-        private Builder isSecurityComputer(boolean is) {
-            isSecurityComputer = is;
+        private Builder securityComputer() {
+            isSecurityComputer = true;
             function = Tile.Function.MAIN_COMPUTER;
             return this;
         }
@@ -360,7 +356,7 @@ public enum TileType {
         }
 
         // Getters
-        public Class getSubClass() {
+        public Class<? extends Tile> getSubClass() {
             return subClass;
         }
         public Tile.Function getFunction() {
@@ -374,9 +370,6 @@ public enum TileType {
         }
         public EntityDetectDirection getSafeSpot() {
             return safeSpot;
-        }
-        public boolean isEscapeDoor() {
-            return escapeDoor;
         }
         public Texture[] getOverlayTex() {
             return overlayTex;

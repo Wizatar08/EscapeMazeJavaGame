@@ -38,7 +38,7 @@ public class Enemy implements Entity {
         this.hypotenuse = 0;
         this.pathfinder = new EnemyPathfinder(this);
         this.distanceView = type.getViewDistance();
-        this.playerInstances = game.getPlayer();
+        this.playerInstances = game.getPlayerInstances();
         this.gameController = game;
         this.alarmSpeed = type.getAlarmSpeed();
         multiplyPaths();
@@ -102,18 +102,18 @@ public class Enemy implements Entity {
 
     private void detectPlayer() {
         playerInstances.forEach((p) -> {
-            if (pathfinder.scanForWalls(distanceView, p) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !playerInstances.get(gameController.CURRENT_PLAYER).isSafe()) {
+            if (pathfinder.scanForWalls(distanceView, p) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !playerInstances.get(gameController.getCurrentPlayerIndex()).isSafe()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
         });
-        if (checkCollision(x, y, width, height, playerInstances.get(gameController.CURRENT_PLAYER).getX(), playerInstances.get(gameController.CURRENT_PLAYER).getY(), playerInstances.get(gameController.CURRENT_PLAYER).getWidth(), playerInstances.get(gameController.CURRENT_PLAYER).getHeight())) {
+        if (checkCollision(x, y, width, height, playerInstances.get(gameController.getCurrentPlayerIndex()).getX(), playerInstances.get(gameController.getCurrentPlayerIndex()).getY(), playerInstances.get(gameController.getCurrentPlayerIndex()).getWidth(), playerInstances.get(gameController.getCurrentPlayerIndex()).getHeight())) {
             gameController.setState(Game.GameStates.GAME_END);
             gameController.endGame(false);
         }
     }
 
     public float getAngleOfPlayerRelativeToEnemy() {
-        float rotComparison = pathfinder.getRotInDegrees(x, y, playerInstances.get(gameController.CURRENT_PLAYER).getX(), playerInstances.get(gameController.CURRENT_PLAYER).getY());
+        float rotComparison = pathfinder.getRotInDegrees(x, y, playerInstances.get(gameController.getCurrentPlayerIndex()).getX(), playerInstances.get(gameController.getCurrentPlayerIndex()).getY());
         return rotComparison - rot;
     }
 
