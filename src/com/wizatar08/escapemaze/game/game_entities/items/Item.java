@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 
 import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
@@ -110,6 +111,10 @@ public class Item implements Entity {
     @Override
     public void draw() {
         Drawer.drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y);
+    }
+
+    public void draw(float xVal, float yVal) {
+        Drawer.drawQuadTex(texture, xVal, yVal);
     }
 
     public String getId() {

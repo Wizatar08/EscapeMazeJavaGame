@@ -64,7 +64,7 @@ public class Inventory {
         Drawer.drawQuadTex(selectedTex, ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (currentSelected * 64) - 4, HEIGHT - 81);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i) != null) {
-                Drawer.drawQuadTex(items.get(i).getTexture(), ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
+                items.get(i).draw(((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
             }
         }
     }
@@ -103,5 +103,8 @@ public class Inventory {
     }
     public int getCurrentSelected() {
         return currentSelected;
+    }
+    public Item getCurrentSelectedItem() {
+        return items.get(currentSelected);
     }
 }

@@ -4,8 +4,8 @@ import org.jetbrains.annotations.Contract;
 
 public class Timer {
     private TimerModes mode;
-    private float totalSeconds, startingSeconds;
-    private int seconds, minutes, hours;
+    private float totalSeconds;
+    private final int startingSeconds;
     private boolean paused;
 
     public Timer() {
@@ -97,7 +97,7 @@ public class Timer {
         paused = !paused;
     }
 
-    public void setTime(int totalSeconds) {
+    public void setTime(float totalSeconds) {
         this.totalSeconds = totalSeconds;
     }
 
@@ -117,7 +117,6 @@ public class Timer {
     public boolean isAtTime(int totalSeconds) {
         return Math.floor(this.totalSeconds) == totalSeconds;
     }
-
     public boolean isAtTime(int hours, int minutes, int seconds) {
         return isAtTime(calculateTotalSeconds(hours, minutes, seconds));
     }
@@ -125,19 +124,18 @@ public class Timer {
     public int getMinutes() {
         return totalMinutes((int) totalSeconds);
     }
-
     public int getHours() {
         return totalHours((int) totalSeconds);
     }
-
     public int getSeconds() {
         return (int) Math.floor(totalSeconds % 60);
     }
-
     public float getTotalSeconds() {
         return totalSeconds;
     }
-
+    public int getStartingSeconds() {
+        return startingSeconds;
+    }
     public boolean isPaused() {
         return paused;
     }

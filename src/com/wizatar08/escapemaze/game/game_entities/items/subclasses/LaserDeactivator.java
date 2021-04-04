@@ -1,11 +1,13 @@
-package com.wizatar08.escapemaze.game.game_entities.items;
+package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.Game;
 import org.newdawn.slick.opengl.Texture;
 
-public class LaserDeactivator extends Item{
+public class LaserDeactivator extends Item {
     private Game gameController;
     private Tile tile;
 

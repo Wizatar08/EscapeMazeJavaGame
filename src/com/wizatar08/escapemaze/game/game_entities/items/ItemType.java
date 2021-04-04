@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities.items;
 
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.*;
 import com.wizatar08.escapemaze.helpers.IDTypes;
 import com.wizatar08.escapemaze.helpers.VariationID;
 

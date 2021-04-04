@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities;
 import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
@@ -137,12 +138,14 @@ public class Player implements Entity {
                     gameController.switchPauseState();
                 }
             }
-            if (Mouse.isButtonDown(0)) {
-                useItem(inventory.getCurrentSelected());
-            }
-            if (Mouse.isButtonDown(1)) {
-                if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
-                    dropItem(inventory.getItems().get(inventory.getCurrentSelected()), inventory.getCurrentSelected());
+            while (Mouse.next()) {
+                if (mouseDown(0)) {
+                    useItem(inventory.getCurrentSelected());
+                }
+                if (mouseDown(1)) {
+                    if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
+                        dropItem(inventory.getItems().get(inventory.getCurrentSelected()), inventory.getCurrentSelected());
+                    }
                 }
             }
             if (!isSafe) {
@@ -198,6 +201,11 @@ public class Player implements Entity {
     // Check if a key is pressed
     private boolean keyDown(int key) {
         return (Keyboard.getEventKey() == key) && (Keyboard.getEventKeyState());
+    }
+
+    // Check if a key is pressed
+    private boolean mouseDown(int key) {
+        return (Mouse.getEventButton() == key) && (Mouse.getEventButtonState());
     }
 
     // Move the player and detect if the player hit any walls
@@ -258,6 +266,28 @@ public class Player implements Entity {
         gameController.addItemToGame(item);
         item.setIsInInventory(false);
         inventory.remove(fromSlot);
+    }
+
+    public Item getClosestNonOccupiedPowerSource() {
+        Item currItem = null;
+        for (Item item : inventory.getItems()) {
+            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).hasDurability()) {
+                currItem = item;
+                break;
+            }
+        }
+        return currItem;
+    }
+
+    public Item getClosestNonOccupiedGasSource() {
+        Item currItem = null;
+        for (Item item : inventory.getItems()) {
+            if (item instanceof DurabilityItem && item.isGasSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).hasDurability()) {
+                currItem = item;
+                break;
+            }
+        }
+        return currItem;
     }
 
     // Draw the player if not in a safe spot

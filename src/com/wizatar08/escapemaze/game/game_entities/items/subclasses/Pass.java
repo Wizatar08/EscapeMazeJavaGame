@@ -1,6 +1,8 @@
-package com.wizatar08.escapemaze.game.game_entities.items;
+package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
