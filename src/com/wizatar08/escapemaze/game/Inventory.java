@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.game;
 
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Drawer;
 import org.newdawn.slick.opengl.Texture;
 
@@ -90,6 +91,33 @@ public class Inventory {
         if (selected < slots) {
             this.currentSelected = selected;
         }
+    }
+
+    public boolean hasItem(ItemType type) {
+        for (Item item : items) {
+            if (item != null && item.getType() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasItem(Class<? extends Item> itemClass) {
+        for (Item item : items) {
+            if (item != null && item.getClass() == itemClass) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasActiveItem(Class<? extends Item> itemClass) {
+        for (Item item : items) {
+            if (item != null && item.getClass() == itemClass && item.isRunning()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Item> getItems() {

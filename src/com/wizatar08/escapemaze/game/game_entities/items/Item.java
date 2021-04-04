@@ -18,14 +18,18 @@ import java.math.BigInteger;
 import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
+    private final Game gameController;
     private float x, y, texX, texY, width, height, weight, speedBoost;
-    private int passLevel;
+    private int passLevel, playerInd;
     private Texture texture;
     private String id;
-    private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor;
+    private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor, displayOnPlayer;
     private Timer cooldownPickupTimer;
+    private ItemType type;
 
     public Item(Game game, ItemType type, Texture texture, float x, float y) {
+        this.gameController = game;
+        this.type = type;
         this.texture = texture;
         this.x = x;
         this.y = y;
@@ -42,6 +46,7 @@ public class Item implements Entity {
         this.isAdminAccessor = type.isAdminAccessor();
         this.isPowerSource = type.isPower();
         this.isGasSource = type.isGas();
+        this.displayOnPlayer = false;
 
         this.speedBoost = 0;
 
@@ -57,10 +62,25 @@ public class Item implements Entity {
         }
     }
 
+    public void displayOnPlayer(boolean display) {
+        playerInd = gameController.getCurrentPlayerIndex();
+        displayOnPlayer = display;
+    }
+
+    private void drawOnPlayer() {
+        if (displayOnPlayer && inInventory) {
+            Player p = gameController.getPlayerInstances().get(playerInd);
+            drawQuadTex(texture, p.getX() - ((width - p.getWidth()) / 2), p.getY() - ((height - p.getHeight()) / 2));
+        }
+    }
+
     @Override
     public void update() {
         updateTimer();
+        drawOnPlayer();
     }
+
+    public void drop() {}
 
     @Override
     public float getX() {
@@ -178,5 +198,14 @@ public class Item implements Entity {
     }
     public boolean isAdminAccessor() {
         return isAdminAccessor;
+    }
+    public boolean isDisplayedOnPlayer() {
+        return displayOnPlayer;
+    }
+    public ItemType getType() {
+        return type;
+    }
+    public boolean isRunning() {
+        return false;
     }
 }

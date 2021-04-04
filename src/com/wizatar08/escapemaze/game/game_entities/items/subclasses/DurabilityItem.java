@@ -15,12 +15,14 @@ public class DurabilityItem extends Item {
     private final Timer durabilityTime;
     private Texture backgroundTex, barTex;
     private float percentage;
+    private final float onePercent;
 
     public DurabilityItem(Game game, ItemType type, Texture texture, float x, float y) {
         super(game, type, texture, x, y);
         durabilityTime = new Timer(Timer.TimerModes.COUNT_DOWN, (int) type.getClassArgs()[0]);
         backgroundTex = LoadPNG("game/durability/background");
         barTex = LoadPNG("game/durability/bar");
+        onePercent = (float) durabilityTime.getStartingSeconds() / 100;
     }
 
     @Override
@@ -58,6 +60,9 @@ public class DurabilityItem extends Item {
     }
     public boolean isBeingUsed() {
         return !durabilityTime.isPaused();
+    }
+    public float getDurabilityPercentage() {
+        return percentage;
     }
 
 }

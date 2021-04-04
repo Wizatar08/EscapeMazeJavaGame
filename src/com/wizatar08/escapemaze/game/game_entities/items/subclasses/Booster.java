@@ -28,10 +28,14 @@ public class Booster extends Item {
     }
 
     @Override
+    public void drop() {
+        running = false;
+    }
+
+    @Override
     public void use() {
         super.use();
         running = !running;
-        System.out.println("USE: " + running);
     }
 
     @Override

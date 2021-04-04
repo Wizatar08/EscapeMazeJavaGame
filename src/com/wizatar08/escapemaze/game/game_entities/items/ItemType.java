@@ -27,14 +27,15 @@ public enum ItemType {
     BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource().className(DurabilityItem.class, new Object[]{40})),
     BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(DurabilityItem.class, new Object[]{40})),
     BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class)),
-    ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f));
+    ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f)),
+    HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.2f).className(HoveringDevice.class));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults
      * - DONE*: Admin accessor: Can unlock special things. *Make sure to add other tiles/items that require the admin accessor
      * - DONE: Gas can: Can enable other items to be used. Has only certain amount of time before gas runs out.
      * - DONE: Simple battery: Can enable other items to be used Has only certain amount of time before electricity runs out.
-     * - Jetpack: Must have gas can to use. Can let the player fly, avoiding certain security issues (pressure plates)
+     * - DONE: Hovering Device: Must have gas can to use. Can let the player fly, avoiding certain security issues (pressure plates)
      * - DONE: Booster: Must have extra battery to use. Increases player speed. Uses 2% battery per second.
      * - Small EMP: Must have 10% extra battery to use. Will shut down the nearest enemy robot or camera for 10 seconds.
      * - EMP: Must have 40% extra battery to use. Shuts down all enemy robots and cameras for 20 seconds (cannot move or sound alarm). Afterwards, alarm will activate. One time use.

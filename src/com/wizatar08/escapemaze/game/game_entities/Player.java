@@ -4,6 +4,7 @@ import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.HoveringDevice;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
@@ -265,13 +266,18 @@ public class Player implements Entity {
         item.setY(y - (item.getHeight() / 2));
         gameController.addItemToGame(item);
         item.setIsInInventory(false);
+        item.drop();
         inventory.remove(fromSlot);
     }
 
     public Item getClosestNonOccupiedPowerSource() {
+        return this.getClosestNonOccupiedPowerSource(0f);
+    }
+
+    public Item getClosestNonOccupiedPowerSource(float minimumPercentage) {
         Item currItem = null;
         for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).hasDurability()) {
+            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).getDurabilityPercentage() >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
                 currItem = item;
                 break;
             }
@@ -280,9 +286,13 @@ public class Player implements Entity {
     }
 
     public Item getClosestNonOccupiedGasSource() {
+        return this.getClosestNonOccupiedGasSource(0f);
+    }
+
+    public Item getClosestNonOccupiedGasSource(float minimumPercentage) {
         Item currItem = null;
         for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem && item.isGasSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).hasDurability()) {
+            if (item instanceof DurabilityItem && item.isGasSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).getDurabilityPercentage() >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
                 currItem = item;
                 break;
             }
