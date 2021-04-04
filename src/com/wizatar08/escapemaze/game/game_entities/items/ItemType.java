@@ -28,7 +28,10 @@ public enum ItemType {
     BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(DurabilityItem.class, new Object[]{40})),
     BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class)),
     ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f)),
-    HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.2f).className(HoveringDevice.class));
+    HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.3f).className(HoveringDevice.class)),
+    SMALL_EMP(new VariationID(IDTypes.ITEM, "010", "01"), "small_emp", new Builder().weight(0.2f).className(SmallEMP.class)),
+    EMP(new VariationID(IDTypes.ITEM, "010", "02"), "emp", new Builder().weight(1.3f).className(EMP.class)),
+    HACKED_COMPUTER(new VariationID(IDTypes.ITEM, "011", "01"), "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults
@@ -37,9 +40,9 @@ public enum ItemType {
      * - DONE: Simple battery: Can enable other items to be used Has only certain amount of time before electricity runs out.
      * - DONE: Hovering Device: Must have gas can to use. Can let the player fly, avoiding certain security issues (pressure plates)
      * - DONE: Booster: Must have extra battery to use. Increases player speed. Uses 2% battery per second.
-     * - Small EMP: Must have 10% extra battery to use. Will shut down the nearest enemy robot or camera for 10 seconds.
-     * - EMP: Must have 40% extra battery to use. Shuts down all enemy robots and cameras for 20 seconds (cannot move or sound alarm). Afterwards, alarm will activate. One time use.
-     * - Hacked computer: Immediately turns off alarm no matter where you are. One time use.
+     * - DONE: Small EMP: Must have 10% extra battery to use. Will shut down the nearest enemy robot or camera for 10 seconds.
+     * - DONE: EMP: Must have 40% extra battery to use. Shuts down all enemy robots and cameras for 20 seconds (cannot move or sound alarm). Afterwards, alarm will activate. One time use.
+     * - DONE: Hacked computer: Immediately turns off alarm no matter where you are. One time use. Requires admin accessor
      * - Smoke machine: Must have 30% gas can to use. This halves the vision of all robots for 20 seconds.
      * - Gas spot: Must have 40% gas can to use. Puts gas on the ground. The next enemy to step in it gets debuffed (loses half its speed and vision). Does not work on cameras or atoms bots. This clears the gas spot.
      * - Blockade: Item cannot be picked up, but instead pushed (This is considered an item because it shouldn't spawn as a tile). This prevents enemies from seeing you through it. If an enemy bumps into it, alarm will be set off.

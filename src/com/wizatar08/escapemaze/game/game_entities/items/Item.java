@@ -74,6 +74,16 @@ public class Item implements Entity {
         }
     }
 
+    public void destroy() {
+        if (inInventory) {
+            gameController.getPlayerInstances().forEach((p) -> {
+                if (p.getInventory().hasItem(this)) {
+                    p.getInventory().remove(p.getInventory().getItemIndex(this));
+                }
+            });
+        }
+    }
+
     @Override
     public void update() {
         updateTimer();

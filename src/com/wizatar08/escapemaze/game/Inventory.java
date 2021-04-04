@@ -93,9 +93,27 @@ public class Inventory {
         }
     }
 
-    public boolean hasItem(ItemType type) {
-        for (Item item : items) {
-            if (item != null && item.getType() == type) {
+    public int getItemIndex(Item item) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i) != null && item == items.get(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean hasItem(ItemType item) {
+        for (Item item1 : items) {
+            if (item1 != null && item == item1.getType()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasItem(Item item) {
+        for (Item item1 : items) {
+            if (item1 != null && item == item1) {
                 return true;
             }
         }

@@ -354,4 +354,8 @@ public class Game {
     public int getCurrentPlayerIndex() {
         return currentPlayer;
     }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
 }

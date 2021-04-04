@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities.enemies;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.EnemyPathfinder;
+import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.Sys;
@@ -24,6 +25,7 @@ public class Enemy implements Entity {
     private EnemyPathfinder pathfinder;
     private ArrayList<Player> playerInstances;
     private Game gameController;
+    private Timer freezeTime;
 
     public Enemy(Game game, int id, int[][] path) {
         this.id = String.valueOf(id);
@@ -41,6 +43,7 @@ public class Enemy implements Entity {
         this.playerInstances = game.getPlayerInstances();
         this.gameController = game;
         this.alarmSpeed = type.getAlarmSpeed();
+        this.freezeTime = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         multiplyPaths();
     }
 
@@ -94,10 +97,21 @@ public class Enemy implements Entity {
     }
 
     public void update() {
-        rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0], pathCoords[currentPathPoint][1]);
-        move();
-        pathfinder.update();
-        detectPlayer();
+        if (freezeTime.isPaused()) {
+            rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0], pathCoords[currentPathPoint][1]);
+            move();
+            pathfinder.update();
+            detectPlayer();
+        }
+        if (freezeTime.getTotalSeconds() <= 0) {
+            freezeTime.pause();
+        }
+        freezeTime.update();
+    }
+
+    public void freeze(float seconds) {
+        freezeTime.setTime(seconds);
+        freezeTime.unpause();
     }
 
     private void detectPlayer() {

@@ -22,7 +22,7 @@ public class DurabilityItem extends Item {
         durabilityTime = new Timer(Timer.TimerModes.COUNT_DOWN, (int) type.getClassArgs()[0]);
         backgroundTex = LoadPNG("game/durability/background");
         barTex = LoadPNG("game/durability/bar");
-        onePercent = (float) durabilityTime.getStartingSeconds() / 100;
+        onePercent = (float) durabilityTime.getStartingSeconds() / 100f;
     }
 
     @Override
@@ -44,6 +44,10 @@ public class DurabilityItem extends Item {
             drawQuadTex(barTex, getX() + 2, getY(), barTex.getImageWidth(), barTex.getImageHeight());
         }
         super.draw();
+    }
+
+    public void deplete(float percent) {
+        durabilityTime.setTime(durabilityTime.getTotalSeconds() - (durabilityTime.getStartingSeconds() * percent));
     }
 
     @Override

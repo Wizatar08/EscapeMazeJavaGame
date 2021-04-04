@@ -1,0 +1,47 @@
+package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
+
+import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.helpers.Timer;
+import com.wizatar08.escapemaze.menus.Game;
+import org.newdawn.slick.opengl.Texture;
+
+public class EMP extends Item {
+    private Game gameController;
+    private Timer countdown;
+
+    public EMP(Game game, ItemType type, Texture texture, float x, float y) {
+        super(game, type, texture, x, y);
+        gameController = game;
+        countdown = new Timer(Timer.TimerModes.COUNT_DOWN, 40);
+    }
+
+    @Override
+    public boolean canUse() {
+        return true;
+    }
+
+    @Override
+    public void use() {
+        super.use();
+        System.out.println(gameController.getCurrentPlayer().getClosestNonOccupiedPowerSource(40f));
+        if (gameController.getEnemies().size() != 0 && gameController.getCurrentPlayer().getClosestNonOccupiedPowerSource(40f) != null) {
+            ((DurabilityItem) gameController.getCurrentPlayer().getClosestNonOccupiedPowerSource(40f)).deplete(0.4f);
+            gameController.getEnemies().forEach((e) -> {
+                e.freeze(20);
+                countdown.unpause();
+            });
+            countdown.setTime(40);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        countdown.update();
+        if (countdown.getTotalSeconds() <= 0) {
+            gameController.setState(Game.GameStates.ALARM);
+            destroy();
+        }
+    }
+}

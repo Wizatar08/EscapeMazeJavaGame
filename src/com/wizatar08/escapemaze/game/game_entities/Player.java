@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.game.game_entities;
 
 import com.wizatar08.escapemaze.game.Inventory;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
@@ -275,14 +276,16 @@ public class Player implements Entity {
     }
 
     public Item getClosestNonOccupiedPowerSource(float minimumPercentage) {
-        Item currItem = null;
         for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).getDurabilityPercentage() >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
-                currItem = item;
-                break;
+            if (item instanceof DurabilityItem) {
+                System.out.println("IS DURABILITY ITEM: " + (((DurabilityItem) item).getDurabilityPercentage() * 100) + ", " + minimumPercentage);
+            }
+            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && (((DurabilityItem) item).getDurabilityPercentage() * 100) >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
+                System.out.println(((DurabilityItem) item).getDurabilityPercentage());
+                return item;
             }
         }
-        return currItem;
+        return null;
     }
 
     public Item getClosestNonOccupiedGasSource() {
@@ -399,6 +402,25 @@ public class Player implements Entity {
                 }
             }
         }
+    }
+
+    public Enemy getClosestEnemy() {
+        ArrayList<Integer> distances = new ArrayList<>();
+        for (Enemy enemy : gameController.getEnemies()) {
+            distances.add((int) Math.round(Math.sqrt((enemy.getX() * enemy.getX()) + (enemy.getY() * enemy.getY()))));
+        }
+        int smallestDist = Integer.MAX_VALUE;
+        int smallestDistEnemyIndex = 0;
+        for (int i = 0; i < distances.size(); i++) {
+            if (distances.get(i) < smallestDist) {
+                smallestDist = distances.get(i);
+                smallestDistEnemyIndex = i;
+            }
+        }
+        if (gameController.getEnemies().size() != 0) {
+            return gameController.getEnemies().get(smallestDistEnemyIndex);
+        }
+        return null;
     }
 
     public void update() {
