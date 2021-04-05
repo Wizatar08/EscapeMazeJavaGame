@@ -5,15 +5,12 @@ import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
-import com.wizatar08.escapemaze.game.game_entities.items.subclasses.HoveringDevice;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
-import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
 import com.wizatar08.escapemaze.menus.Game;
-import javafx.scene.input.MouseButton;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
@@ -61,7 +58,9 @@ public class Player implements Entity {
         this.speedInfluence = 0.0f;
     }
 
-
+    public Tile getOnTile() {
+        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE));
+    }
     public boolean isAtSecurityComputer() {
         return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isSecurityComputer();
     }
@@ -69,7 +68,8 @@ public class Player implements Entity {
         return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isPressurePlateComputer();
     }
 
-    // Detects if Player is near a safe spot, return true if so and false if not
+    // Detects if Player is near a safe spot, return true if so and false if not. This is NOT in
+    // a Tile subclass (at the moment) because safe spots are directional.
     public boolean isNearSafeSpot() {
         if (map.getSafeSpots() != null) {
             int i = 0;
@@ -128,12 +128,7 @@ public class Player implements Entity {
                         } else if (isSafe) {
                             isSafe = false;
                         }
-                        if (isAtSecurityComputer() && gameController.currentState() == Game.GameStates.ALARM) {
-                            gameController.setState(Game.GameStates.NORMAL);
-                        }
-                        if (isAtPressurePlateComputer()) {
-                            gameController.setPressurePlateActive(false);
-                        }
+                        getOnTile().useTile();
                     }
                 }
                 if (keyDown(Keyboard.KEY_ESCAPE)) {
@@ -177,7 +172,6 @@ public class Player implements Entity {
             if (checkCollision(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), x, y, width, height)) {
                 x = tile.getX() - (distX / 4) + ((float) TILE_SIZE / 2) - 16;
                 y = tile.getY() - (distY / 4) + ((float) TILE_SIZE / 2) - 16;
-                System.out.println(tileDetectionSpot.getSafeTile().isEscapeDoor());
                 if (tileDetectionSpot.getSafeTile().isEscapeDoor()) {
                     escapeDoor();
                 }
@@ -388,19 +382,7 @@ public class Player implements Entity {
     private void detectIfAtSpecificTile() {
         ArrayList<Tile> list = getAllSurroundingTiles();
         for (Tile tile : list) {
-            if (inventory.getItems().get(inventory.getCurrentSelected()) != null) {
-                if (tile.isLockedDoor() && tile.isActive()) {
-                    if (ItemType.getType(inventory.getItems().get(inventory.getCurrentSelected()).getId()) == ((ItemUnlocksDoorTile) tile).unlockableBy()) {
-                        drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
-                    }
-                }
-                if (tile.isAuthorityDoor() && tile.isAuthorityDoorLocked()) {
-                    drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
-                }
-                if (tile.isActive() && ItemType.getType(inventory.getItems().get(inventory.getCurrentSelected()).getId()) == ItemType.LASER_DEACTIVATOR) {
-                    drawQuadTex(detectTex, tile.getX() + Game.DIS_X, tile.getY() + Game.DIS_Y);
-                }
-            }
+            tile.playerNearTile();
         }
     }
 

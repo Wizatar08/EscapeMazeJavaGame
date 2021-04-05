@@ -9,10 +9,10 @@ import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;
 
-public class PressurePlateTile extends Tile {
+public class PressurePlate extends Tile {
     private final Game gameController;
 
-    public PressurePlateTile(Game game, float x, float y, int width, int height, TileType type) {
+    public PressurePlate(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         this.gameController = game;
     }

@@ -4,6 +4,7 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.map.tile_types.LaserSecure;
 import com.wizatar08.escapemaze.menus.Game;
 import org.newdawn.slick.opengl.Texture;
 
@@ -20,7 +21,7 @@ public class LaserDeactivator extends Item {
     @Override
     public boolean canUse() {
         for (Tile tile : gameController.getCurrentPlayer().getAllSurroundingTiles()) {
-            if (tile.getFunction() == Tile.Function.LASER_SECURE) {
+            if (tile.getSubClass() == LaserSecure.class) {
                 this.tile = tile;
                 return true;
             }

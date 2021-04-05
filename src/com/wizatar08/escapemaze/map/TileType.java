@@ -3,8 +3,7 @@ package com.wizatar08.escapemaze.map;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.IDTypes;
 import com.wizatar08.escapemaze.helpers.VariationID;
-import com.wizatar08.escapemaze.map.tile_types.ItemUnlocksDoorTile;
-import com.wizatar08.escapemaze.map.tile_types.PressurePlateTile;
+import com.wizatar08.escapemaze.map.tile_types.*;
 import org.newdawn.slick.opengl.Texture;
 
 import java.util.*;
@@ -84,7 +83,8 @@ public enum TileType {
     PRES_PLATE_DEF_FLOOR_COMP_90(new VariationID(IDTypes.TILE, "009", "02"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{90}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{90})),
     PRES_PLATE_DEF_FLOOR_COMP_180(new VariationID(IDTypes.TILE, "009", "03"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
     PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
-    PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0}));
+    PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0})),
+    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger());
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -108,13 +108,12 @@ public enum TileType {
 
     // Initialize variables
     private final String id, texture;
-    private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer;
+    private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer, startsActive, activeInfluencesPassasble;
     private final EntityDetectDirection safeSpot;
     private final Texture[] overlayTex, activeTexture;
     private final int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
-    private final Tile.Function function;
     private final Class<? extends Tile> subClass;
     private final Object[] subClassArgs;
 
@@ -123,7 +122,8 @@ public enum TileType {
         addToMap(id.getFullId(), this);
         this.id = id.getFullId();
         this.texture = texture;
-        this.function = builder.getFunction();
+        this.startsActive = builder.startsActive();
+        this.activeInfluencesPassasble = builder.activeInfluencesPassable();
         this.isPassable = builder.getIsPassable();
         this.isSafeSpot = builder.getIsSafeSpot();
         this.safeSpot = builder.getSafeSpot();
@@ -160,9 +160,6 @@ public enum TileType {
     }
     public String getTexture() {
         return texture;
-    }
-    public Tile.Function getFunction() {
-        return function;
     }
     public boolean isPassable() {
         return isPassable;
@@ -203,6 +200,12 @@ public enum TileType {
     public int[] cardPassesNeeded() {
         return cardPassesNeeded;
     }
+    public boolean startsActive() {
+        return startsActive;
+    }
+    public boolean activeInfluencesPassable() {
+        return activeInfluencesPassasble;
+    }
 
     /**
      * Tile builder class.
@@ -211,8 +214,7 @@ public enum TileType {
         public static EntityDetectDirection safeSpot;
         public static Texture[] activeTexture, overlayTex;
         public static int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
-        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate;
-        public static Tile.Function function;
+        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate, startsActive, activeInfluencesPassable;
         public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
 
@@ -236,8 +238,9 @@ public enum TileType {
             cardPassesNeeded = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             isPressurePlateComputer = false;
             pressurePlate = false;
-            function = Tile.Function.SIMPLE_WALL;
             subClass = null;
+            startsActive = false;
+            activeInfluencesPassable = false;
         }
 
         /**
@@ -262,7 +265,6 @@ public enum TileType {
         private Builder safeSpot(EntityDetectDirection direction) {
             isSafeSpot = true;
             safeSpot = direction;
-            function = Tile.Function.SAFE_SPOT;
             return this;
         }
 
@@ -271,7 +273,7 @@ public enum TileType {
          */
         private Builder escapeDoor() {
             escapeDoor = true;
-            function = Tile.Function.EXIT_SPOT;
+            subclass(ExitSpot.class);
             return this;
         }
 
@@ -303,8 +305,9 @@ public enum TileType {
             activeTexture = unlockedTileTexture;
             activeTextureRots = unlockedTileTextureRots;
             doorLocked = true;
-            function = Tile.Function.ITEM_UNLOCK_DOOR;
-            subclass(ItemUnlocksDoorTile.class);
+            startsActive = true;
+            activeInfluencesPassable = true;
+            subclass(ItemUnlocksDoor.class);
             return this;
         }
 
@@ -316,7 +319,9 @@ public enum TileType {
             activeTexture = unlockedTileTexture;
             activeTextureRots = unlockedTileTextureRots;
             authorityLocked = true;
-            function = Tile.Function.AUTHORITY_DOOR;
+            subclass(AuthorityDoor.class);
+            startsActive = true;
+            activeInfluencesPassable = true;
             return this;
         }
 
@@ -327,7 +332,7 @@ public enum TileType {
             activeTexture = deactivatedTileTexture;
             activeTextureRots = deactivatedTileTextureRots;
             isSecure = true;
-            function = Tile.Function.LASER_SECURE;
+            startsActive = true;
             return this;
         }
 
@@ -336,7 +341,7 @@ public enum TileType {
          */
         private Builder securityComputer() {
             isSecurityComputer = true;
-            function = Tile.Function.MAIN_COMPUTER;
+            subclass(MainComputer.class);
             return this;
         }
 
@@ -344,23 +349,27 @@ public enum TileType {
             isPressurePlateComputer = true;
             activeTexture = overlayTex;
             activeTextureRots = rots;
-            function = Tile.Function.PRESSURE_PLATE_COMPUTER;
+            subclass(PressurePlateComputer.class);
+            startsActive = true;
             return this;
         }
 
         private Builder pressurePlate() {
             pressurePlate = true;
-            function = Tile.Function.PRESSURE_PLATE;
-            subclass(PressurePlateTile.class);
+            subclass(PressurePlate.class);
+            startsActive = true;
+            return this;
+        }
+
+        private Builder batteryCharger() {
+            subclass(RechargeStation.class);
+            startsActive = true;
             return this;
         }
 
         // Getters
         public Class<? extends Tile> getSubClass() {
             return subClass;
-        }
-        public Tile.Function getFunction() {
-            return function;
         }
         public boolean getIsPassable() {
             return isPassable;
@@ -406,6 +415,12 @@ public enum TileType {
         }
         public boolean isPressurePlate() {
             return pressurePlate;
+        }
+        public boolean startsActive() {
+            return startsActive;
+        }
+        public boolean activeInfluencesPassable() {
+            return activeInfluencesPassable;
         }
     }
 }
