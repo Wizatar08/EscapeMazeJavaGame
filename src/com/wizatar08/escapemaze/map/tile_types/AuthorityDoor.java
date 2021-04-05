@@ -21,7 +21,7 @@ public class AuthorityDoor extends Tile {
     @Override
     public void playerNearTile() {
         if (gameController.getCurrentPlayer().getInventory().getItems().get(gameController.getCurrentPlayer().getInventory().getCurrentSelected()) != null) {
-            if (isAuthorityDoorLocked()) {
+            if (isActive()) {
                 drawQuadTex(detectTex, getX() + Game.DIS_X, getY() + Game.DIS_Y);
             }
         }

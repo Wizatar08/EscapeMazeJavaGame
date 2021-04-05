@@ -31,6 +31,6 @@ public class Key extends Item {
 
     @Override
     public void use() {
-        tile.unlockDoor();
+        tile.setActive(false);
     }
 }

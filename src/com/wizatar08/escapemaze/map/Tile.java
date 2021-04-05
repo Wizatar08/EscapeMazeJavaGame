@@ -82,7 +82,7 @@ public class Tile implements Entity, TileEntity {
      */
     public void update() {}
     /**
-     * Overridden in subclasses. Used to determine if a player is near this tile.
+     * Overridden in subclasses. Used to determine if a player is NEAR (Not on) this tile.
      */
     public void playerNearTile() {}
     public boolean isOnTile() {
@@ -95,20 +95,15 @@ public class Tile implements Entity, TileEntity {
      */
     public void useTile() {}
 
-    public void unlockDoor() {
-        isActive = false;
-    }
-    public void lockDoor() {
-        isActive = true;
-    }
+    /**
+     * Overridden in subclasses. Used to carry out a function when a player is ontop of this tile.
+     */
+    public void onTile() {}
 
     // Getters
     public float getHeight() {
         return height;
     }
-
-
-
     public float getWidth() {
         return width;
     }
@@ -124,6 +119,7 @@ public class Tile implements Entity, TileEntity {
     public TileType getType() {
         return type;
     }
+
     public int getXPlace() {
         return (int) x / TILE_SIZE;
     }
@@ -142,29 +138,8 @@ public class Tile implements Entity, TileEntity {
     public void setHeight(float height) {
          this.height = (int) height;
     }
-    public boolean canPass() {
-        return canPass;
-    }
-    public boolean isHarmful() {
-        return false;
-    }
-    public boolean canHide() {
-        return false;
-    }
-    public boolean isSecurityComputer() {
-        return subClass == MainComputer.class;
-    }
-    public boolean isEscapeDoor() {
-        return subClass == ExitSpot.class;
-    }
-    public boolean isAuthorityDoorLocked() {
-        return isActive;
-    }
     public boolean isSeen() {
         return canBeSeen;
-    }
-    public boolean isSecureTile() {
-        return subClass == LaserSecure.class;
     }
     public int[] getRequiredPassLevels() {
         return requiredPassLevels;
@@ -177,12 +152,6 @@ public class Tile implements Entity, TileEntity {
     }
     public boolean isActive() {
         return isActive;
-    }
-    public boolean isPressurePlateComputer() {
-        return subClass == PressurePlateComputer.class;
-    }
-    public boolean isPressurePlate() {
-        return subClass == PressurePlate.class;
     }
     public Class<? extends Tile> getSubClass() {
         return subClass;

@@ -10,6 +10,10 @@ import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
+import com.wizatar08.escapemaze.map.tile_types.ExitSpot;
+import com.wizatar08.escapemaze.map.tile_types.MainComputer;
+import com.wizatar08.escapemaze.map.tile_types.PressurePlate;
+import com.wizatar08.escapemaze.map.tile_types.PressurePlateComputer;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -60,12 +64,6 @@ public class Player implements Entity {
 
     public Tile getOnTile() {
         return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE));
-    }
-    public boolean isAtSecurityComputer() {
-        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isSecurityComputer();
-    }
-    public boolean isAtPressurePlateComputer() {
-        return map.getTile(Math.round((x - (TILE_SIZE / 4)) / TILE_SIZE), Math.round((y - (TILE_SIZE / 4)) / TILE_SIZE)).isPressurePlateComputer();
     }
 
     // Detects if Player is near a safe spot, return true if so and false if not. This is NOT in
@@ -120,7 +118,6 @@ public class Player implements Entity {
                 if (keyDown(Keyboard.KEY_E)) {
                     gameController.changePlayerInstance();
                 }
-
                 if (gameController.currentState() == Game.GameStates.NORMAL || gameController.currentState() == Game.GameStates.ALARM) {
                     if (keyDown(Keyboard.KEY_SPACE)) {
                         if (isNearSafeSpot() && !isSafe) {
@@ -172,7 +169,7 @@ public class Player implements Entity {
             if (checkCollision(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), x, y, width, height)) {
                 x = tile.getX() - (distX / 4) + ((float) TILE_SIZE / 2) - 16;
                 y = tile.getY() - (distY / 4) + ((float) TILE_SIZE / 2) - 16;
-                if (tileDetectionSpot.getSafeTile().isEscapeDoor()) {
+                if (tileDetectionSpot.getSafeTile().getSubClass() == ExitSpot.class) {
                     escapeDoor();
                 }
             }
@@ -336,7 +333,7 @@ public class Player implements Entity {
         }
         if (item != null) {
             Tile tile = gameController.getMap().getTile((int) item.getX() / TILE_SIZE, (int) item.getY() / TILE_SIZE);
-            if (tile.getX() == item.getX() && tile.getY() == item.getY() && tile.isPressurePlate() && tile.isActive()) {
+            if (tile.getX() == item.getX() && tile.getY() == item.getY() && tile.getSubClass() == PressurePlate.class && tile.isActive()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
             addItemToInventory(item);
@@ -383,6 +380,9 @@ public class Player implements Entity {
         ArrayList<Tile> list = getAllSurroundingTiles();
         for (Tile tile : list) {
             tile.playerNearTile();
+        }
+        if (getOnTile().isOnTile()) {
+            getOnTile().onTile();
         }
     }
 
