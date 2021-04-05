@@ -15,6 +15,7 @@ import com.wizatar08.escapemaze.map.tile_types.MainComputer;
 import com.wizatar08.escapemaze.map.tile_types.PressurePlate;
 import com.wizatar08.escapemaze.map.tile_types.PressurePlateComputer;
 import com.wizatar08.escapemaze.menus.Game;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
@@ -126,6 +127,7 @@ public class Player implements Entity {
                             isSafe = false;
                         }
                         getOnTile().useTile();
+                        getAllSurroundingTiles().forEach(Tile::useTilePlayerNear);
                     }
                 }
                 if (keyDown(Keyboard.KEY_ESCAPE)) {
@@ -268,11 +270,7 @@ public class Player implements Entity {
 
     public Item getClosestNonOccupiedPowerSource(float minimumPercentage) {
         for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem) {
-                System.out.println("IS DURABILITY ITEM: " + (((DurabilityItem) item).getDurabilityPercentage() * 100) + ", " + minimumPercentage);
-            }
             if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && (((DurabilityItem) item).getDurabilityPercentage() * 100) >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
-                System.out.println(((DurabilityItem) item).getDurabilityPercentage());
                 return item;
             }
         }

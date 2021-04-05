@@ -82,6 +82,10 @@ public class Tile implements Entity, TileEntity {
      */
     public void update() {}
     /**
+     * Overridden in subclasses. Used to carry out a function when a player presses the USE button when NEAR the tile.
+     */
+    public void useTilePlayerNear() {}
+    /**
      * Overridden in subclasses. Used to determine if a player is NEAR (Not on) this tile.
      */
     public void playerNearTile() {}

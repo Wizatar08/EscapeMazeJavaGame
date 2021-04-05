@@ -50,6 +50,13 @@ public class DurabilityItem extends Item {
         durabilityTime.setTime(durabilityTime.getTotalSeconds() - (durabilityTime.getStartingSeconds() * percent));
     }
 
+    public void add(float percent) {
+        durabilityTime.setTime(durabilityTime.getTotalSeconds() + (durabilityTime.getStartingSeconds() * percent));
+        if (durabilityTime.getTotalSeconds() > durabilityTime.getStartingSeconds()) {
+            durabilityTime.setTime(durabilityTime.getStartingSeconds());
+        }
+    }
+
     @Override
     public void draw(float xVal, float yVal) {
         super.draw(xVal, yVal);
