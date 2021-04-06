@@ -264,34 +264,6 @@ public class Player implements Entity {
         inventory.remove(fromSlot);
     }
 
-    public Item getClosestNonOccupiedPowerSource() {
-        return this.getClosestNonOccupiedPowerSource(0f);
-    }
-
-    public Item getClosestNonOccupiedPowerSource(float minimumPercentage) {
-        for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && (((DurabilityItem) item).getDurabilityPercentage() * 100) >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public Item getClosestNonOccupiedGasSource() {
-        return this.getClosestNonOccupiedGasSource(0f);
-    }
-
-    public Item getClosestNonOccupiedGasSource(float minimumPercentage) {
-        Item currItem = null;
-        for (Item item : inventory.getItems()) {
-            if (item instanceof DurabilityItem && item.isGasSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).getDurabilityPercentage() >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
-                currItem = item;
-                break;
-            }
-        }
-        return currItem;
-    }
-
     // Draw the player if not in a safe spot
     public void draw() {
         if (!isSafe) {

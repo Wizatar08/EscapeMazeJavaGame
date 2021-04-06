@@ -84,7 +84,8 @@ public enum TileType {
     PRES_PLATE_DEF_FLOOR_COMP_180(new VariationID(IDTypes.TILE, "009", "03"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
     PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
     PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0})),
-    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger());
+    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger()),
+    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler());
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -363,6 +364,12 @@ public enum TileType {
 
         private Builder batteryCharger() {
             subclass(RechargeStation.class);
+            startsActive = true;
+            return this;
+        }
+
+        private Builder gasRefueler() {
+            subclass(RefuelStation.class);
             startsActive = true;
             return this;
         }

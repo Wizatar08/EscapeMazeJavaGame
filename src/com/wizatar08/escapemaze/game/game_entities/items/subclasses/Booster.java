@@ -19,11 +19,12 @@ public class Booster extends Item {
     @Override
     public void update() {
         super.update();
-        if (running && gameController.getCurrentPlayer().getClosestNonOccupiedPowerSource() != null) {
-            ((DurabilityItem) gameController.getCurrentPlayer().getClosestNonOccupiedPowerSource()).deplete();
+        if (running && gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedPowerSource() != null) {
+            ((DurabilityItem) gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedPowerSource()).deplete();
             this.setSpeedBoost(1.4f);
         } else {
             this.setSpeedBoost(0.0f);
+            running = false;
         }
     }
 

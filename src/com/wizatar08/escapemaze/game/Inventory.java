@@ -2,6 +2,7 @@ package com.wizatar08.escapemaze.game;
 
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
 import com.wizatar08.escapemaze.helpers.Drawer;
 import org.newdawn.slick.opengl.Texture;
 
@@ -136,6 +137,36 @@ public class Inventory {
             }
         }
         return false;
+    }
+
+
+
+    public Item getClosestNonOccupiedPowerSource() {
+        return this.getClosestNonOccupiedPowerSource(0f);
+    }
+
+    public Item getClosestNonOccupiedPowerSource(float minimumPercentage) {
+        for (Item item : items) {
+            if (item instanceof DurabilityItem && item.isPowerSource() && !((DurabilityItem) item).isBeingUsed() && (((DurabilityItem) item).getDurabilityPercentage() * 100) >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Item getClosestNonOccupiedGasSource() {
+        return this.getClosestNonOccupiedGasSource(0f);
+    }
+
+    public Item getClosestNonOccupiedGasSource(float minimumPercentage) {
+        Item currItem = null;
+        for (Item item : items) {
+            if (item instanceof DurabilityItem && item.isGasSource() && !((DurabilityItem) item).isBeingUsed() && ((DurabilityItem) item).getDurabilityPercentage() >= minimumPercentage && ((DurabilityItem) item).hasDurability()) {
+                currItem = item;
+                break;
+            }
+        }
+        return currItem;
     }
 
     public ArrayList<Item> getItems() {

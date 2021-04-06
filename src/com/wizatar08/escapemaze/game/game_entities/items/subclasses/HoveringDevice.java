@@ -29,8 +29,8 @@ public class HoveringDevice extends Item {
     @Override
     public void update() {
         super.update();
-        if (running && gameController.getCurrentPlayer().getClosestNonOccupiedGasSource() != null) {
-            ((DurabilityItem) gameController.getCurrentPlayer().getClosestNonOccupiedGasSource()).deplete();
+        if (running && gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedGasSource() != null) {
+            ((DurabilityItem) gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedGasSource()).deplete();
             this.setSpeedBoost(0.7f);
             this.displayOnPlayer(true);
             canRun = true;
@@ -38,6 +38,7 @@ public class HoveringDevice extends Item {
             this.setSpeedBoost(0.0f);
             this.displayOnPlayer(false);
             canRun = false;
+            running = false;
         }
     }
 
