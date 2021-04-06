@@ -58,7 +58,7 @@ public class Player implements Entity {
         this.map = map;
         this.isSafe = false;
         this.tex = LoadPNG("players/player_" + texColor);
-        this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.detectTex = LoadPNG("tiles/selectors/tile_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         this.speedInfluence = 0.0f;
     }

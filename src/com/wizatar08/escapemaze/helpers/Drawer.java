@@ -133,7 +133,12 @@ public class Drawer {
 
     public static Texture LoadTexture(String path, String fileType) {
         Texture tex = null;
-        InputStream in = ResourceLoader.getResourceAsStream(path);
+        InputStream in;
+        try {
+            in = ResourceLoader.getResourceAsStream(path);
+        } catch (RuntimeException e) {
+            in = ResourceLoader.getResourceAsStream("src/resources/images/null.png");
+        }
         try {
             tex = TextureLoader.getTexture(fileType.toUpperCase(), in);
         } catch (IOException e){

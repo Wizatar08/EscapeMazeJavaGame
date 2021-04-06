@@ -31,6 +31,7 @@ public class EMP extends Item {
                 countdown.unpause();
             });
             countdown.setTime(40);
+            destroy();
         }
     }
 
@@ -40,7 +41,6 @@ public class EMP extends Item {
         countdown.update();
         if (countdown.getTotalSeconds() <= 0) {
             gameController.setState(Game.GameStates.ALARM);
-            destroy();
         }
     }
 }

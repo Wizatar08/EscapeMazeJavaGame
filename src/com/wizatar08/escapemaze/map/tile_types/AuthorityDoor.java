@@ -15,7 +15,7 @@ public class AuthorityDoor extends Tile {
     public AuthorityDoor(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         gameController = game;
-        this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.detectTex = LoadPNG("tiles/selectors/item_use_selector");
     }
 
     @Override

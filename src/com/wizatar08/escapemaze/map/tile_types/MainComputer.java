@@ -15,7 +15,7 @@ public class MainComputer extends Tile {
     public MainComputer(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         gameController = game;
-        detectTex = LoadPNG("tiles/selectors/safe_space_selector");
+        detectTex = LoadPNG("tiles/selectors/tile_selector");
     }
 
     @Override

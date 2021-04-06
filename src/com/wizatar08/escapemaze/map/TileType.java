@@ -90,8 +90,8 @@ public enum TileType {
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
      * - DONE: Pressure plate floor: Activates alarm when player hits it. Can be deactivated it by overriding pressure plate management computer or fly over it
-     * - Recharge station: Can recharge battery there.
-     * - Refuel station: Can refuel gas tank there.
+     * - DONE: Recharge station: Can recharge battery there.
+     * - DONE: Refuel station: Can refuel gas tank there.
      * - Movement detector: Activates alarm when player hits the tile. Can be deactivated by overriding movement detector management computer.
      * - Material detector: Activates alarm when you hold a required item when moving onto this tile. Can be deactivated by overriding material detector computer.
      * - DONE: Pressure plate mamanement computer: Managed pressure plates, can be overridden

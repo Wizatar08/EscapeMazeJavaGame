@@ -1,6 +1,7 @@
-package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
+package com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability;
 
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.tile_types.RechargeStation;
 import com.wizatar08.escapemaze.map.tile_types.RefuelStation;

@@ -19,7 +19,7 @@ public class ItemUnlocksDoor extends Tile {
         System.out.println(type + ", " + this.getId());
         this.unlockableBy = (ItemType) type.subClassArgs()[0];
         this.gameController = game;
-        this.detectTex = LoadPNG("tiles/selectors/safe_space_selector");
+        this.detectTex = LoadPNG("tiles/selectors/item_use_selector");
     }
 
     public ItemType unlockableBy() {
