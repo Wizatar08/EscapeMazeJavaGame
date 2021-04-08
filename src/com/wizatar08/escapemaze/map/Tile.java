@@ -104,6 +104,11 @@ public class Tile implements Entity, TileEntity {
      */
     public void onTile() {}
 
+    /**
+     * Overridden in subclasses. Used to carry out a function when the whole map is loaded.
+     */
+    public void onMapCreation() {}
+
     // Getters
     public float getHeight() {
         return height;

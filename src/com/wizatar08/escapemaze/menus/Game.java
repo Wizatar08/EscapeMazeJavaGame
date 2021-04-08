@@ -13,18 +13,14 @@ import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.render.Renderer;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.glu.Project;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import javax.swing.*;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Random;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -43,16 +39,18 @@ public class Game {
     public static float DIS_X, DIS_Y;
     private Texture redScreen, alertBox, gameEndTex;
     private int currentPlayer;
-    private boolean pressurePlatesActive;
+    private boolean pressurePlatesActive, materialDetectorsActive;
 
     public Game() {
         ItemType nullItem = ItemType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
+        TileType nullTile = TileType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
         // Initialize variables
         Gson gson = new Gson();
         levelNumber = MenuRun.getLevel();
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
         JSONLevel level = gson.fromJson(reader, JSONLevel.class);
         map = ExternalMapHandler.LoadMap(this, level.getMap());
+
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
         for (int i = 0; i < level.getPlayerStartPos().length; i++) {
@@ -90,6 +88,7 @@ public class Game {
         stolenItems = 0;
         currentPlayer = 0;
         pressurePlatesActive = true;
+        materialDetectorsActive = true;
 
         switch (level.getScroll()) {
             case "none":
@@ -108,6 +107,12 @@ public class Game {
                 System.err.println("Invalid scroll type: " + level.getScroll() + " - Using default scroll type: none");
                 scrollType = MapScroll.NONE;
                 break;
+        }
+
+        for (int i = 0; i < map.getMapAsArray().length; i++) {
+            for (int j = 0; j < map.getMapAsArray()[i].length; j++) {
+                map.getMapAsArray()[i][j].onMapCreation();
+            }
         }
     }
 
@@ -344,12 +349,18 @@ public class Game {
     public void setPressurePlateActive(boolean active) {
         pressurePlatesActive = active;
     }
+    public void setMaterialDetectorsActive(boolean active) {
+        materialDetectorsActive = active;
+    }
 
     public Player getCurrentPlayer() {
         return playerInstances.get(currentPlayer);
     }
     public boolean pressurePlatesActive() {
         return pressurePlatesActive;
+    }
+    public boolean materialDetectorsActive() {
+        return materialDetectorsActive;
     }
     public int getCurrentPlayerIndex() {
         return currentPlayer;

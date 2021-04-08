@@ -7,8 +7,6 @@ import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.opengl.Display;
 
-import java.io.FileNotFoundException;
-
 /**
  * Where all the code is set up and run
  */

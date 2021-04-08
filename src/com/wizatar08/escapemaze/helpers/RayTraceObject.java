@@ -1,10 +1,7 @@
 package com.wizatar08.escapemaze.helpers;
 
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
-import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.render.Renderer;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 public class RayTraceObject {
     private float x, y, targetX, targetY, width, height, targetWidth, targetHeight;

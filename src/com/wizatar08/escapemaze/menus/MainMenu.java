@@ -17,6 +17,7 @@ public class MainMenu {
     private Texture background;
     private boolean buttonDown;
     private Timer cooldownTimer;
+    private Texture test;
 
     // Constructor
     public MainMenu() {

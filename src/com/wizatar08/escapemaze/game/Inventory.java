@@ -130,6 +130,15 @@ public class Inventory {
         return false;
     }
 
+    public boolean hasRequiredItem() {
+        for (Item item : items) {
+            if (item != null && item.isRequired()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasActiveItem(Class<? extends Item> itemClass) {
         for (Item item : items) {
             if (item != null && item.getClass() == itemClass && item.isRunning()) {

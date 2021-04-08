@@ -89,19 +89,7 @@ public class Drawer {
      * @param height height of image
      */
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height) {
-        tex.bind();
-        glTranslatef(x, y, 0);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0, 0);
-        glVertex2f(0, 0);
-        glTexCoord2f(1, 0);
-        glVertex2f(width, 0);
-        glTexCoord2f(1, 1);
-        glVertex2f(width, height);
-        glTexCoord2f(0, 1);
-        glVertex2f(0, height);
-        glEnd();
-        glLoadIdentity();
+        drawQuadTex(tex, x, y, width, height, 0);
     }
 
     /**
@@ -150,6 +138,14 @@ public class Drawer {
         if (name != null) {
             Texture tex = null;
             tex = LoadTexture("src/resources/images/" + name + ".png", "png");
+            return tex;
+        }
+        return null;
+    }
+    public static Texture LoadGIF(String name) {
+        if (name != null) {
+            Texture tex = null;
+            tex = LoadTexture("src/resources/images/" + name + ".gif", "gif");
             return tex;
         }
         return null;

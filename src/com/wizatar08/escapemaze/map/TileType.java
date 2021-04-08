@@ -85,7 +85,15 @@ public enum TileType {
     PRES_PLATE_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "009", "04"), "default_floor", new Builder().isPassable().isPressurePlateComputer(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
     PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), "default_floor", new Builder().isPassable().pressurePlate().overlayTex(new Texture[]{LoadPNG("tile_overlays/pressure_plate")}, new int[]{0})),
     DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger()),
-    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler());
+    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), "default_floor", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler()),
+    METAL_WALL_MDET_0(new VariationID(IDTypes.TILE, "013", "01"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/material_detector")}, new int[]{0, 180}).materialDetector(EntityDetectDirection.DOWN, new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/deactivated_material_detector")}, new int[]{0, 180})),
+    METAL_WALL_MDET_90(new VariationID(IDTypes.TILE, "013", "02"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/material_detector")}, new int[]{90, 270}).materialDetector(EntityDetectDirection.LEFT, new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/deactivated_material_detector")}, new int[]{90, 270})),
+    METAL_WALL_MDET_180(new VariationID(IDTypes.TILE, "013", "03"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/material_detector")}, new int[]{180, 0}).materialDetector(EntityDetectDirection.UP, new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/deactivated_material_detector")}, new int[]{180, 0})),
+    METAL_WALL_MDET_270(new VariationID(IDTypes.TILE, "013", "04"), "metal_wall", new Builder().overlayTex(new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/material_detector")}, new int[]{270, 90}).materialDetector(EntityDetectDirection.RIGHT, new Texture[]{LoadPNG("tile_overlays/wall_side"), LoadPNG("tile_overlays/deactivated_material_detector")}, new int[]{270, 90})),
+    MAT_DETECT_DEF_FLOOR_COMP(new VariationID(IDTypes.TILE, "014", "01"), "default_floor", new Builder().isPassable().overlayTex(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_activated")}, new int[]{0}).materialDetectorComputer(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_deactivated")}, new int[]{0})),
+    MAT_DETECT_DEF_FLOOR_COMP_90(new VariationID(IDTypes.TILE, "014", "02"), "default_floor", new Builder().isPassable().overlayTex(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_activated")}, new int[]{90}).materialDetectorComputer(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_deactivated")}, new int[]{90})),
+    MAT_DETECT_DEF_FLOOR_COMP_180(new VariationID(IDTypes.TILE, "014", "03"), "default_floor", new Builder().isPassable().overlayTex(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_activated")}, new int[]{180}).materialDetectorComputer(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_deactivated")}, new int[]{180})),
+    MAT_DETECT_DEF_FLOOR_COMP_270(new VariationID(IDTypes.TILE, "014", "04"), "default_floor", new Builder().isPassable().overlayTex(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_activated")}, new int[]{270}).materialDetectorComputer(new Texture[]{LoadPNG("tile_overlays/material_detector_computer_deactivated")}, new int[]{270}));
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -370,6 +378,23 @@ public enum TileType {
 
         private Builder gasRefueler() {
             subclass(RefuelStation.class);
+            startsActive = true;
+            return this;
+        }
+
+        private Builder materialDetector(EntityDetectDirection direction, Texture[] deactivatedTileTexture, int[] deactivatedTileTextureRots) {
+            subClassArgs = new Object[]{direction};
+            activeTexture = deactivatedTileTexture;
+            activeTextureRots = deactivatedTileTextureRots;
+            startsActive = true;
+            subclass(MaterialDetector.class);
+            return this;
+        }
+
+        private Builder materialDetectorComputer(Texture[] overlayTex, int[] rots) {
+            activeTexture = overlayTex;
+            activeTextureRots = rots;
+            subclass(MaterialDetectorComputer.class);
             startsActive = true;
             return this;
         }
