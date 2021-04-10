@@ -9,7 +9,7 @@ import com.wizatar08.escapemaze.menus.Game;
 
 public class RechargeStation extends Tile {
     private Game gameController;
-    private Tex batteryTex, detectItemTex, takeItemTex, hasItemTex;
+    private Tex batteryTex, detectItemTex, takeItemTex, hasItemTex, hasItemFullTex;
     private RechargableBattery itemCharging;
 
     public RechargeStation(Game game, float x, float y, int width, int height, TileType type) {
@@ -18,7 +18,8 @@ public class RechargeStation extends Tile {
         itemCharging = null;
         detectItemTex = new Tex("tiles/selectors/item_use_selector");
         takeItemTex = new Tex("tiles/selectors/tile_selector");
-        hasItemTex = new Tex(((Tex) type.subClassArgs()[0]).getTexturePath(), ((Tex) type.subClassArgs()[0]).getImageHeight(), ((Tex) type.subClassArgs()[0]).getSecondsBetweenFrames(), ((Tex) type.subClassArgs()[0]).isFading());
+        hasItemTex = Tex.newInstance((Tex) type.subClassArgs()[0]);
+        hasItemFullTex = Tex.newInstance((Tex) type.subClassArgs()[1]);
     }
 
     public void chargeBattery(Tex tex) {
@@ -34,6 +35,7 @@ public class RechargeStation extends Tile {
             if (itemCharging.getDurabilityPercentage() < 1.0f) {
                 itemCharging.add(Clock.Delta() * 0.01f);
             }
+            itemCharging.update();
         }
     }
 
@@ -41,7 +43,11 @@ public class RechargeStation extends Tile {
     public void draw() {
         super.draw();
         if (batteryTex != null) {
-            hasItemTex.draw(getX(), getY());
+            if (itemCharging.getDurabilityPercentage() < 1.0f) {
+                hasItemTex.draw(getX(), getY());
+            } else {
+                hasItemFullTex.draw(getX(), getY());
+            }
             batteryTex.draw(getX(), getY());
         }
     }

@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
+import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
@@ -11,8 +12,8 @@ public class Key extends Item {
     private Game gameController;
     private Tile tile;
 
-    public Key(Game game, ItemType type, Tex texture, float x, float y) {
-        super(game, type, texture, x, y);
+    public Key(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
+        super(game, type, texture, data, x, y);
         gameController = game;
     }
 

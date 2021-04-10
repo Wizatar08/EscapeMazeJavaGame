@@ -9,7 +9,7 @@ import com.wizatar08.escapemaze.menus.Game;
 
 public class RefuelStation extends Tile {
     private Game gameController;
-    private Tex gasCanTex, detectItemTex, takeItemTex;
+    private Tex gasCanTex, detectItemTex, takeItemTex, hasItemTex, hasItemFullTex;
     private RefuelableGasCan itemCharging;
 
     public RefuelStation(Game game, float x, float y, int width, int height, TileType type) {
@@ -18,6 +18,8 @@ public class RefuelStation extends Tile {
         itemCharging = null;
         detectItemTex = new Tex("tiles/selectors/item_use_selector");
         takeItemTex = new Tex("tiles/selectors/tile_selector");
+        hasItemTex = Tex.newInstance((Tex) type.subClassArgs()[0]);
+        hasItemFullTex = Tex.newInstance((Tex) type.subClassArgs()[1]);
     }
 
     public void chargeGasCan(Tex tex) {
@@ -33,6 +35,7 @@ public class RefuelStation extends Tile {
             if (itemCharging.getDurabilityPercentage() < 1.0f) {
                 itemCharging.add(Clock.Delta() * 0.01f);
             }
+            itemCharging.update();
         }
     }
 
@@ -40,6 +43,11 @@ public class RefuelStation extends Tile {
     public void draw() {
         super.draw();
         if (gasCanTex != null) {
+            if (itemCharging.getDurabilityPercentage() < 1.0f) {
+                hasItemTex.draw(getX(), getY());
+            } else {
+                hasItemFullTex.draw(getX(), getY());
+            }
             gasCanTex.draw(getX(), getY());
         }
     }

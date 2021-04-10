@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities.items;
 
+import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
@@ -17,7 +18,7 @@ public class Item implements Entity {
     private Timer cooldownPickupTimer;
     private ItemType type;
 
-    public Item(Game game, ItemType type, Tex texture, float x, float y) {
+    public Item(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
         this.gameController = game;
         this.type = type;
         this.texture = texture;

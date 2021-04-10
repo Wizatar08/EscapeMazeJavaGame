@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability;
 
+import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
@@ -12,8 +13,8 @@ public class RechargableBattery extends DurabilityItem {
     private Tile tile;
     private ItemType type;
 
-    public RechargableBattery(Game game, ItemType type, Tex texture, float x, float y) {
-        super(game, type, texture, x, y);
+    public RechargableBattery(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
+        super(game, type, texture, data, x, y);
         gameController = game;
         tile = null;
         this.type = type;

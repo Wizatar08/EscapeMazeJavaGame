@@ -35,7 +35,7 @@ public class Tile implements Entity, TileEntity {
         this.type = type;
         this.subClass = type.getSubClass();
         this.canPass = type.isPassable();
-        this.defaultTexture = new Tex(type.getTexture().getTexturePath(), type.getTexture().getImageHeight(), type.getTexture().getSecondsBetweenFrames(), type.getTexture().isFading());
+        this.defaultTexture = Tex.newInstance(type.getTexture());
         this.defaultOverlapTexture = type.getOverlayTex();
         this.defaultOverlapTexRots = type.getOverlayTexRot();
         this.activeTexture = type.getActiveTileTexture();

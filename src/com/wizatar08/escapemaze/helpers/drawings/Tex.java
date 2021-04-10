@@ -11,7 +11,7 @@ public class Tex {
     private boolean fade;
     private float secondsBetweenFrames;
     private final Timer timer;
-    private Texture texture, nextTex;
+    private Texture texture;
     private String texturePath;
 
     /**
@@ -60,6 +60,10 @@ public class Tex {
         this.timer.unpause();
     }
 
+    public static Tex newInstance(Tex t) {
+        return new Tex(t.getTexturePath(), t.getImageHeight(), t.getSecondsBetweenFrames(), t.isFading());
+    }
+
     public int getNextFrameNum() {
         int f = frame;
         f++;
@@ -74,14 +78,18 @@ public class Tex {
     }
 
     public void draw(float x, float y, float angle) {
+        draw(x, y, angle, texture.getImageWidth());
+    }
+
+    public void draw(float x, float y, float angle, float width) {
         timer.update();
         if (timer.getTotalSeconds() <= 0 || timer.getTotalSeconds() > 256) {
             timer.setTime(timer.getStartingSeconds());
             frame = getNextFrameNum();
         }
-        drawQuadTex(texture, x, y, texture.getImageWidth(), imageHeight, angle, (1.0f / totalFrames) * frame, (1.0f / totalFrames) * frame + (1.0f / totalFrames));
+        drawQuadTex(texture, x, y, width, imageHeight, angle, (1.0f / totalFrames) * frame, (1.0f / totalFrames) * frame + (1.0f / totalFrames));
         if (fade) {
-            drawQuadTex(texture, x, y, texture.getImageWidth(), imageHeight, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
+            drawQuadTex(texture, x, y, width, imageHeight, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
         }
     }
 

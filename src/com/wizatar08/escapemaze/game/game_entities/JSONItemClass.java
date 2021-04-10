@@ -2,6 +2,7 @@ package com.wizatar08.escapemaze.game.game_entities;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
@@ -29,17 +30,23 @@ public class JSONItemClass {
             String id = items.get(i).getAsJsonObject().get("id").getAsString();
             int x = items.get(i).getAsJsonObject().get("x").getAsInt();
             int y = items.get(i).getAsJsonObject().get("y").getAsInt();
+            JsonObject data;
+            try {
+                data = items.get(i).getAsJsonObject().get("data").getAsJsonObject();
+            } catch (NullPointerException e) {
+                data = null;
+            }
 
             Class clazz = ItemType.getType(id).getClassname();
             if (clazz != null) {
                 try {
-                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Tex.class, float.class, float.class).newInstance(game, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), x, y));
+                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Tex.class, JsonObject.class, float.class, float.class).newInstance(game, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), data, x, y));
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             } else {
                 Tex t = new Tex("game/items/" + ItemType.getType(id).getTexture());
-                itemList.add(new Item(game, ItemType.getType(id), t, x, y));
+                itemList.add(new Item(game, ItemType.getType(id), t, data, x, y));
             }
         }
         return itemList;

@@ -8,8 +8,12 @@ import com.wizatar08.escapemaze.game.game_entities.JSONItemClass;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.JSONEnemyClass;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
+import com.wizatar08.escapemaze.helpers.Lang;
+import com.wizatar08.escapemaze.helpers.TextBlock;
+import com.wizatar08.escapemaze.helpers.ui.UI;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.util.glu.Project;
+import org.newdawn.slick.Color;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -42,9 +46,12 @@ public class JSONLevel {
     @SerializedName("inventory_slots")
     private int inventorySlots;
 
+    @SerializedName("text")
+    private JsonArray text;
+
     private Gson gson;
 
-    public JSONLevel(String map, String levelName, JsonArray playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots) {
+    public JSONLevel(String map, String levelName, JsonArray playerStartPos, String enemies, String items, String scroll, int alarmSeconds, int inventorySlots, JsonArray text) {
         this.map = map;
         this.levelName = levelName;
         this.playerSettings = playerStartPos;
@@ -53,6 +60,7 @@ public class JSONLevel {
         this.scroll = scroll;
         this.alarmSeconds = alarmSeconds;
         this.inventorySlots = inventorySlots;
+        this.text = text;
     }
 
     public ArrayList<Enemy> getEnemies(Game game) {
@@ -90,6 +98,24 @@ public class JSONLevel {
             poss[i][1] = playerSettings.get(i).getAsJsonObject().get("y").getAsInt();
         }
         return poss;
+    }
+
+    public TextBlock[] getText(UI gameTextUI) {
+        try {
+            TextBlock[] textBlocks = new TextBlock[text.getAsJsonArray().size()];
+            for (int i = 0; i < text.getAsJsonArray().size(); i++) {
+                JsonObject obj = text.get(i).getAsJsonObject();
+                String t = Lang.get(obj.get("text").getAsString());
+                int size = obj.get("size").getAsInt();
+                String color = obj.get("color").getAsString();
+                int x = obj.get("x").getAsInt();
+                int y = obj.get("y").getAsInt();
+                textBlocks[i] = new TextBlock(gameTextUI, "string" + i, t, x, y, size, Color.decode(color));
+            }
+            return textBlocks;
+        } catch (NullPointerException e) {
+            return new TextBlock[0];
+        }
     }
 
     public String getScroll() {

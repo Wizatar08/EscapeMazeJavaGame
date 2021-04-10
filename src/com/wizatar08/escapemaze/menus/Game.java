@@ -31,8 +31,9 @@ public class Game {
     private ArrayList<Enemy> enemies;
     private ArrayList<Item> items;
     private GameStates currentGameState, prevGameState;
-    private UI ui, gameEndUI;
+    private UI ui, gameEndUI, textUI;
     private TextBlock fpsDisplay, timeDisplay, blank, alarmTimer, requiredItemsStolen;
+    private TextBlock[] levelTexts;
     private Timer timeOnLevel, internalAlarmTimer;
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
@@ -49,7 +50,8 @@ public class Game {
         InputStreamReader reader = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/lvl" + levelNumber + ".json"));
         JSONLevel level = gson.fromJson(reader, JSONLevel.class);
         map = ExternalMapHandler.LoadMap(this, level.getMap());
-
+        textUI = new UI();
+        levelTexts = level.getText(textUI);
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
         for (int i = 0; i < level.getPlayerStartPos().length; i++) {
@@ -88,6 +90,10 @@ public class Game {
         currentPlayer = 0;
         pressurePlatesActive = true;
         materialDetectorsActive = true;
+
+        for (int i = 0; i < levelTexts.length; i++) {
+            textUI.drawString(levelTexts[i]);
+        }
 
         switch (level.getScroll()) {
             case "none":
@@ -255,6 +261,7 @@ public class Game {
             ui.showString("alarm", false);
         }
         ui.drawAllStrings();
+        textUI.drawAllStrings();
     }
 
     /**

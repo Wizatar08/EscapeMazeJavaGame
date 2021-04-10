@@ -12,5 +12,42 @@
   "items": "lvl1",
   "scroll": "none",
   "alarm_seconds": 45,
-  "inventory_slots": 5
+  "inventory_slots": 5,
+  "text": [
+    {
+      "text": "game.ui.beginner_text.1",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 64,
+      "y": 48
+    },
+    {
+      "text": "game.ui.beginner_text.2",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 96,
+      "y": 72
+    },
+    {
+      "text": "game.ui.beginner_text.3",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 128,
+      "y": 104
+    },
+    {
+      "text": "game.ui.beginner_text.4",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 8,
+      "y": 328
+    },
+    {
+      "text": "game.ui.beginner_text.5",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 8,
+      "y": 352
+    }
+  ]
 }

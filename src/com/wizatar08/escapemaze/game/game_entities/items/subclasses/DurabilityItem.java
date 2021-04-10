@@ -1,5 +1,6 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
+import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Clock;
@@ -13,8 +14,8 @@ public class DurabilityItem extends Item {
     private float percentage;
     private final float onePercent;
 
-    public DurabilityItem(Game game, ItemType type, Tex texture, float x, float y) {
-        super(game, type, texture, x, y);
+    public DurabilityItem(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
+        super(game, type, texture, data, x, y);
         durabilityTime = new Timer(Timer.TimerModes.COUNT_DOWN, (int) type.getClassArgs()[0]);
         backgroundTex = new Tex("game/durability/background");
         barTex = new Tex("game/durability/bar");
@@ -57,7 +58,7 @@ public class DurabilityItem extends Item {
     public void draw(float xVal, float yVal) {
         super.draw(xVal, yVal);
         backgroundTex.draw(xVal + 2, yVal);
-        barTex.draw(xVal + 2, yVal + 56);
+        barTex.draw(xVal + 2, yVal + 56, 0, barTex.getOpenGLTex().getImageWidth() * (durabilityTime.getTotalSeconds() / durabilityTime.getStartingSeconds()));
     }
     public void deplete() {
         durabilityTime.setTime(durabilityTime.getTotalSeconds() - (Clock.Delta() / 2));

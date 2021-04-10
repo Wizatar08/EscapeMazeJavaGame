@@ -1,5 +1,9 @@
 package com.wizatar08.escapemaze.menus;
 
+import com.wizatar08.escapemaze.game.game_entities.enemies.EnemyType;
+import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.map.TileType;
+
 public class MenuRun {
     // Initialize variables
     public static Menus MENU = Menus.MAIN_MENU;
@@ -14,6 +18,9 @@ public class MenuRun {
 
     // Update
     public void update() {
+        ItemType itype = ItemType.NULL;
+        TileType ttype = TileType.NULL;
+        EnemyType etype = EnemyType.NULL;
         switch (MENU) { // Loop through all possible values of 'menu'
             case MAIN_MENU: // Run if 'menu' == Menus.MAIN_MENU
                 if (mainMenu == null) mainMenu = new MainMenu();

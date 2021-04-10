@@ -84,8 +84,8 @@ public enum TileType {
     PRES_PLATE_DEF_FLOOR_COMP_3(new VariationID(IDTypes.TILE, "009", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
     PRES_PLATE_DEF_FLOOR_COMP_4(new VariationID(IDTypes.TILE, "009", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
     PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().pressurePlate().overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate")}, new int[]{0})),
-    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new Tex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f))),
-    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler()),
+    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new Tex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f), new Tex("tile_overlays/recharge_station_has_battery_full", Renderer.TILE_SIZE, 0.5f))),
+    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler(new Tex("tile_overlays/refuel_station_has_object", Renderer.TILE_SIZE, 0.15f), new Tex("tile_overlays/refuel_station_has_object_full", Renderer.TILE_SIZE, 0.5f))),
     METAL_WALL_MDET_0(new VariationID(IDTypes.TILE, "013", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{0, 180}).materialDetector(EntityDetectDirection.DOWN, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{0, 180})),
     METAL_WALL_MDET_1(new VariationID(IDTypes.TILE, "013", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{90, 270}).materialDetector(EntityDetectDirection.LEFT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{90, 270})),
     METAL_WALL_MDET_2(new VariationID(IDTypes.TILE, "013", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{180, 0}).materialDetector(EntityDetectDirection.UP, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{180, 0})),
@@ -371,16 +371,17 @@ public enum TileType {
             return this;
         }
 
-        private Builder batteryCharger(Tex tex) {
+        private Builder batteryCharger(Tex tex, Tex doneTex) {
             subclass(RechargeStation.class);
             startsActive = true;
-            subClassArgs = new Object[]{tex};
+            subClassArgs = new Object[]{tex, doneTex};
             return this;
         }
 
-        private Builder gasRefueler() {
+        private Builder gasRefueler(Tex tex, Tex doneTex) {
             subclass(RefuelStation.class);
             startsActive = true;
+            subClassArgs = new Object[]{tex, doneTex};
             return this;
         }
 

@@ -12,5 +12,21 @@
   "items": "lvl6",
   "scroll": "none",
   "alarm_seconds": 30,
-  "inventory_slots": 5
+  "inventory_slots": 5,
+  "text": [
+    {
+      "text": "game.ui.beginner_text.20",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 400,
+      "y": 448
+    },
+    {
+      "text": "game.ui.beginner_text.21",
+      "size": 24,
+      "color": "0xFFFF00",
+      "x": 400,
+      "y": 472
+    }
+  ]
 }
