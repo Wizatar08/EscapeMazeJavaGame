@@ -3,27 +3,22 @@ package com.wizatar08.escapemaze.game.game_entities;
 import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
-import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
 import com.wizatar08.escapemaze.helpers.Clock;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.tile_types.ExitSpot;
-import com.wizatar08.escapemaze.map.tile_types.MainComputer;
 import com.wizatar08.escapemaze.map.tile_types.PressurePlate;
-import com.wizatar08.escapemaze.map.tile_types.PressurePlateComputer;
 import com.wizatar08.escapemaze.menus.Game;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.opengl.Texture;
 
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 
 /*
 PLAYER CONTROLS:
@@ -42,7 +37,7 @@ public class Player implements Entity {
     private float width, height;
     private TileMap map;
     private boolean isSafe;
-    private Texture tex, detectTex;
+    private Tex tex, detectTex;
     private final Game gameController;
     private Inventory inventory;
     private float weightInfluence, speedInfluence;
@@ -57,8 +52,8 @@ public class Player implements Entity {
         this.height = 32;
         this.map = map;
         this.isSafe = false;
-        this.tex = LoadPNG("players/player_" + texColor);
-        this.detectTex = LoadPNG("tiles/selectors/tile_selector");
+        this.tex = new Tex("players/player_" + texColor);
+        this.detectTex = new Tex("tiles/selectors/tile_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         this.speedInfluence = 0.0f;
     }
@@ -267,7 +262,7 @@ public class Player implements Entity {
     // Draw the player if not in a safe spot
     public void draw() {
         if (!isSafe) {
-            drawQuadTex(tex, x + Game.DIS_X, y + Game.DIS_Y);
+            tex.draw(x + Game.DIS_X, y + Game.DIS_Y);
         }
         if (isNearSafeSpot()) {
             for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
@@ -276,7 +271,7 @@ public class Player implements Entity {
                 float distX = tileDetectionSpot.getDetectTile().getX() - tileDetectionSpot.getSafeTile().getX();
                 float distY = tileDetectionSpot.getDetectTile().getY() - tileDetectionSpot.getSafeTile().getY();
                 if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
-                    drawQuadTex(detectTex, safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y, safeTile.getWidth(), safeTile.getHeight());
+                    detectTex.draw(safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y);
                 }
             }
         }

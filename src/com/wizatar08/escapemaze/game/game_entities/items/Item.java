@@ -1,33 +1,30 @@
 package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
-import org.newdawn.slick.opengl.Texture;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class Item implements Entity {
     private final Game gameController;
     private float x, y, texX, texY, width, height, weight, speedBoost;
     private int passLevel, playerInd;
-    private Texture texture;
+    private Tex texture;
     private String id;
     private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor, displayOnPlayer;
     private Timer cooldownPickupTimer;
     private ItemType type;
 
-    public Item(Game game, ItemType type, Texture texture, float x, float y) {
+    public Item(Game game, ItemType type, Tex texture, float x, float y) {
         this.gameController = game;
         this.type = type;
         this.texture = texture;
         this.x = x;
         this.y = y;
-        this.width = texture.getImageWidth();
-        this.height = texture.getImageHeight();
+        this.width = texture.getOpenGLTex().getImageWidth();
+        this.height = texture.getOpenGLTex().getImageHeight();
         this.texX = x + ((Renderer.TILE_SIZE - width) / 2);
         this.texY = y + ((Renderer.TILE_SIZE - height) / 2);
         this.id = type.getId();
@@ -63,7 +60,7 @@ public class Item implements Entity {
     private void drawOnPlayer() {
         if (displayOnPlayer && inInventory) {
             Player p = gameController.getPlayerInstances().get(playerInd);
-            drawQuadTex(texture, p.getX() - ((width - p.getWidth()) / 2), p.getY() - ((height - p.getHeight()) / 2));
+            texture.draw(p.getX() - ((width - p.getWidth()) / 2), p.getY() - ((height - p.getHeight()) / 2));
         }
     }
 
@@ -127,17 +124,17 @@ public class Item implements Entity {
         this.height = height;
     }
 
-    public Texture getTexture() {
+    public Tex getTexture() {
         return texture;
     }
 
     @Override
     public void draw() {
-        Drawer.drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y);
+        texture.draw(x + Game.DIS_X, y + Game.DIS_Y);
     }
 
     public void draw(float xVal, float yVal) {
-        Drawer.drawQuadTex(texture, xVal, yVal);
+        texture.draw(xVal, yVal);
     }
 
     public String getId() {

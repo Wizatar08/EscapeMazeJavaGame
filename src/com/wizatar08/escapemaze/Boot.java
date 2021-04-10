@@ -1,7 +1,7 @@
 package com.wizatar08.escapemaze;
 
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.drawings.Drawer;
 import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;

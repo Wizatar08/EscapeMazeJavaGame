@@ -4,24 +4,20 @@ import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.interfaces.Entity;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.menus.Game;
-import org.lwjgl.Sys;
-import org.newdawn.slick.opengl.Texture;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 public class DurabilityItem extends Item {
     private final Timer durabilityTime;
-    private Texture backgroundTex, barTex;
+    private Tex backgroundTex, barTex;
     private float percentage;
     private final float onePercent;
 
-    public DurabilityItem(Game game, ItemType type, Texture texture, float x, float y) {
+    public DurabilityItem(Game game, ItemType type, Tex texture, float x, float y) {
         super(game, type, texture, x, y);
         durabilityTime = new Timer(Timer.TimerModes.COUNT_DOWN, (int) type.getClassArgs()[0]);
-        backgroundTex = LoadPNG("game/durability/background");
-        barTex = LoadPNG("game/durability/bar");
+        backgroundTex = new Tex("game/durability/background");
+        barTex = new Tex("game/durability/bar");
         onePercent = (float) durabilityTime.getStartingSeconds() / 100f;
     }
 
@@ -40,8 +36,8 @@ public class DurabilityItem extends Item {
     @Override
     public void draw() {
         if (isInInventory()) {
-            drawQuadTex(backgroundTex, getX() + 2, getY(), backgroundTex.getImageWidth(), backgroundTex.getImageHeight());
-            drawQuadTex(barTex, getX() + 2, getY(), barTex.getImageWidth(), barTex.getImageHeight());
+            backgroundTex.draw(getX() + 2, getY());
+            barTex.draw(getX() + 2, getY());
         }
         super.draw();
     }
@@ -60,8 +56,8 @@ public class DurabilityItem extends Item {
     @Override
     public void draw(float xVal, float yVal) {
         super.draw(xVal, yVal);
-        drawQuadTex(backgroundTex, xVal + 2, yVal, backgroundTex.getImageWidth(), backgroundTex.getImageHeight());
-        drawQuadTex(barTex, xVal + 2, yVal + 56, barTex.getImageWidth() * percentage, barTex.getImageHeight());
+        backgroundTex.draw(xVal + 2, yVal);
+        barTex.draw(xVal + 2, yVal + 56);
     }
     public void deplete() {
         durabilityTime.setTime(durabilityTime.getTotalSeconds() - (Clock.Delta() / 2));

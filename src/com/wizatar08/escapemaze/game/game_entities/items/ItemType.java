@@ -3,7 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.*;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RefuelableGasCan;
-import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.IDTypes;
 import com.wizatar08.escapemaze.helpers.VariationID;
 
@@ -27,8 +27,8 @@ public enum ItemType {
     PASS_1(new VariationID(IDTypes.ITEM, "004", "01"), "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
     PASS_2(new VariationID(IDTypes.ITEM, "004", "02"), "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
     PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
-    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource().className(RechargableBattery.class, new Object[]{40, Drawer.LoadPNG("tile_overlays/battery_plugged")})),
-    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(RefuelableGasCan.class, new Object[]{40, Drawer.LoadPNG("tile_overlays/gas_can_refuel")})),
+    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource().className(RechargableBattery.class, new Object[]{40, new Tex("tile_overlays/battery_plugged")})),
+    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(RefuelableGasCan.class, new Object[]{40, new Tex("tile_overlays/gas_can_refuel")})),
     BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class)),
     ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f)),
     HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.3f).className(HoveringDevice.class)),

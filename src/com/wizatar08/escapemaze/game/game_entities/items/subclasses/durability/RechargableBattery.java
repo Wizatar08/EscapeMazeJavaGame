@@ -1,22 +1,18 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability;
 
-import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.map.Tile;
-import com.wizatar08.escapemaze.map.tile_types.LaserSecure;
 import com.wizatar08.escapemaze.map.tile_types.RechargeStation;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
-
-import java.util.Arrays;
 
 public class RechargableBattery extends DurabilityItem {
     private final Game gameController;
     private Tile tile;
     private ItemType type;
 
-    public RechargableBattery(Game game, ItemType type, Texture texture, float x, float y) {
+    public RechargableBattery(Game game, ItemType type, Tex texture, float x, float y) {
         super(game, type, texture, x, y);
         gameController = game;
         tile = null;
@@ -37,8 +33,8 @@ public class RechargableBattery extends DurabilityItem {
     public void startCharging() {}
     public void stopCharging() {}
 
-    public Texture getBatteryChargingTexture() {
-        return (Texture) type.getClassArgs()[1];
+    public Tex getBatteryChargingTexture() {
+        return (Tex) type.getClassArgs()[1];
     }
 
     @Override

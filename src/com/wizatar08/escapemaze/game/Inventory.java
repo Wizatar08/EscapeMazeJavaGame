@@ -3,8 +3,7 @@ package com.wizatar08.escapemaze.game;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.DurabilityItem;
-import com.wizatar08.escapemaze.helpers.Drawer;
-import org.newdawn.slick.opengl.Texture;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Inventory {
     private int slots, currentSelected;
     private ArrayList<Item> items;
-    private Texture slotTex, selectedTex;
+    private Tex slotTex, selectedTex;
     private boolean hasPowerSource, hasGasSource;
 
     public Inventory(int slots) {
@@ -22,8 +21,8 @@ public class Inventory {
         for (int i = 0; i < slots; i++) {
             items.add(i, null);
         }
-        slotTex = Drawer.LoadPNG("game/inventory_slot");
-        selectedTex = Drawer.LoadPNG("game/inventory_slot_selected");
+        slotTex = new Tex("game/inventory_slot");
+        selectedTex = new Tex("game/inventory_slot_selected");
         this.hasPowerSource = false;
         this.hasGasSource = false;
         this.currentSelected = 0;
@@ -61,9 +60,9 @@ public class Inventory {
     public void draw() {
         //System.out.println(items.get(0) + ", " + items.get(1) + ", " + items.get(2) + ", " + items.get(3) + ", " + items.get(4));
         for (int i = 0; i < slots; i++) {
-            Drawer.drawQuadTex(slotTex, ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
+            slotTex.draw(((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
         }
-        Drawer.drawQuadTex(selectedTex, ((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (currentSelected * 64) - 4, HEIGHT - 81);
+        selectedTex.draw(((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (currentSelected * 64) - 4, HEIGHT - 81);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i) != null) {
                 items.get(i).draw(((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);

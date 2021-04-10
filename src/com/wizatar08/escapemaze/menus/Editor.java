@@ -4,17 +4,15 @@ import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.helpers.TextBlock;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.opengl.Texture;
 
 import javax.swing.*;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,7 +23,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Editor {
     // Initialize variables
-    private Texture background;
+    private Tex background;
     private TileMap map;
     private UI editorUI;
     private ArrayList<UI.Menu> menus;
@@ -57,7 +55,7 @@ public class Editor {
         }
         displacementX = 0;
         displacementY = 0;
-        background = LoadPNG("backgrounds/main_menu");
+        background = new Tex("backgrounds/main_menu");
         items = new ArrayList<>();
         status = new TextBlock(editorUI, "Status", "", 8, 8);
     }
@@ -189,7 +187,7 @@ public class Editor {
                         items.remove(ind);
                     } else {
                         System.out.println(ItemType.getType(id) + ", " + id);
-                        items.add(new Item(null, ItemType.getType(id), LoadPNG("game/items/" + ItemType.getType(id).getTexture()), (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
+                        items.add(new Item(null, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), (int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
                     }
                 }
             } else {
@@ -279,7 +277,8 @@ public class Editor {
     }
 
     private void setPlacement() {
-        drawQuadTex(LoadPNG("tiles/selectors/safe_space_selector"), (int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE) * TILE_SIZE + displacementX, (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)) * TILE_SIZE +  displacementY, TILE_SIZE, TILE_SIZE);
+        Tex t = new Tex("tiles/selectors/safe_space_selector");
+        t.draw((int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE) * TILE_SIZE + displacementX, (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)) * TILE_SIZE +  displacementY);
     }
 
     public void update() {
@@ -293,11 +292,11 @@ public class Editor {
     }
 
     private void draw() {
-        drawQuadTex(background, 0, 0, WIDTH * 2, HEIGHT);
+        background.draw(0, 0);
         map.draw();
         editorUI.draw();
         for (Item item : items) {
-            drawQuadTex(item.getTexture(), item.getX() + displacementX, item.getY() + displacementY);
+            item.getTexture().draw(item.getX() + displacementX, item.getY() + displacementY);
         }
         status.draw();
         if (isPlacingItem) {
@@ -316,9 +315,9 @@ public class Editor {
         for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
             int ceil = (int) Math.ceil(i / (w * h));
             if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 20, 220, 704, 3, 11);
-            Texture[] textures = new Texture[TileType.TILE_TYPES.get(i).getOverlayTex().length + 1];
+            Tex[] textures = new Tex[TileType.TILE_TYPES.get(i).getOverlayTex().length + 1];
             int ind = 0;
-            textures[0] = LoadPNG("tiles/" + TileType.TILE_TYPES.get(i).getTexture());
+            textures[0] = TileType.TILE_TYPES.get(i).getTexture();
             for (int j = 0; j < TileType.TILE_TYPES.get(i).getOverlayTex().length; j++) {
                 textures[j + 1] = TileType.TILE_TYPES.get(i).getOverlayTex()[j];
             }

@@ -2,26 +2,26 @@ package com.wizatar08.escapemaze.map.tile_types;
 
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
 
 public class RechargeStation extends Tile {
     private Game gameController;
-    private Texture batteryTex, detectItemTex, takeItemTex;
+    private Tex batteryTex, detectItemTex, takeItemTex, hasItemTex;
     private RechargableBattery itemCharging;
 
     public RechargeStation(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         gameController = game;
         itemCharging = null;
-        detectItemTex = Drawer.LoadPNG("tiles/selectors/item_use_selector");
-        takeItemTex = Drawer.LoadPNG("tiles/selectors/tile_selector");
+        detectItemTex = new Tex("tiles/selectors/item_use_selector");
+        takeItemTex = new Tex("tiles/selectors/tile_selector");
+        hasItemTex = new Tex(((Tex) type.subClassArgs()[0]).getTexturePath(), ((Tex) type.subClassArgs()[0]).getImageHeight(), ((Tex) type.subClassArgs()[0]).getSecondsBetweenFrames(), ((Tex) type.subClassArgs()[0]).isFading());
     }
 
-    public void chargeBattery(Texture tex) {
+    public void chargeBattery(Tex tex) {
         batteryTex = tex;
     }
     public void takeBattery() {
@@ -41,13 +41,14 @@ public class RechargeStation extends Tile {
     public void draw() {
         super.draw();
         if (batteryTex != null) {
-            Drawer.drawQuadTex(batteryTex, getX(), getY());
+            hasItemTex.draw(getX(), getY());
+            batteryTex.draw(getX(), getY());
         }
     }
 
     @Override
     public void useTilePlayerNear() {
-        if (itemCharging != null) {
+        if (itemCharging != null && gameController.getCurrentPlayer().getInventory().getCurrentSelectedItem() == null) {
             gameController.getCurrentPlayer().getInventory().add(itemCharging);
             itemCharging.stopCharging();
             takeBattery();
@@ -57,11 +58,11 @@ public class RechargeStation extends Tile {
 
     @Override
     public void playerNearTile() {
-        if (!gameController.getCurrentPlayer().getInventory().canAdd() && itemCharging == null && gameController.getCurrentPlayer().getInventory().getCurrentSelectedItem() instanceof RechargableBattery) {
-            Drawer.drawQuadTex(detectItemTex, getX(), getY());
+        if (itemCharging == null && gameController.getCurrentPlayer().getInventory().getCurrentSelectedItem() instanceof RechargableBattery) {
+            detectItemTex.draw(getX(), getY());
         }
         if (gameController.getCurrentPlayer().getInventory().getCurrentSelectedItem() == null && itemCharging != null) {
-            Drawer.drawQuadTex(takeItemTex, getX(), getY());
+            takeItemTex.draw(getX(), getY());
         }
     }
 

@@ -8,6 +8,7 @@ import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.*;
 import com.wizatar08.escapemaze.helpers.Timer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileMap;
@@ -16,9 +17,7 @@ import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.glu.Project;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
 
-import javax.swing.*;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class Game {
     private Timer timeOnLevel, internalAlarmTimer;
     private MapScroll scrollType;
     public static float DIS_X, DIS_Y;
-    private Texture redScreen, alertBox, gameEndTex;
+    private Tex redScreen, alertBox, gameEndTex;
     private int currentPlayer;
     private boolean pressurePlatesActive, materialDetectorsActive;
 
@@ -72,13 +71,13 @@ public class Game {
         ui.drawString(requiredItemsStolen);
         ui.drawString(blank);
         ui.showString("alarm", false);
-        redScreen = Drawer.LoadPNG("backgrounds/red_screen");
-        alertBox = Drawer.LoadPNG("game/alert");
-        gameEndTex = Drawer.LoadPNG("backgrounds/game_end");
+        redScreen = new Tex("backgrounds/red_screen");
+        alertBox = new Tex("game/alert");
+        gameEndTex = new Tex("backgrounds/game_end");
         timeOnLevel = new Timer();
         internalAlarmTimer = new Timer(level.getAlarmSeconds());
         timeOnLevel.unpause();
-        redScreen = Drawer.LoadPNG("backgrounds/red_screen");
+        redScreen = new Tex("backgrounds/red_screen");
         requiredItems = 0;
         for (Item item : items) {
             if (item.isRequired()) {
@@ -184,9 +183,9 @@ public class Game {
 
     private void alarm() {
         if (Math.floor(internalAlarmTimer.getTotalSeconds()) % 2 == 0) {
-            Drawer.drawQuadTex(redScreen, 0, 0);
+            redScreen.draw(0, 0);
         }
-        Drawer.drawQuadTex(alertBox, WIDTH / 2 - (alertBox.getImageWidth()) / 2, 24);
+        alertBox.draw(WIDTH / 2 - (alertBox.getOpenGLTex().getImageWidth()) / 2, 24);
         ui.showString("alarm", true);
     }
 
@@ -297,9 +296,9 @@ public class Game {
             sWin = "win";
         }
         currentGameState = GameStates.GAME_END;
-        Drawer.drawQuadTex(gameEndTex, ((float) WIDTH / 2) - ((float) gameEndTex.getImageWidth()) / 2, ((float) HEIGHT / 2) - ((float) gameEndTex.getImageHeight() / 2));
+        gameEndTex.draw(((float) WIDTH / 2) - ((float) gameEndTex.getOpenGLTex().getImageWidth()) / 2, ((float) HEIGHT / 2) - ((float) gameEndTex.getOpenGLTex().getImageHeight() / 2));
         gameEndUI.drawString(new TextBlock(gameEndUI, "GameOver", Lang.get("game.end." + sWin), 0, 256, 56f, Color.orange));
-        gameEndUI.addButton("GoBack", new Texture[]{Drawer.LoadPNG("buttons/game_buttons/end_game_btn")}, (WIDTH / 2) - (Drawer.LoadPNG("buttons/game_buttons/end_game_btn").getImageWidth() / 2), 512 - 64, new TextBlock(gameEndUI, "EndGame", Lang.get("game.end.go_back"), 0, 0, 32f), true, true);
+        gameEndUI.addButton("GoBack", new Tex[]{new Tex("buttons/game_buttons/end_game_btn")}, (WIDTH / 2) - (new Tex("buttons/game_buttons/end_game_btn").getOpenGLTex().getImageWidth() / 2), 512 - 64, new TextBlock(gameEndUI, "EndGame", Lang.get("game.end.go_back"), 0, 0, 32f), true, true);
         gameEndUI.getString("GameOver").setX(((float) WIDTH / 2) - (gameEndUI.getString("GameOver").getWidth()));
         gameEndUI.setStringPos("GameOver", ((float) WIDTH / 2) - (gameEndUI.getString("GameOver").getX() / 2), 256);
         gameEndUI.drawAllStrings();

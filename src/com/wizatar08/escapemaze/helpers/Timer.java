@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 public class Timer {
     private TimerModes mode;
     private float totalSeconds;
-    private final int startingSeconds;
+    private final float startingSeconds;
     private boolean paused;
 
     public Timer() {
@@ -20,7 +20,7 @@ public class Timer {
         this(TimerModes.COUNT_DOWN, calculateTotalSeconds(hours, minutes, seconds));
     }
 
-    public Timer(int totalSeconds) {
+    public Timer(float totalSeconds) {
         this (TimerModes.COUNT_DOWN, totalSeconds);
     }
 
@@ -28,7 +28,7 @@ public class Timer {
         this(mode, calculateTotalSeconds(hours, minutes, seconds));
     }
 
-    public Timer(TimerModes mode, int totalSeconds) {
+    public Timer(TimerModes mode, float totalSeconds) {
         this.mode = mode;
         this.totalSeconds = totalSeconds;
         this.startingSeconds = totalSeconds;
@@ -133,7 +133,7 @@ public class Timer {
     public float getTotalSeconds() {
         return totalSeconds;
     }
-    public int getStartingSeconds() {
+    public float getStartingSeconds() {
         return startingSeconds;
     }
     public boolean isPaused() {

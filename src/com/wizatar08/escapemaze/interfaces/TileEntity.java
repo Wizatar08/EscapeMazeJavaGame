@@ -1,6 +1,6 @@
 package com.wizatar08.escapemaze.interfaces;
 
-import org.newdawn.slick.opengl.Texture;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 
 public interface TileEntity {
 
@@ -17,5 +17,5 @@ public interface TileEntity {
     /**
      * Get the texture of the tile
      */
-    Texture getTexture();
+    Tex getTexture();
 }

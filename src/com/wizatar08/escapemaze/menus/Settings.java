@@ -2,11 +2,11 @@ package com.wizatar08.escapemaze.menus;
 
 import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.helpers.TextBlock;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 import java.io.*;
@@ -15,14 +15,14 @@ import java.util.*;
 public class Settings {
     private String currentLang, windowSettings;
     private UI ui;
-    private Texture background;
+    private Tex background;
     private boolean buttonDown;
 
     private String[] langs = new String[]{"en_US", "te_ST"};
     private int langIndex = 0;
 
     public Settings() {
-        background = LoadPNG("backgrounds/main_menu");
+        background = new Tex("backgrounds/main_menu");
         ui = new UI();
         buttonDown = false;
         createBtns();
@@ -35,10 +35,10 @@ public class Settings {
     }
 
     private void createBtns() {
-        ui.addButton("Apply", new Texture[]{LoadPNG("buttons/settings_buttons/apply")}, WIDTH / 2 - 128, HEIGHT - 96, new TextBlock(ui, "Apply", Lang.get("settings.apply"), 0, 0, 32f, Color.blue), true, true);
-        ui.addButton("Back", new Texture[]{LoadPNG("buttons/settings_buttons/back")}, 64, HEIGHT - 96);
-        ui.addButton("Lang", new Texture[]{LoadPNG("buttons/settings_buttons/change")}, WIDTH - 320, 128, new TextBlock(ui, "Lang", Lang.get("settings.lang.change"), 0, 0, 32f, Color.white), true, true);
-        ui.addButton("Window", new Texture[]{LoadPNG("buttons/settings_buttons/change")}, WIDTH - 320, 128 + 96, new TextBlock(ui, "Window", Lang.get("settings.window.change"), 0, 0, 32f, Color.white), true, true);
+        ui.addButton("Apply", new Tex[]{new Tex("buttons/settings_buttons/apply")}, WIDTH / 2 - 128, HEIGHT - 96, new TextBlock(ui, "Apply", Lang.get("settings.apply"), 0, 0, 32f, Color.blue), true, true);
+        ui.addButton("Back", new Tex[]{new Tex("buttons/settings_buttons/back")}, 64, HEIGHT - 96);
+        ui.addButton("Lang", new Tex[]{new Tex("buttons/settings_buttons/change")}, WIDTH - 320, 128, new TextBlock(ui, "Lang", Lang.get("settings.lang.change"), 0, 0, 32f, Color.white), true, true);
+        ui.addButton("Window", new Tex[]{new Tex("buttons/settings_buttons/change")}, WIDTH - 320, 128 + 96, new TextBlock(ui, "Window", Lang.get("settings.window.change"), 0, 0, 32f, Color.white), true, true);
     }
 
     private void setSettings() throws Exception {
@@ -106,7 +106,7 @@ public class Settings {
     }
 
     private void draw() {
-        drawQuadTex(background, 0, 0, WIDTH, HEIGHT);
+        background.draw(0, 0);
         ui.draw();
 
     }

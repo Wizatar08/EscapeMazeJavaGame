@@ -1,26 +1,21 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.game.game_entities.items.Item;
-import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
-import com.wizatar08.escapemaze.map.tile_types.*;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
 
-import java.lang.reflect.InvocationTargetException;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity, TileEntity {
     private float x, y, initialX, initialY;
     private int width, height;
     private String id;
-    private final Texture defaultTexture;
-    private final Texture[] activeTexture, defaultOverlapTexture;
+    private final Tex defaultTexture;
+    private final Tex[] activeTexture, defaultOverlapTexture;
     private final int[] defaultOverlapTexRots, activeTextureRots, requiredPassLevels;
     private final TileType type;
     private boolean isActive, activeInfluencesPassable, canBeSeen;
@@ -40,7 +35,7 @@ public class Tile implements Entity, TileEntity {
         this.type = type;
         this.subClass = type.getSubClass();
         this.canPass = type.isPassable();
-        this.defaultTexture = LoadPNG("tiles/" + type.getTexture());
+        this.defaultTexture = new Tex(type.getTexture().getTexturePath(), type.getTexture().getImageHeight(), type.getTexture().getSecondsBetweenFrames(), type.getTexture().isFading());
         this.defaultOverlapTexture = type.getOverlayTex();
         this.defaultOverlapTexRots = type.getOverlayTexRot();
         this.activeTexture = type.getActiveTileTexture();
@@ -59,16 +54,16 @@ public class Tile implements Entity, TileEntity {
         setX(initialX + Editor.displacementX);
         setY(initialY + Editor.displacementY);
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
-            drawQuadTex(defaultTexture, x + Game.DIS_X, y + Game.DIS_Y, width, height);
+            defaultTexture.draw(x + Game.DIS_X, y + Game.DIS_Y);
             canBeSeen = true;
             if (hasMultipleTexs && !isActive){
                 for (int i = 0; i < activeTexture.length; i++) {
-                    drawQuadTex(activeTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, activeTextureRots[i]);
+                    activeTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, activeTextureRots[i]);
                 }
             } else {
                 if (defaultOverlapTexture != null) {
                     for (int i = 0; i < defaultOverlapTexture.length; i++) {
-                        drawQuadTex(defaultOverlapTexture[i], x + Game.DIS_X, y + Game.DIS_Y, width, height, defaultOverlapTexRots[i]);
+                        defaultOverlapTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, defaultOverlapTexRots[i]);
                     }
                 }
             }
@@ -122,7 +117,7 @@ public class Tile implements Entity, TileEntity {
     public float getY() {
         return y;
     }
-    public Texture getTexture() {
+    public Tex getTexture() {
         return defaultTexture;
     }
     public TileType getType() {

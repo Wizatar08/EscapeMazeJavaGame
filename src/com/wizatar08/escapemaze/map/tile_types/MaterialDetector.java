@@ -1,16 +1,14 @@
 package com.wizatar08.escapemaze.map.tile_types;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.Drawer;
 import com.wizatar08.escapemaze.map.EntityDetectDirection;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
 
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class MaterialDetector extends Tile {

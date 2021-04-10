@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 
 public class TextBlock {
     private UI ui;

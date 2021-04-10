@@ -5,9 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.annotations.SerializedName;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.helpers.Drawer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -34,12 +33,13 @@ public class JSONItemClass {
             Class clazz = ItemType.getType(id).getClassname();
             if (clazz != null) {
                 try {
-                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Texture.class, float.class, float.class).newInstance(game, ItemType.getType(id), Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()), x, y));
+                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Tex.class, float.class, float.class).newInstance(game, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), x, y));
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             } else {
-                itemList.add(new Item(game, ItemType.getType(id), Drawer.LoadPNG("game/items/" + ItemType.getType(id).getTexture()), x, y));
+                Tex t = new Tex("game/items/" + ItemType.getType(id).getTexture());
+                itemList.add(new Item(game, ItemType.getType(id), t, x, y));
             }
         }
         return itemList;

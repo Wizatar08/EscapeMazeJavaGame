@@ -1,14 +1,13 @@
 package com.wizatar08.escapemaze.helpers.ui;
 
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 import com.wizatar08.escapemaze.helpers.TextBlock;
-import org.lwjgl.Sys;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
+
 import java.util.ArrayList;
 
 public class UI {
@@ -99,7 +98,7 @@ public class UI {
         }
     }
 
-    public void addButton(String name, Texture[] textureNames, int x, int y) {
+    public void addButton(String name, Tex[] textureNames, int x, int y) {
         int[] rots = new int[textureNames.length];
         for (int i = 0; i < textureNames.length; i++) {
             rots[i] = 0;
@@ -107,15 +106,15 @@ public class UI {
         addButton(name, textureNames, x, y, rots);
     }
 
-    public void addButton(String name, Texture[] textureNames, int x, int y, int[] rots) {
+    public void addButton(String name, Tex[] textureNames, int x, int y, int[] rots) {
         buttonList.add(new Button(name, textureNames, x, y, rots));
     }
 
-    public void addButton(String name, Texture[] textureNames, int x, int y, TextBlock text) {
+    public void addButton(String name, Tex[] textureNames, int x, int y, TextBlock text) {
         addButton(name, textureNames, x, y, text, false, false);
     }
 
-    public void addButton(String name, Texture[] textureNames, int x, int y, TextBlock text, boolean centerW, boolean centerH) {
+    public void addButton(String name, Tex[] textureNames, int x, int y, TextBlock text, boolean centerW, boolean centerH) {
         Button b;
         int[] rots = new int[textureNames.length];
         for (int i = 0; i < textureNames.length; i++) {
@@ -155,7 +154,7 @@ public class UI {
         return null;
     }
 
-    public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Texture background, int xOffset, int yOffset) {
+    public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background, int xOffset, int yOffset) {
         menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, background, xOffset, yOffset));
     }
 
@@ -175,7 +174,7 @@ public class UI {
     public void draw() {
         for (Button b: buttonList) {
             for (int i = 0; i < b.getTextures().length; i++) {
-                drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                b.getTextures()[i].draw(b.getX(), b.getY());
             }
             if (b.getText() != null) {
                 b.getText().draw();
@@ -197,10 +196,10 @@ public class UI {
         private ArrayList<Button> menuButtons;
         private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset;
         private boolean show;
-        private Texture background;
+        private Tex background;
         private TextBlock blank;
 
-        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Texture background, int xOffset, int yOffset) {
+        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background, int xOffset, int yOffset) {
             this.name = name;
             this.x = x;
             this.y = y;
@@ -218,11 +217,11 @@ public class UI {
             this.blank = new TextBlock(null, "blank", "", 0, 0, 24f, Color.white);
         }
 
-        public void addButton(String name, Texture[] buttonTextures) {
+        public void addButton(String name, Tex[] buttonTextures) {
             addButton(name, buttonTextures, (TextBlock) null, false, false);
         }
 
-        public void addButton(String name, Texture[] buttonTextures, TextBlock text, boolean centerW, boolean centerH) {
+        public void addButton(String name, Tex[] buttonTextures, TextBlock text, boolean centerW, boolean centerH) {
             int[] rots = new int[buttonTextures.length];
             for (int i = 0; i < buttonTextures.length; i++) {
                 rots[i] = 0;
@@ -249,7 +248,7 @@ public class UI {
          * @param buttonTexture
          * @param rot
          */
-        public void addButton(String name, Texture[] buttonTexture, int[] rot) {
+        public void addButton(String name, Tex[] buttonTexture, int[] rot) {
             Button b = new Button(name, buttonTexture, 0, 0, rot);
             setButton(b);
         }
@@ -288,9 +287,9 @@ public class UI {
                 for (Button b : menuButtons) {
                     for (int i = 0; i < b.getTextures().length; i++) {
                         if (i == 0) {
-                            drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                            b.getTextures()[i].draw(b.getX(), b.getY());
                         } else {
-                            drawQuadTex(b.getTextures()[i], b.getX(), b.getY(), b.getWidth(), b.getHeight(), b.getRots()[i - 1]);
+                            b.getTextures()[i].draw(b.getX(), b.getY(), b.getRots()[i - 1]);
                         }
                     }
                     if (b.getText() != null) {

@@ -1,20 +1,20 @@
 package com.wizatar08.escapemaze.helpers.ui;
 
 import com.wizatar08.escapemaze.helpers.TextBlock;
-import org.newdawn.slick.opengl.Texture;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 
 public class Button {
     private String name;
-    private Texture[] textures;
+    private Tex[] textures;
     private int[] rots;
     private int x, y, width, height;
     private TextBlock text;
 
-    public Button(String name, Texture[] textures, int x, int y, int[] rots) {
+    public Button(String name, Tex[] textures, int x, int y, int[] rots) {
         this(name, textures, x, y, rots, null);
     }
 
-    public Button(String name, Texture[] textures, int x, int y, int[] rots, TextBlock text) {
+    public Button(String name, Tex[] textures, int x, int y, int[] rots, TextBlock text) {
         this.name = name;
         this.textures = textures;
         this.x = x;
@@ -23,11 +23,11 @@ public class Button {
         int biggestWidth = 1;
         int biggestHeight = 1;
         for (int i = 0; i < textures.length; i++) {
-            if (textures[i].getImageWidth() > biggestWidth) {
-                biggestWidth = textures[i].getImageWidth();
+            if (textures[i].getOpenGLTex().getImageWidth() > biggestWidth) {
+                biggestWidth = textures[i].getOpenGLTex().getImageWidth();
             }
-            if (textures[i].getImageHeight() > biggestHeight) {
-                biggestHeight = textures[i].getImageHeight();
+            if (textures[i].getOpenGLTex().getImageHeight() > biggestHeight) {
+                biggestHeight = textures[i].getOpenGLTex().getImageHeight();
             }
         }
         this.width = biggestWidth;
@@ -45,7 +45,7 @@ public class Button {
         return height;
     }
 
-    public Texture[] getTextures() {
+    public Tex[] getTextures() {
         return textures;
     }
 

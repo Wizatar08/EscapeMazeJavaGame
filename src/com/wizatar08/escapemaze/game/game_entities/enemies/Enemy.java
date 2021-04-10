@@ -4,15 +4,13 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.EnemyPathfinder;
 import com.wizatar08.escapemaze.helpers.Timer;
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
-import org.lwjgl.Sys;
-import org.newdawn.slick.opengl.Texture;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {
@@ -20,7 +18,7 @@ public class Enemy implements Entity {
     private float x, y, width, height, rot, hypotenuse, alarmSpeed;
     private String id;
     private int[][] pathCoords;
-    private Texture texture;
+    private Tex texture;
     private EnemyType type;
     private EnemyPathfinder pathfinder;
     private ArrayList<Player> playerInstances;
@@ -32,11 +30,11 @@ public class Enemy implements Entity {
         this.pathCoords = path;
         this.currentPathPoint = 0;
         this.type = EnemyType.ENEMY_IDS.get(this.id);
-        this.texture = LoadPNG("enemies/" + type.getTexture());
+        this.texture = new Tex("enemies/" + type.getTexture());
         this.x = path[0][0] * TILE_SIZE;
         this.y = path[0][1] * TILE_SIZE;
-        this.width = texture.getImageWidth();
-        this.height = texture.getImageHeight();
+        this.width = texture.getOpenGLTex().getImageWidth();
+        this.height = texture.getOpenGLTex().getImageHeight();
         this.hypotenuse = 0;
         this.pathfinder = new EnemyPathfinder(this);
         this.distanceView = type.getViewDistance();
@@ -75,7 +73,7 @@ public class Enemy implements Entity {
     }
 
     public void draw() {
-        drawQuadTex(texture, x + Game.DIS_X, y + Game.DIS_Y, width, height, rot);
+        texture.draw(x + Game.DIS_X, y + Game.DIS_Y, rot);
     }
 
     private void move() {

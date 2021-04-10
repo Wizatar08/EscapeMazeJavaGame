@@ -1,21 +1,18 @@
 package com.wizatar08.escapemaze.map.tile_types;
 
+import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
-import org.newdawn.slick.opengl.Texture;
-
-import static com.wizatar08.escapemaze.helpers.Drawer.LoadPNG;
-import static com.wizatar08.escapemaze.helpers.Drawer.drawQuadTex;
 
 public class MainComputer extends Tile {
     private Game gameController;
-    private Texture detectTex;
+    private Tex detectTex;
 
     public MainComputer(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         gameController = game;
-        detectTex = LoadPNG("tiles/selectors/tile_selector");
+        detectTex = new Tex("tiles/selectors/tile_selector");
     }
 
     @Override
@@ -28,7 +25,7 @@ public class MainComputer extends Tile {
     @Override
     public void onTile() {
         if (gameController.currentState() == Game.GameStates.ALARM) {
-            drawQuadTex(detectTex, getX(), getY());
+            detectTex.draw(getX(), getY());
         }
     }
 }
