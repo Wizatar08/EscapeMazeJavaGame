@@ -73,35 +73,40 @@ public class Settings {
         detectIfButtonHit();
     }
 
+    // Check if a key is pressed
+    private boolean mouseDown(int key) {
+        return (Mouse.getEventButton() == key) && (Mouse.getEventButtonState());
+    }
+
     private void detectIfButtonHit() {
-        if (Mouse.isButtonDown(0) && !buttonDown) {
-            buttonDown = true;
-            if (ui.isButtonClicked("Apply")) {
-                try {
-                    updateSettings();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        while (Mouse.next()) {
+            if (mouseDown(0)) {
+                if (ui.isButtonClicked("Apply")) {
+                    try {
+                        updateSettings();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (ui.isButtonClicked("Back")) {
+                    MenuRun.setState(Menus.MAIN_MENU);
+                }
+                if (ui.isButtonClicked("Lang")) {
+                    langIndex++;
+                    if (langIndex >= langs.length) {
+                        langIndex = 0;
+                    }
+                    ui.changeString("Lang", (Lang.get("settings.lang.current") + Lang.get("settings.lang." + langs[langIndex])));
+                }
+                if (ui.isButtonClicked("Window")) {
+                    if (windowSettings == "true") {
+                        windowSettings = "false";
+                    } else {
+                        windowSettings = "true";
+                    }
+                    ui.changeString("Window", (Lang.get("settings.window.current") + Lang.get("settings.window." + windowSettings)));
                 }
             }
-            if (ui.isButtonClicked("Back")) {
-                MenuRun.setState(Menus.MAIN_MENU);
-            }
-            if (ui.isButtonClicked("Lang")) {
-                langIndex++;
-                if (langIndex >= langs.length) {
-                    langIndex = 0;
-                }
-                ui.changeString("Lang", (Lang.get("settings.lang.current") + Lang.get("settings.lang." + langs[langIndex])));
-            } if (ui.isButtonClicked("Window")) {
-                if (windowSettings == "true") {
-                    windowSettings = "false";
-                } else {
-                    windowSettings = "true";
-                }
-                ui.changeString("Window", (Lang.get("settings.window.current") + Lang.get("settings.window." + windowSettings)));
-            }
-        } else {
-            buttonDown = false;
         }
     }
 
