@@ -14,7 +14,7 @@ public class TileDetectionSpot {
         this.isEscape = isEscapeTile;
     }
 
-    public static Tile detectAt(TileMap map, Tile tile, @NotNull EntityDetectDirection dir) {
+    public static Tile detectAt(TileMap map, Tile tile, @NotNull Direction dir) {
         switch (dir) {
             default:
                 return tile;

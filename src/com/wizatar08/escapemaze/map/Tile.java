@@ -7,6 +7,8 @@ import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -22,10 +24,12 @@ public class Tile implements Entity, TileEntity {
     private final boolean canPass, hasMultipleTexs;
     private Game game;
     private Class<? extends Tile> subClass;
+    private Condition rayTraceSeeable;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
         this.id = type.getId();
+        this.rayTraceSeeable = type.isRayTraceSeeable();
         this.x = x;
         this.y = y;
         this.initialX = x;
@@ -44,6 +48,67 @@ public class Tile implements Entity, TileEntity {
         this.activeInfluencesPassable = type.activeInfluencesPassable();
         this.requiredPassLevels = type.cardPassesNeeded();
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
+    }
+
+    public enum Condition {
+        ALWAYS, NONE, ONLY_IF_ACTIVE, ONLY_IF_NOT_ACTIVE,
+        PLAYER_ON_TILE, PLAYER_NOT_ON_TILE, PLAYER_TOUCHING_TILE, PLAYER_NOT_TOUCHING_TILE;
+
+        public boolean condition(Tile tile) {
+            switch (this) {
+                case NONE: return false;
+                case ALWAYS: return true;
+                case ONLY_IF_ACTIVE: return tile.isActive();
+                case ONLY_IF_NOT_ACTIVE: return !tile.isActive();
+                case PLAYER_ON_TILE:
+                    boolean isTrue = false;
+                    for (Player player : tile.game.getPlayerInstances()) {
+                        if (player.getOnTile() == tile) {
+                            isTrue = true;
+                        }
+                    }
+                    return isTrue;
+                case PLAYER_NOT_ON_TILE:
+                    boolean isTrue1 = false;
+                    for (Player player : tile.game.getPlayerInstances()) {
+                        if (player.getOnTile() == tile) {
+                            isTrue1 = true;
+                        }
+                    }
+                    return !isTrue1;
+                case PLAYER_TOUCHING_TILE:
+                    boolean isTrue2 = false;
+                    for (Player player : tile.game.getPlayerInstances()) {
+                        for (Tile tile1 : player.getAllSurroundingTiles()) {
+                            if (tile1 == tile && checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), tile.x, tile.y, tile.width, tile.height)) {
+                                isTrue2 = true;
+                            }
+                        }
+                    }
+                    return isTrue2;
+                case PLAYER_NOT_TOUCHING_TILE:
+                    boolean isTrue3 = false;
+                    for (Player player : tile.game.getPlayerInstances()) {
+                        for (Tile tile1 : player.getAllSurroundingTiles()) {
+                            if (tile1 == tile && checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), tile.x, tile.y, tile.width, tile.height)) {
+                                isTrue3 = true;
+                            }
+                        }
+                    }
+                    return !isTrue3;
+            }
+            return false;
+        }
+
+        public Condition inverse() {
+            switch (this) {
+                case ALWAYS: return NONE;
+                case NONE: return ALWAYS;
+                case ONLY_IF_ACTIVE: return ONLY_IF_NOT_ACTIVE;
+                case ONLY_IF_NOT_ACTIVE: return ONLY_IF_ACTIVE;
+            }
+            return null;
+        }
     }
 
     public boolean testIfPassable() {
@@ -83,7 +148,7 @@ public class Tile implements Entity, TileEntity {
     /**
      * Overridden in subclasses. Used to determine if a player is NEAR (Not on) this tile.
      */
-    public void playerNearTile() {}
+    public void playerNearTile(Direction direction) {}
     public boolean isOnTile() {
         Player player = game.getCurrentPlayer();
         return checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), x + 16, y + 16, x + width - 16, y - height - 16);
@@ -159,5 +224,8 @@ public class Tile implements Entity, TileEntity {
     }
     public Class<? extends Tile> getSubClass() {
         return subClass;
+    }
+    public boolean rayTraceSeeable() {
+        return rayTraceSeeable.condition(this);
     }
 }

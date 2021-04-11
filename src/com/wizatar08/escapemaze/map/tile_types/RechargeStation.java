@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.map.tile_types;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
@@ -63,7 +64,7 @@ public class RechargeStation extends Tile {
     }
 
     @Override
-    public void playerNearTile() {
+    public void playerNearTile(Direction direction) {
         if (itemCharging == null && gameController.getCurrentPlayer().getInventory().getCurrentSelectedItem() instanceof RechargableBattery) {
             detectItemTex.draw(getX(), getY());
         }

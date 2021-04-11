@@ -56,44 +56,48 @@ public enum TileType {
     METAL_WALL_52(new VariationID(IDTypes.TILE, "001", "52"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_corner_edge")}, new int[]{180})),
     METAL_WALL_53(new VariationID(IDTypes.TILE, "001", "53"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_corner_edge")}, new int[]{270})),
     METAL_WALL_54(new VariationID(IDTypes.TILE, "001", "54"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_full")}, new int[]{0})),
-    DEFAULT_FLOOR(new VariationID(IDTypes.TILE, "002", "00"), new Tex("tiles/default_floor"), new Builder().isPassable()),
-    METAL_WALL_DOOR_1(new VariationID(IDTypes.TILE, "003", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}).safeSpot(EntityDetectDirection.DOWN)),
-    METAL_WALL_DOOR_2(new VariationID(IDTypes.TILE, "003", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{90, 90}).safeSpot(EntityDetectDirection.LEFT)),
-    METAL_WALL_DOOR_3(new VariationID(IDTypes.TILE, "003", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{180, 180}).safeSpot(EntityDetectDirection.UP)),
-    METAL_WALL_DOOR_4(new VariationID(IDTypes.TILE, "003", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(EntityDetectDirection.RIGHT)),
-    COMPUTER_DEF_FLOOR_1(new VariationID(IDTypes.TILE, "004", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{0})),
-    COMPUTER_DEF_FLOOR_2(new VariationID(IDTypes.TILE, "004", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{90})),
-    COMPUTER_DEF_FLOOR_3(new VariationID(IDTypes.TILE, "004", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{180})),
-    COMPUTER_DEF_FLOOR_4(new VariationID(IDTypes.TILE, "004", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{270})),
-    METAL_WALL_EDOOR_1(new VariationID(IDTypes.TILE, "005", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}).safeSpot(EntityDetectDirection.DOWN).escapeDoor()),
-    METAL_WALL_EDOOR_2(new VariationID(IDTypes.TILE, "005", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{90, 90}).safeSpot(EntityDetectDirection.LEFT).escapeDoor()),
-    METAL_WALL_EDOOR_3(new VariationID(IDTypes.TILE, "005", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{180, 180}).safeSpot(EntityDetectDirection.UP).escapeDoor()),
-    METAL_WALL_EDOOR_4(new VariationID(IDTypes.TILE, "005", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{270, 270}).safeSpot(EntityDetectDirection.RIGHT).escapeDoor()),
-    DEFAULT_FLOOR_RED_LOCK(new VariationID(IDTypes.TILE, "006", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/red_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.RED_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_ORANGE_LOCK(new VariationID(IDTypes.TILE, "006", "02"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/orange_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.ORANGE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_YELLOW_LOCK(new VariationID(IDTypes.TILE, "006", "03"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/yellow_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.YELLOW_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_GREEN_LOCK(new VariationID(IDTypes.TILE, "006", "04"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/green_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.GREEN_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "05"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/blue_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.BLUE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_DARK_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "06"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/dark_blue_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.DARK_BLUE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/purple_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PURPLE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
-    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/pink_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PINK_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0})),
+    DEFAULT_FLOOR(new VariationID(IDTypes.TILE, "002", "00"), new Tex("tiles/default_floor"), new Builder().isPassable().rayTraceSeeable(Tile.Condition.ALWAYS)),
+    METAL_WALL_DOOR_1(new VariationID(IDTypes.TILE, "003", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}).safeSpot(Direction.DOWN)),
+    METAL_WALL_DOOR_2(new VariationID(IDTypes.TILE, "003", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{90, 90}).safeSpot(Direction.LEFT)),
+    METAL_WALL_DOOR_3(new VariationID(IDTypes.TILE, "003", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{180, 180}).safeSpot(Direction.UP)),
+    METAL_WALL_DOOR_4(new VariationID(IDTypes.TILE, "003", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_door")}, new int[]{270, 270}).safeSpot(Direction.RIGHT)),
+    COMPUTER_DEF_FLOOR_1(new VariationID(IDTypes.TILE, "004", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    COMPUTER_DEF_FLOOR_2(new VariationID(IDTypes.TILE, "004", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{90}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    COMPUTER_DEF_FLOOR_3(new VariationID(IDTypes.TILE, "004", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{180}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    COMPUTER_DEF_FLOOR_4(new VariationID(IDTypes.TILE, "004", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().securityComputer().overlayTex(new Tex[]{new Tex("tile_overlays/security_computers")}, new int[]{270}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    METAL_WALL_EDOOR_1(new VariationID(IDTypes.TILE, "005", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}).safeSpot(Direction.DOWN).escapeDoor()),
+    METAL_WALL_EDOOR_2(new VariationID(IDTypes.TILE, "005", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{90, 90}).safeSpot(Direction.LEFT).escapeDoor()),
+    METAL_WALL_EDOOR_3(new VariationID(IDTypes.TILE, "005", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{180, 180}).safeSpot(Direction.UP).escapeDoor()),
+    METAL_WALL_EDOOR_4(new VariationID(IDTypes.TILE, "005", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/basic_escape_door")}, new int[]{270, 270}).safeSpot(Direction.RIGHT).escapeDoor()),
+    DEFAULT_FLOOR_RED_LOCK(new VariationID(IDTypes.TILE, "006", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/red_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.RED_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_ORANGE_LOCK(new VariationID(IDTypes.TILE, "006", "02"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/orange_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.ORANGE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_YELLOW_LOCK(new VariationID(IDTypes.TILE, "006", "03"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/yellow_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.YELLOW_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_GREEN_LOCK(new VariationID(IDTypes.TILE, "006", "04"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/green_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.GREEN_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "05"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/blue_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.BLUE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_DARK_BLUE_LOCK(new VariationID(IDTypes.TILE, "006", "06"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/dark_blue_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.DARK_BLUE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_PURPLE_LOCK(new VariationID(IDTypes.TILE, "006", "07"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/purple_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PURPLE_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
+    DEFAULT_FLOOR_PINK_LOCK(new VariationID(IDTypes.TILE, "006", "08"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/pink_tint"), new Tex("tile_overlays/lock")}, new int[]{0, 0}).isPassable().itemUnlockDoor(ItemType.PINK_KEY, new Tex[]{new Tex("tile_overlays/lock")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ONLY_IF_NOT_ACTIVE)),
     DEFAULT_FLOOR_SECURE_PODIUM(new VariationID(IDTypes.TILE, "007", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/default_activated_secure_podium")}, new int[]{0}).isPassable().laserSecure(new Tex[]{new Tex("tile_overlays/default_deactivated_secure_podium")}, new int[]{0})),
     AUTHORITY_DOOR(new VariationID(IDTypes.TILE, "008", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/vault_locked")}, new int[]{0}).isPassable().authorityLock(new int[]{3, 2, 1}, new Tex[]{new Tex("tile_overlays/vault_unlocked")}, new int[]{0})),
-    PRES_PLATE_DEF_FLOOR_COMP_1(new VariationID(IDTypes.TILE, "009", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{0}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{0})),
-    PRES_PLATE_DEF_FLOOR_COMP_2(new VariationID(IDTypes.TILE, "009", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{90}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{90})),
-    PRES_PLATE_DEF_FLOOR_COMP_3(new VariationID(IDTypes.TILE, "009", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{180})),
-    PRES_PLATE_DEF_FLOOR_COMP_4(new VariationID(IDTypes.TILE, "009", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{270})),
+    PRES_PLATE_DEF_FLOOR_COMP_1(new VariationID(IDTypes.TILE, "009", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{0}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    PRES_PLATE_DEF_FLOOR_COMP_2(new VariationID(IDTypes.TILE, "009", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{90}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{90}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    PRES_PLATE_DEF_FLOOR_COMP_3(new VariationID(IDTypes.TILE, "009", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{180}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    PRES_PLATE_DEF_FLOOR_COMP_4(new VariationID(IDTypes.TILE, "009", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{270}).rayTraceSeeable(Tile.Condition.ALWAYS)),
     PRESSURE_PLATE_DEF_FLOOR(new VariationID(IDTypes.TILE, "010", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().pressurePlate().overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate")}, new int[]{0})),
-    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new Tex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f), new Tex("tile_overlays/recharge_station_has_battery_full", Renderer.TILE_SIZE, 0.5f))),
-    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler(new Tex("tile_overlays/refuel_station_has_object", Renderer.TILE_SIZE, 0.15f), new Tex("tile_overlays/refuel_station_has_object_full", Renderer.TILE_SIZE, 0.5f))),
-    METAL_WALL_MDET_0(new VariationID(IDTypes.TILE, "013", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{0, 180}).materialDetector(EntityDetectDirection.DOWN, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{0, 180})),
-    METAL_WALL_MDET_1(new VariationID(IDTypes.TILE, "013", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{90, 270}).materialDetector(EntityDetectDirection.LEFT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{90, 270})),
-    METAL_WALL_MDET_2(new VariationID(IDTypes.TILE, "013", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{180, 0}).materialDetector(EntityDetectDirection.UP, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{180, 0})),
-    METAL_WALL_MDET_3(new VariationID(IDTypes.TILE, "013", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{270, 90}).materialDetector(EntityDetectDirection.RIGHT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{270, 90})),
-    MAT_DETECT_DEF_FLOOR_COMP_1(new VariationID(IDTypes.TILE, "014", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{0}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{0})),
-    MAT_DETECT_DEF_FLOOR_COMP_2(new VariationID(IDTypes.TILE, "014", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{90}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{90})),
-    MAT_DETECT_DEF_FLOOR_COMP_3(new VariationID(IDTypes.TILE, "014", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{180}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{180})),
-    MAT_DETECT_DEF_FLOOR_COMP_4(new VariationID(IDTypes.TILE, "014", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{270}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{270}));
+    DEFAULT_RECHARGE_STATION(new VariationID(IDTypes.TILE, "011", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new Tex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f), new Tex("tile_overlays/recharge_station_has_battery_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    DEFAULT_REFUEL_STATION(new VariationID(IDTypes.TILE, "012", "01"), new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler(new Tex("tile_overlays/refuel_station_has_object", Renderer.TILE_SIZE, 0.15f), new Tex("tile_overlays/refuel_station_has_object_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    METAL_WALL_MDET_0(new VariationID(IDTypes.TILE, "013", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{0, 180}).materialDetector(Direction.DOWN, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{0, 180})),
+    METAL_WALL_MDET_1(new VariationID(IDTypes.TILE, "013", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{90, 270}).materialDetector(Direction.LEFT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{90, 270})),
+    METAL_WALL_MDET_2(new VariationID(IDTypes.TILE, "013", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{180, 0}).materialDetector(Direction.UP, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{180, 0})),
+    METAL_WALL_MDET_3(new VariationID(IDTypes.TILE, "013", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{270, 90}).materialDetector(Direction.RIGHT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{270, 90})),
+    MAT_DETECT_DEF_FLOOR_COMP_1(new VariationID(IDTypes.TILE, "014", "01"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{0}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{0}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    MAT_DETECT_DEF_FLOOR_COMP_2(new VariationID(IDTypes.TILE, "014", "02"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{90}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{90}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    MAT_DETECT_DEF_FLOOR_COMP_3(new VariationID(IDTypes.TILE, "014", "03"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{180}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{180}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    MAT_DETECT_DEF_FLOOR_COMP_4(new VariationID(IDTypes.TILE, "014", "04"), new Tex("tiles/default_floor"), new Builder().isPassable().overlayTex(new Tex[]{new Tex("tile_overlays/material_detector_computer_activated")}, new int[]{270}).materialDetectorComputer(new Tex[]{new Tex("tile_overlays/material_detector_computer_deactivated")}, new int[]{270}).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    DISPENSER_1(new VariationID(IDTypes.TILE, "015", "01"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{0, 0}).dispenser(Direction.UP)),
+    DISPENSER_2(new VariationID(IDTypes.TILE, "015", "02"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 90}).dispenser(Direction.RIGHT)),
+    DISPENSER_3(new VariationID(IDTypes.TILE, "015", "03"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{0, 180}).dispenser(Direction.DOWN)),
+    DISPENSER_4(new VariationID(IDTypes.TILE, "015", "04"), new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 270}).dispenser(Direction.LEFT));
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -119,19 +123,21 @@ public enum TileType {
     private final String id;
     private final Tex texture;
     private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer, startsActive, activeInfluencesPassasble;
-    private final EntityDetectDirection safeSpot;
+    private final Direction safeSpot;
     private final Tex[] overlayTex, activeTexture;
     private final int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
     public static Map<String, TileType> TILE_IDS; // ArrayList to store all different tile ids
     public static ArrayList<TileType> TILE_TYPES;
     private final Class<? extends Tile> subClass;
     private final Object[] subClassArgs;
+    private final Tile.Condition rayTraceSeeable;
 
     TileType(VariationID id, Tex texture, Builder builder) {
         createIdMapAndArrays();
         addToMap(id.getFullId(), this);
         this.id = id.getFullId();
         this.texture = texture;
+        this.rayTraceSeeable = builder.isRayTraceSeeable();
         this.startsActive = builder.startsActive();
         this.activeInfluencesPassasble = builder.activeInfluencesPassable();
         this.isPassable = builder.getIsPassable();
@@ -177,7 +183,7 @@ public enum TileType {
     public boolean isSafeSpot() {
         return isSafeSpot;
     }
-    public EntityDetectDirection getSafeSpot() {
+    public Direction getSafeSpot() {
         return safeSpot;
     }
     public Tex[] getOverlayTex() {
@@ -216,17 +222,21 @@ public enum TileType {
     public boolean activeInfluencesPassable() {
         return activeInfluencesPassasble;
     }
+    public Tile.Condition isRayTraceSeeable() {
+        return rayTraceSeeable;
+    }
 
     /**
      * Tile builder class.
      */
     private static class Builder {
-        public static EntityDetectDirection safeSpot;
+        public static Direction safeSpot;
         public static Tex[] activeTexture, overlayTex;
         public static int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
         public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate, startsActive, activeInfluencesPassable;
         public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
+        public static Tile.Condition rayTraceSeeable;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -234,7 +244,8 @@ public enum TileType {
         private Builder() {
             isPassable = false;
             isSafeSpot = false;
-            safeSpot = EntityDetectDirection.NONE;
+            rayTraceSeeable = Tile.Condition.NONE;
+            safeSpot = Direction.NONE;
             escapeDoor = false;
             overlayTex = new Tex[]{new Tex("tiles/blank")};
             overlayTexRot = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -269,10 +280,15 @@ public enum TileType {
             return this;
         }
 
+        private Builder rayTraceSeeable(Tile.Condition condition) {
+            this.rayTraceSeeable = condition;
+            return this;
+        }
+
         /**
          * Is safety tile
          */
-        private Builder safeSpot(EntityDetectDirection direction) {
+        private Builder safeSpot(Direction direction) {
             isSafeSpot = true;
             safeSpot = direction;
             return this;
@@ -385,7 +401,7 @@ public enum TileType {
             return this;
         }
 
-        private Builder materialDetector(EntityDetectDirection direction, Tex[] deactivatedTileTexture, int[] deactivatedTileTextureRots) {
+        private Builder materialDetector(Direction direction, Tex[] deactivatedTileTexture, int[] deactivatedTileTextureRots) {
             subClassArgs = new Object[]{direction};
             activeTexture = deactivatedTileTexture;
             activeTextureRots = deactivatedTileTextureRots;
@@ -402,9 +418,18 @@ public enum TileType {
             return this;
         }
 
+        private Builder dispenser(Direction direction) {
+            subclass(Dispenser.class);
+            subClassArgs = new Object[]{direction};
+            return this;
+        }
+
         // Getters
         public Class<? extends Tile> getSubClass() {
             return subClass;
+        }
+        public Tile.Condition isRayTraceSeeable() {
+            return rayTraceSeeable;
         }
         public boolean getIsPassable() {
             return isPassable;
@@ -412,7 +437,7 @@ public enum TileType {
         public boolean getIsSafeSpot() {
             return isSafeSpot;
         }
-        public EntityDetectDirection getSafeSpot() {
+        public Direction getSafeSpot() {
             return safeSpot;
         }
         public Tex[] getOverlayTex() {

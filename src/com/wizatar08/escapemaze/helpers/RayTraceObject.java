@@ -19,11 +19,7 @@ public class RayTraceObject {
      */
     public boolean scanDistance(int distanceView) {
         float dist = getDistance(x + (width / 2), y + (height / 2), targetX + (targetWidth / 2), targetY + (targetHeight / 2));
-        if (dist <= distanceView) {
-            //drawQuadTex(LoadPNG("shapes/enemy_vision"), targetX - 8 + (targetWidth / 2), targetY - 8 + (targetHeight / 2), 17, 17);
-            return true;
-        }
-        return false;
+        return dist <= distanceView;
     }
 
     /**
@@ -40,12 +36,9 @@ public class RayTraceObject {
             int xPlace = (int) Math.floor(x / Renderer.TILE_SIZE);
             int yPlace = (int) Math.floor(y / Renderer.TILE_SIZE);
             if (rayTraceEnemy != null) {
-                if (!rayTraceEnemy.getGameController().getMap().getMapAsArray()[xPlace][yPlace].getType().isPassable()) {
+                if (!rayTraceEnemy.getGameController().getMap().getMapAsArray()[xPlace][yPlace].getType().isRayTraceSeeable().condition(rayTraceEnemy.getGameController().getMap().getMapAsArray()[xPlace][yPlace])) {
                     return false;
                 }
-            }
-            if ((rayTraceEnemy.getAngleOfPlayerRelativeToEnemy() < ((float) rayTraceEnemy.getType().getAngleOfView() / 2) && rayTraceEnemy.getAngleOfPlayerRelativeToEnemy() > ((float) -rayTraceEnemy.getType().getAngleOfView() / 2))) {
-                //drawQuadTex(LoadPNG("shapes/enemy_vision"), (float) x, (float) y, 7, 7);
             }
         }
         return true;

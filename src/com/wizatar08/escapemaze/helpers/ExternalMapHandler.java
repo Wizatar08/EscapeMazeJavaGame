@@ -5,7 +5,7 @@ import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.menus.Menus;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
-import com.wizatar08.escapemaze.map.EntityDetectDirection;
+import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.menus.MenuRun;
@@ -61,7 +61,7 @@ public class ExternalMapHandler {
                         grid.setTile(i, j, getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)));
                         //System.out.println("TILE TYPE " + getTileType(map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6)) + ", " + map.substring((i * grid.getTilesHigh() + j) * 6, (i * grid.getTilesHigh() + j + 1) * 6) + ", " + TileType.DEFAULT_FLOOR_RED_LOCK.getId());
                         if (MenuRun.MENU == Menus.GAME) {
-                            if (grid.getTile(i, j).getType().getSafeSpot() != EntityDetectDirection.NONE) {
+                            if (grid.getTile(i, j).getType().getSafeSpot() != Direction.NONE) {
                                 grid.addSafeSpot(new TileDetectionSpot(TileDetectionSpot.detectAt(grid, grid.getTile(i, j), grid.getTile(i, j).getType().getSafeSpot()), grid.getTile(i, j), grid.getTile(i, j).getSubClass() == ExitSpot.class));
                             }
                         }

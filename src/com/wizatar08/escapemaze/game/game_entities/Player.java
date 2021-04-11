@@ -5,6 +5,7 @@ import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.interfaces.Entity;
@@ -16,6 +17,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
@@ -341,10 +344,19 @@ public class Player implements Entity {
         return list;
     }
 
+    public Map<Tile, Direction> getAllSurroundingTilesWithDirections() {
+        Map<Tile, Direction> list = new HashMap<>();
+        list.put(getUpTile(), Direction.UP);
+        list.put(getRightTile(), Direction.RIGHT);
+        list.put(getDownTile(), Direction.DOWN);
+        list.put(getLeftTile(), Direction.LEFT);
+        return list;
+    }
+
     private void detectIfAtSpecificTile() {
-        ArrayList<Tile> list = getAllSurroundingTiles();
-        for (Tile tile : list) {
-            tile.playerNearTile();
+        Map<Tile, Direction> list = getAllSurroundingTilesWithDirections();
+        for (int i = 0; i < list.size(); i++) {
+            ((Tile) list.keySet().toArray()[i]).playerNearTile(list.get(list.keySet().toArray()[i]));
         }
         if (getOnTile().isOnTile()) {
             getOnTile().onTile();

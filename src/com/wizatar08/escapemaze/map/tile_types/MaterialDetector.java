@@ -1,7 +1,7 @@
 package com.wizatar08.escapemaze.map.tile_types;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.map.EntityDetectDirection;
+import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.menus.Game;
@@ -13,13 +13,13 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class MaterialDetector extends Tile {
     private Game gameController;
-    private EntityDetectDirection detectDirection;
+    private Direction detectDirection;
     private ArrayList<Integer> xPoses, yPoses;
 
     public MaterialDetector(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
         gameController = game;
-        detectDirection = (EntityDetectDirection) type.subClassArgs()[0];
+        detectDirection = (Direction) type.subClassArgs()[0];
         xPoses = new ArrayList<>();
         yPoses = new ArrayList<>();
     }
