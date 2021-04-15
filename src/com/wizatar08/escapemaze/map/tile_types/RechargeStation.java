@@ -44,6 +44,7 @@ public class RechargeStation extends Tile {
     public void draw() {
         super.draw();
         if (batteryTex != null) {
+            batteryTex = itemCharging.getBatteryChargingTexture();
             if (itemCharging.getDurabilityPercentage() < 1.0f) {
                 hasItemTex.draw(getX(), getY());
             } else {
@@ -78,4 +79,6 @@ public class RechargeStation extends Tile {
         chargeBattery(itemCharging.getBatteryChargingTexture());
         itemCharging.destroy();
     }
+
+
 }

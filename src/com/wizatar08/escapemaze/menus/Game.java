@@ -6,6 +6,7 @@ import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.game.game_entities.items.subclasses.HelperBot;
 import com.wizatar08.escapemaze.helpers.*;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
@@ -29,7 +30,7 @@ public class Game {
     private String levelName;
     private ArrayList<Player> playerInstances;
     private ArrayList<Enemy> enemies;
-    private ArrayList<Item> items;
+    private ArrayList<Item> items, removedItems;
     private GameStates currentGameState, prevGameState;
     private UI ui, gameEndUI, textUI;
     private TextBlock fpsDisplay, timeDisplay, blank, alarmTimer, requiredItemsStolen;
@@ -40,6 +41,7 @@ public class Game {
     private Tex redScreen, alertBox, gameEndTex;
     private int currentPlayer;
     private boolean pressurePlatesActive, materialDetectorsActive;
+    private ArrayList<ItemType> itemsNeededForNewPlayerInstance;
 
     public Game() {
         ItemType nullItem = ItemType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
@@ -59,6 +61,7 @@ public class Game {
         }
         enemies = level.getEnemies(this);
         items = level.getItems(this);
+        removedItems = new ArrayList<>();
         currentGameState = GameStates.NORMAL;
         ui = new UI();
         gameEndUI = new UI();
@@ -119,6 +122,7 @@ public class Game {
                 map.getMapAsArray()[i][j].onMapCreation();
             }
         }
+        addRequiredNewPlayerItems();
     }
 
     public enum GameStates {
@@ -152,6 +156,7 @@ public class Game {
     }
 
     public void update() {
+        //playerInstances.forEach((p) -> System.out.println(p.getX() + ", " + p.getY()));
         if (currentGameState == GameStates.GAME_END) {
             detectIfButtonHitOnGameEnd();
         } else {
@@ -185,6 +190,8 @@ public class Game {
                 endGame(false);
             }
         }
+        removedItems.forEach((i) -> items.remove(i));
+        removedItems.clear();
     }
 
     private void alarm() {
@@ -290,7 +297,7 @@ public class Game {
     }
 
     public void removeItemFromGame(Item item) {
-        items.remove(item);
+        removedItems.add(item);
     }
 
     public void addItemToGame(Item item) {
@@ -310,6 +317,38 @@ public class Game {
         gameEndUI.setStringPos("GameOver", ((float) WIDTH / 2) - (gameEndUI.getString("GameOver").getX() / 2), 256);
         gameEndUI.drawAllStrings();
         gameEndUI.draw();
+    }
+
+    public void doHelperBotTasks(ArrayList<Item> items, HelperBot bot) {
+        ArrayList<Item> applicableItems;
+        if (canAddPlayer(items).size() >= itemsNeededForNewPlayerInstance.size()) {
+            applicableItems = canAddPlayer(items);
+            bot.beginCountdown();
+            if (bot.countdownAtZero()) {
+                applicableItems.forEach(Item::destroy);
+                System.out.println((bot.getX() / TILE_SIZE * TILE_SIZE) + ", " + (bot.getY() / TILE_SIZE * TILE_SIZE));
+                playerInstances.add(new Player(this, "red", (bot.getX() + TILE_SIZE) / TILE_SIZE, (bot.getY() + TILE_SIZE) / TILE_SIZE, map));
+                bot.setDurability(0);
+                bot.endCountdown();
+            }
+        }
+    }
+
+    private ArrayList<Item> canAddPlayer(ArrayList<Item> itemsList) {
+        ArrayList<Item> applicable = new ArrayList<>();
+        for (Item item : itemsList) {
+            if (itemsNeededForNewPlayerInstance.contains(item.getType()) && !applicable.contains(item)) {
+                applicable.add(item);
+            }
+        }
+        return applicable;
+    }
+
+    public void addRequiredNewPlayerItems() {
+        itemsNeededForNewPlayerInstance = new ArrayList<>();
+        itemsNeededForNewPlayerInstance.add(ItemType.INSTRUCTIONS);
+        itemsNeededForNewPlayerInstance.add(ItemType.PARTS_RED);
+        itemsNeededForNewPlayerInstance.add(ItemType.MINI_GENERATOR);
     }
 
     public void stealItem() {

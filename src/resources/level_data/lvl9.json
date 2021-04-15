@@ -1,0 +1,16 @@
+{
+  "level_name": "Level 9",
+  "map": "level9",
+  "player_start": [
+    {
+      "color": "red",
+      "x": 3,
+      "y": 3
+    }
+  ],
+  "enemies": "lvl9",
+  "items": "lvl9",
+  "scroll": "none",
+  "alarm_seconds": 35,
+  "inventory_slots": 5
+}

@@ -34,7 +34,11 @@ public enum ItemType {
     HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.3f).className(HoveringDevice.class)),
     SMALL_EMP(new VariationID(IDTypes.ITEM, "010", "01"), "small_emp", new Builder().weight(0.2f).className(SmallEMP.class)),
     EMP(new VariationID(IDTypes.ITEM, "010", "02"), "emp", new Builder().weight(1.3f).className(EMP.class)),
-    HACKED_COMPUTER(new VariationID(IDTypes.ITEM, "011", "01"), "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class));
+    HACKED_COMPUTER(new VariationID(IDTypes.ITEM, "011", "01"), "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class)),
+    INSTRUCTIONS(new VariationID(IDTypes.ITEM, "012", "01"), "instructions", new Builder().weight(0.5f)),
+    PARTS_RED(new VariationID(IDTypes.ITEM, "013", "01"), "red_robot_parts", new Builder().weight(1.5f)),
+    MINI_GENERATOR(new VariationID(IDTypes.ITEM, "014", "01"), "mini_generator", new Builder().weight(1.35f)),
+    HELPER_BOT(new VariationID(IDTypes.ITEM, "015", "01"), "helper_bot_unpowered", new Builder().weight(1.35f).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")}));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults

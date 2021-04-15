@@ -60,6 +60,11 @@ public class DurabilityItem extends Item {
         backgroundTex.draw(xVal + 2, yVal);
         barTex.draw(xVal + 2, yVal + 56, 0, barTex.getOpenGLTex().getImageWidth() * (durabilityTime.getTotalSeconds() / durabilityTime.getStartingSeconds()));
     }
+
+    public void setDurability(float durability) {
+        durabilityTime.setTime(durability);
+    }
+
     public void deplete() {
         durabilityTime.setTime(durabilityTime.getTotalSeconds() - (Clock.Delta() / 2));
     }
@@ -71,6 +76,12 @@ public class DurabilityItem extends Item {
     }
     public float getDurabilityPercentage() {
         return percentage;
+    }
+    public Tex getBackgroundBarTex() {
+        return backgroundTex;
+    }
+    public Tex getBarTex() {
+        return barTex;
     }
 
 }

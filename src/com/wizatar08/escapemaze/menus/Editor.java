@@ -1,5 +1,8 @@
 package com.wizatar08.escapemaze.menus;
 
+import com.google.gson.Gson;
+import com.wizatar08.escapemaze.game.JSONLevel;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Lang;
@@ -11,12 +14,14 @@ import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.glu.Project;
 
 import javax.swing.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
@@ -27,12 +32,14 @@ public class Editor {
     private TileMap map;
     private UI editorUI;
     private ArrayList<UI.Menu> menus;
+    private Gson gson;
     public static int displacementX;
     public static int displacementY;
     private TileType tileSelected;
     private int menuIndex;
     private boolean isSelectingEnemy, isPlacingItem;
     private ArrayList<Item> items;
+    private ArrayList<Enemy> enemies;
     private int[][] positions;
     private int index;
     private String id;
@@ -58,6 +65,7 @@ public class Editor {
         background = new Tex("backgrounds/main_menu");
         items = new ArrayList<>();
         status = new TextBlock(editorUI, "Status", "", 8, 8);
+        gson = new Gson();
     }
 
     private void changeMapSize(int width, int height) {
@@ -81,11 +89,15 @@ public class Editor {
             }
             if (keyDown(Keyboard.KEY_LSHIFT)) {
                 String mapName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
-                TileMap newMap = ExternalMapHandler.LoadMap(null, mapName);
-                if (newMap != null) {
+                try {
+                    InputStreamReader in = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/" + mapName + ".json"));
+                    JSONLevel lvlData = gson.fromJson(in, JSONLevel.class);
+                    TileMap newMap = ExternalMapHandler.LoadMap(null, lvlData.getMap());
                     map = newMap;
-                } else {
-                    JOptionPane.showMessageDialog(null, Lang.get("editor.load_map.error") + mapName + ".wtremm");
+                    items = lvlData.getItems(null);
+                    // ENEMIES HERE
+                } catch (NullPointerException e){
+                    JOptionPane.showMessageDialog(null, Lang.get("editor.load_map.error") + mapName + ".json");
                 }
             }
             if (keyDown(Keyboard.KEY_EQUALS)) {
@@ -277,7 +289,7 @@ public class Editor {
     }
 
     private void setPlacement() {
-        Tex t = new Tex("tiles/selectors/safe_space_selector");
+        Tex t = new Tex("tiles/selectors/item_selector");
         t.draw((int) Math.floor((Mouse.getX() - displacementX) / TILE_SIZE) * TILE_SIZE + displacementX, (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)) * TILE_SIZE +  displacementY);
     }
 

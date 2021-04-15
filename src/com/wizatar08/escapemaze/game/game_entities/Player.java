@@ -288,6 +288,7 @@ public class Player implements Entity {
         if (inventory.canAdd()) {
             gameController.removeItemFromGame(item);
             item.setIsInInventory(true);
+            item.onPickup();
             inventory.add(item);
         }
     }

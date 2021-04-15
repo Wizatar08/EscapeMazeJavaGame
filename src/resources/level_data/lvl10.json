@@ -1,0 +1,16 @@
+{
+  "level_name": "Level 10",
+  "map": "level10",
+  "player_start": [
+    {
+      "color": "red",
+      "x": 13,
+      "y": 6
+    }
+  ],
+  "enemies": "lvl10",
+  "items": "lvl10",
+  "scroll": "none",
+  "alarm_seconds": 30,
+  "inventory_slots": 5
+}

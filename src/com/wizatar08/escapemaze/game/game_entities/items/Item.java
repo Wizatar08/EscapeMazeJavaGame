@@ -2,11 +2,14 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.helpers.drawings.Drawer;
 import com.wizatar08.escapemaze.helpers.drawings.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
+
+import java.util.ArrayList;
 
 public class Item implements Entity {
     private final Game gameController;
@@ -72,7 +75,20 @@ public class Item implements Entity {
                     p.getInventory().remove(p.getInventory().getItemIndex(this));
                 }
             });
+        } else {
+            gameController.removeItemFromGame(this);
         }
+    }
+
+    public boolean isTouching(Item... items) {
+        int required = items.length, found = 0;
+        ArrayList<? extends Item> itemsTouched;
+        for (Item item : items) {
+            if (Drawer.checkCollision(x, y, width, height, item.getX(), item.getY(), item.getWidth(), item.getHeight())) {
+                found++;
+            }
+        }
+        return required >= found;
     }
 
     @Override
@@ -82,6 +98,8 @@ public class Item implements Entity {
     }
 
     public void drop() {}
+
+    public void onPickup() {}
 
     @Override
     public float getX() {
