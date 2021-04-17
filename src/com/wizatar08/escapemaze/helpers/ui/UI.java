@@ -179,7 +179,6 @@ public class UI {
             if (b.getText() != null) {
                 b.getText().draw();
             }
-            blank.draw();
         }
         for (Menu m: menuList) {
             m.draw();
@@ -194,7 +193,7 @@ public class UI {
     public class Menu {
         String name;
         private ArrayList<Button> menuButtons;
-        private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset;
+        private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset, yDist;
         private boolean show;
         private Tex background;
         private TextBlock blank;
@@ -208,13 +207,14 @@ public class UI {
             this.optionsWidth = optionsWidth;
             this.optionsHeight = optionsHeight;
             this.background = background;
-            this.padding = (width - (optionsWidth * TILE_SIZE)) / (optionsWidth + 1);
+            this.padding = (width - optionsWidth) / (optionsWidth + 1);
             this.xOffset = xOffset;
             this.yOffset = yOffset;
             this.buttonAmount = 0;
             this.menuButtons = new ArrayList<Button>();
             this.show = true;
             this.blank = new TextBlock(null, "blank", "", 0, 0, 24f, Color.white);
+            this.yDist = height / optionsHeight;
         }
 
         public void addButton(String name, Tex[] buttonTextures) {
@@ -254,22 +254,28 @@ public class UI {
         }
 
         private void setButton(Button b) {
-            if (optionsWidth != 0) b.setY(y + (buttonAmount / optionsWidth) * TILE_SIZE);
-            b.setX(x + (buttonAmount % optionsWidth) * (padding + TILE_SIZE) + padding);
+            if (optionsWidth != 0) {
+                b.setY(y + (buttonAmount / optionsWidth) * yDist);
+            }
+            b.setX(x + (buttonAmount % optionsWidth) * padding);
             buttonAmount++;
             menuButtons.add(b);
         }
 
         public boolean isButtonClicked(String buttonName) {
-            Button b = getButton(buttonName);
-            float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
-            return
-                    (
-                    Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) &&
-                    Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) &&
-                    mouseY > ((float) b.getY() * stretchedMultiplierTotal) &&
-                    mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal)
-                    ) && show;
+            try {
+                Button b = getButton(buttonName);
+                float mouseY = (HEIGHT - Mouse.getY() - 1) - (Display.getHeight() - ((float) HEIGHT * stretchedMultiplierTotal) - (Display.getHeight() - HEIGHT));
+                return
+                        (
+                                Mouse.getX() > ((float) b.getX() * stretchedMultiplierTotal) &&
+                                        Mouse.getX() < (((float) b.getX() + b.getWidth()) * stretchedMultiplierTotal) &&
+                                        mouseY > ((float) b.getY() * stretchedMultiplierTotal) &&
+                                        mouseY < (((float) b.getY() + b.getHeight()) * stretchedMultiplierTotal)
+                        ) && show;
+            } catch (NullPointerException e) {
+                return false;
+            }
         }
 
         private Button getButton(String buttonName) {
@@ -283,11 +289,10 @@ public class UI {
 
         public void draw() {
             if (show) {
-                //if (background != null) drawQuadTex(background, -xOffset + x, -yOffset + y, width, height);
                 for (Button b : menuButtons) {
                     for (int i = 0; i < b.getTextures().length; i++) {
                         if (i == 0) {
-                            b.getTextures()[i].draw(b.getX(), b.getY());
+                            b.getTextures()[0].draw(b.getX(), b.getY());
                         } else {
                             b.getTextures()[i].draw(b.getX(), b.getY(), b.getRots()[i - 1]);
                         }

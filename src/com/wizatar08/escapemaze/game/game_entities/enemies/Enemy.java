@@ -90,54 +90,8 @@ public class Enemy implements Entity {
         texture.draw(x + Game.DIS_X, y + Game.DIS_Y, rot);
     }
 
-    public static BigDecimal sqrtBigDecimal(BigDecimal n) {
-        if (n.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO;
-        } else if (n.compareTo(BigDecimal.ONE) == 0) {
-            return BigDecimal.ONE;
-        } else if (n.signum() < 0) {
-            throw new ArithmeticException("Negative BigDecimal: " + n.floatValue());
-        }
-
-        MathContext mc = new MathContext(34, RoundingMode.HALF_UP);
-
-        BigDecimal xk;
-        BigDecimal delta;
-        Double d = n.doubleValue();
-        double minSqr = Double.MIN_VALUE*Double.MIN_VALUE;
-        if (!d.isInfinite() && d > minSqr) {
-            double dSqrt = Math.sqrt(d);
-            delta = new BigDecimal(BigInteger.ONE, mc.getPrecision());
-            xk = BigDecimal.valueOf(dSqrt);
-        } else {
-            int scale = n.scale();
-            BigInteger value = n.unscaledValue();
-            if (scale != 0) {
-                if (scale % 2 != 0) {
-                    scale++;
-                    value = value.multiply(BigInteger.TEN);
-                }
-                scale /= 2;
-            }
-            int precision = scale < 0 ?
-                    mc.getPrecision() : scale + mc.getPrecision();
-            delta = new BigDecimal(BigInteger.ONE, precision);
-            int rightShift = value.bitCount()/2;
-            xk = new BigDecimal(value.shiftRight(rightShift), scale);
-        }
-
-        BigDecimal two = BigDecimal.valueOf(2);
-        BigDecimal xk1 = n.divide(xk, mc).add(xk).divide(two, mc);
-        while (xk1.subtract(xk).abs().compareTo(delta) > 0) {
-            xk = xk1;
-            xk1 = n.divide(xk, mc).add(xk).divide(two, mc);
-        }
-
-        return xk1;
-    }
-
     private void move() {
-        if (hypotenuse.intValue() < 0 && checkCollision(x, y, width + 17, height + 17, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
+        if (hypotenuse.intValue() < 0 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
             nextPath();
             hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
         }

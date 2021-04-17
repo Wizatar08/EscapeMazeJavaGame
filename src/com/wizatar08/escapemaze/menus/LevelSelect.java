@@ -21,19 +21,28 @@ public class LevelSelect {
         background = new Tex("backgrounds/main_menu");
         path = "buttons/level_buttons/";
         levelSelectionUI = new UI();
-        levelSelectionUI.createMenu("Levels", 100, 100, WIDTH - 200, 96 * 7, 7, 3);
+        levelSelectionUI.createMenu("Levels", 120, 100, WIDTH - 128, (int) Math.round(96 * 6.5), 10, 6, null, 16, 8);
         levelMenu = levelSelectionUI.getMenu("Levels");
-        levelMenu.addButton("L1", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L1", Lang.get("level_select.level_button.1"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L2", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L2", Lang.get("level_select.level_button.2"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L3", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L3", Lang.get("level_select.level_button.3"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L4", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L4", Lang.get("level_select.level_button.4"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L5", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L5", Lang.get("level_select.level_button.5"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L6", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L6", Lang.get("level_select.level_button.6"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L7", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L7", Lang.get("level_select.level_button.7"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L8", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L8", Lang.get("level_select.level_button.8"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L9", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L9", Lang.get("level_select.level_button.9"), 25, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L10", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L10", Lang.get("level_select.level_button.10"), 15, 10, 48, Color.red), true, true);
-        levelMenu.addButton("L11", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L11", Lang.get("level_select.level_button.11"), 15, 10, 48, Color.red), true, true);
+        levelMenu.addButton("L1", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L1", Lang.get("level_select.level_button.1"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L2", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L2", Lang.get("level_select.level_button.2"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L3", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L3", Lang.get("level_select.level_button.3"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L4", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L4", Lang.get("level_select.level_button.4"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L5", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L5", Lang.get("level_select.level_button.5"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L6", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L6", Lang.get("level_select.level_button.6"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L7", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L7", Lang.get("level_select.level_button.7"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L8", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L8", Lang.get("level_select.level_button.8"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L9", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L9", Lang.get("level_select.level_button.9"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L10", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L10", Lang.get("level_select.level_button.10"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L11", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L11", Lang.get("level_select.level_button.11"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L12", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L12", Lang.get("level_select.level_button.12"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L13", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L13", Lang.get("level_select.level_button.13"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L14", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L14", Lang.get("level_select.level_button.14"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L15", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L15", Lang.get("level_select.level_button.15"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L16", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L16", Lang.get("level_select.level_button.16"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L17", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L17", Lang.get("level_select.level_button.17"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L18", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L18", Lang.get("level_select.level_button.18"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L19", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L19", Lang.get("level_select.level_button.19"), 0, 0, 32, Color.red), true, true);
+        levelMenu.addButton("L20", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L20", Lang.get("level_select.level_button.20"), 0, 0, 32, Color.red), true, true);
     }
 
     // Detect if button is pressed
@@ -55,13 +64,13 @@ public class LevelSelect {
 
     // Loop
     public void update() {
-        background.draw(0, 0);
         detectIfButtonHit();
         draw();
     }
 
     // Draw objects on stage
     private void draw() {
+        background.draw(0, 0);
         levelSelectionUI.draw();
     }
 
