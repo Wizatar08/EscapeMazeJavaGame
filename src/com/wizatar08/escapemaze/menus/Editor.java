@@ -326,9 +326,8 @@ public class Editor {
         int h = 11;
         for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
             int ceil = (int) Math.ceil(i / (w * h));
-            if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 20, 220, 704, 3, 11);
+            if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 20, 204, 744, 3, 11);
             Tex[] textures = new Tex[TileType.TILE_TYPES.get(i).getOverlayTex().length + 1];
-            int ind = 0;
             textures[0] = TileType.TILE_TYPES.get(i).getTexture();
             for (int j = 0; j < TileType.TILE_TYPES.get(i).getOverlayTex().length; j++) {
                 textures[j + 1] = TileType.TILE_TYPES.get(i).getOverlayTex()[j];

@@ -154,12 +154,12 @@ public class UI {
         return null;
     }
 
-    public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background, int xOffset, int yOffset) {
-        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, background, xOffset, yOffset));
+    public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background) {
+        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, background));
     }
 
     public void createMenu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight) {
-        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, null, 0, 0));
+        menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, null));
     }
 
     public Menu getMenu(String name) {
@@ -193,23 +193,19 @@ public class UI {
     public class Menu {
         String name;
         private ArrayList<Button> menuButtons;
-        private int x, y, width, height, buttonAmount, optionsWidth, optionsHeight, padding, xOffset, yOffset, yDist;
+        private int x, y, width, height, buttonAmount, optionsWidth, yDist;
         private boolean show;
         private Tex background;
         private TextBlock blank;
 
-        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background, int xOffset, int yOffset) {
+        public Menu(String name, int x, int y, int width, int height, int optionsWidth, int optionsHeight, Tex background) {
             this.name = name;
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
             this.optionsWidth = optionsWidth;
-            this.optionsHeight = optionsHeight;
             this.background = background;
-            this.padding = (width - optionsWidth) / (optionsWidth + 1);
-            this.xOffset = xOffset;
-            this.yOffset = yOffset;
             this.buttonAmount = 0;
             this.menuButtons = new ArrayList<Button>();
             this.show = true;
@@ -257,7 +253,7 @@ public class UI {
             if (optionsWidth != 0) {
                 b.setY(y + (buttonAmount / optionsWidth) * yDist);
             }
-            b.setX(x + (buttonAmount % optionsWidth) * padding);
+            b.setX(x + (buttonAmount % optionsWidth) * (width / optionsWidth));
             buttonAmount++;
             menuButtons.add(b);
         }

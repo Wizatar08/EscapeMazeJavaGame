@@ -21,7 +21,7 @@ public class LevelSelect {
         background = new Tex("backgrounds/main_menu");
         path = "buttons/level_buttons/";
         levelSelectionUI = new UI();
-        levelSelectionUI.createMenu("Levels", 120, 100, WIDTH - 128, (int) Math.round(96 * 6.5), 10, 6, null, 16, 8);
+        levelSelectionUI.createMenu("Levels", 80, 100, WIDTH - 128, (int) Math.round(96 * 6.5), 10, 6, null);
         levelMenu = levelSelectionUI.getMenu("Levels");
         levelMenu.addButton("L1", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L1", Lang.get("level_select.level_button.1"), 0, 0, 32, Color.red), true, true);
         levelMenu.addButton("L2", new Tex[]{new Tex(path + "lvlselect")}, new TextBlock(levelSelectionUI, "L2", Lang.get("level_select.level_button.2"), 0, 0, 32, Color.red), true, true);
