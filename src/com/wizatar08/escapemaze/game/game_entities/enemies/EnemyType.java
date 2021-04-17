@@ -8,8 +8,8 @@ import java.util.*;
 public enum EnemyType {
     // IDTYPE: 2
     NULL(new VariationID(IDTypes.ENEMY), "null", new Builder()),
-    CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60)),
-    SPEED_GUARD(new VariationID(IDTypes.ENEMY, "002", "00"), "speed_guard", new Builder().speed(72.0f).viewDistance(128).angleOfView(60));
+    CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60).hitBoxSize(48)),
+    SPEED_GUARD(new VariationID(IDTypes.ENEMY, "002", "00"), "speed_guard", new Builder().speed(72.0f).viewDistance(128).angleOfView(60).hitBoxSize(44));
 
     /*
      * IDEAS FOR NEW ENEMIES:
@@ -29,7 +29,7 @@ public enum EnemyType {
     private String id;
     private String texture;
     private float speed, alarmSpeed;
-    private int viewDistance, angleOfView;
+    private int viewDistance, angleOfView, hitBoxSize;
 
     public static HashMap<String, EnemyType> ENEMY_IDS;
 
@@ -42,6 +42,7 @@ public enum EnemyType {
         this.viewDistance = builder.getViewDistance();
         this.angleOfView = builder.getangleOfView();
         this.alarmSpeed = builder.getAlarmSpeed();
+        this.hitBoxSize = builder.getHitBoxSize();
     }
 
     private void createIdMapAndArrays() {
@@ -72,15 +73,16 @@ public enum EnemyType {
     public float getAlarmSpeed() {
         return alarmSpeed;
     }
+    public int getHitBoxSize() {
+        return hitBoxSize;
+    }
 
     /**
      * Tile builder class
      */
     private static class Builder {
-        private float speed;
-        private float alarmSpeed;
-        private int viewDistance;
-        private int angleOfView;
+        private float speed, alarmSpeed;
+        private int viewDistance, angleOfView, hitBoxSize;
 
         /**
          * Builder constructor. Defines all variables to its default value.
@@ -90,6 +92,7 @@ public enum EnemyType {
             viewDistance = 64;
             angleOfView = 45;
             alarmSpeed = 2.0f;
+            hitBoxSize = 64;
         }
 
         private Builder speed(float speed) {
@@ -112,6 +115,11 @@ public enum EnemyType {
             return this;
         }
 
+        private Builder hitBoxSize(int hbs) {
+            this.hitBoxSize = hbs;
+            return this;
+        }
+
 
         public float getSpeed() {
             return speed;
@@ -124,6 +132,9 @@ public enum EnemyType {
         }
         public float getAlarmSpeed() {
             return alarmSpeed;
+        }
+        public int getHitBoxSize() {
+            return hitBoxSize;
         }
     }
 }

@@ -18,11 +18,11 @@ import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {
-    private int currentPathPoint, distanceView;
+    private int currentPathPoint, distanceView, hitBoxSize;
     private float x, y, width, height, rot, alarmSpeed;
     private String id;
     private final BigDecimal[][] pathCoords;
-    private Tex texture;
+    private Tex texture, test;
     private EnemyType type;
     private EnemyPathfinder pathfinder;
     private ArrayList<Player> playerInstances;
@@ -33,6 +33,8 @@ public class Enemy implements Entity {
     public Enemy(Game game, int id, int[][] path) {
         this.id = String.valueOf(id);
         this.pathCoords = new BigDecimal[path.length][2];
+
+        this.test = new Tex("shapes/enemy_vision");
 
         for (int i = 0; i < path.length; i++) {
             for (int j = 0; j < path[i].length; j++) {
@@ -55,6 +57,7 @@ public class Enemy implements Entity {
         this.playerInstances = game.getPlayerInstances();
         this.gameController = game;
         this.alarmSpeed = type.getAlarmSpeed();
+        this.hitBoxSize = type.getHitBoxSize();
         this.freezeTime = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         multiplyPaths();
     }
@@ -131,10 +134,11 @@ public class Enemy implements Entity {
             if (pathfinder.scanForWalls(distanceView, p) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !playerInstances.get(gameController.getCurrentPlayerIndex()).isSafe()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
-            if (checkCollision(x, y, width, height, p.getX(), p.getY(), p.getWidth(), p.getHeight()) && !p.isSafe()) {
+            if (checkCollision((width - hitBoxSize) / 2 + x, (height - hitBoxSize) / 2 + y, hitBoxSize, hitBoxSize, p.getX(), p.getY(), p.getWidth(), p.getHeight()) && !p.isSafe()) {
                 gameController.setState(Game.GameStates.GAME_END);
                 gameController.endGame(false);
             }
+            //test.draw((width - hitBoxSize) / 2 + x, (height - hitBoxSize) / 2 + y, 0, hitBoxSize, hitBoxSize);
         });
     }
 
