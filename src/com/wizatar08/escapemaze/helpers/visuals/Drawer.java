@@ -1,21 +1,13 @@
-package com.wizatar08.escapemaze.helpers.drawings;
+package com.wizatar08.escapemaze.helpers.visuals;
 
-import apple.laf.JRSUIUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.glu.Project;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 

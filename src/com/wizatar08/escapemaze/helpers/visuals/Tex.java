@@ -1,9 +1,9 @@
-package com.wizatar08.escapemaze.helpers.drawings;
+package com.wizatar08.escapemaze.helpers.visuals;
 
 import com.wizatar08.escapemaze.helpers.Timer;
 import org.newdawn.slick.opengl.Texture;
 
-import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 
 public class Tex {
     private final int imageHeight, totalFrames;
