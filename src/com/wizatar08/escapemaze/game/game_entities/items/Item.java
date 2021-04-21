@@ -2,8 +2,8 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.drawings.Drawer;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Drawer;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;

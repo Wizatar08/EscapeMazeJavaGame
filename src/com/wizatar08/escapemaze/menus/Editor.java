@@ -6,8 +6,9 @@ import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Lang;
-import com.wizatar08.escapemaze.helpers.TextBlock;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.InputTextBlock;
+import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
@@ -15,6 +16,7 @@ import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.glu.Project;
+import org.newdawn.slick.Color;
 
 import javax.swing.*;
 
@@ -45,6 +47,7 @@ public class Editor {
     private String id;
     private boolean buttonPressed;
     private TextBlock status;
+    private InputTextBlock test;
 
     public Editor() {
         editorUI = new UI();
@@ -66,6 +69,7 @@ public class Editor {
         items = new ArrayList<>();
         status = new TextBlock(editorUI, "Status", "", 8, 8);
         gson = new Gson();
+        test = new InputTextBlock(editorUI, "test", "", 0, 0, 512, 48, 24, Color.red);
     }
 
     private void changeMapSize(int width, int height) {
@@ -87,7 +91,7 @@ public class Editor {
             if (keyDown(Keyboard.KEY_S)) {
                 ExternalMapHandler.SaveMap("map", map);
             }
-            if (keyDown(Keyboard.KEY_LSHIFT)) {
+            if (keyDown(Keyboard.KEY_M)) {
                 String mapName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
                 try {
                     InputStreamReader in = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/" + mapName + ".json"));
@@ -294,6 +298,7 @@ public class Editor {
     }
 
     public void update() {
+        test.update();
         detectKey();
         detectIfButtonDown();
         showMenu();
@@ -301,6 +306,7 @@ public class Editor {
         if (isSelectingEnemy || isPlacingItem) {
             setPlacement();
         }
+        test.draw();
     }
 
     private void draw() {

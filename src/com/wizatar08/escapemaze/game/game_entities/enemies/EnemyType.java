@@ -1,15 +1,12 @@
 package com.wizatar08.escapemaze.game.game_entities.enemies;
 
-import com.wizatar08.escapemaze.helpers.IDTypes;
-import com.wizatar08.escapemaze.helpers.VariationID;
-
 import java.util.*;
 
 public enum EnemyType {
     // IDTYPE: 2
-    NULL(new VariationID(IDTypes.ENEMY), "null", new Builder()),
-    CUBE_SCANNER(new VariationID(IDTypes.ENEMY, "001", "00"), "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60).hitBoxSize(48)),
-    SPEED_GUARD(new VariationID(IDTypes.ENEMY, "002", "00"), "speed_guard", new Builder().speed(72.0f).viewDistance(128).angleOfView(60).hitBoxSize(44));
+    NULL("200000", "null", new Builder()),
+    CUBE_SCANNER("200100", "cube_scanner", new Builder().speed(30.0f).viewDistance(256).angleOfView(60).hitBoxSize(48)),
+    SPEED_GUARD("200200", "speed_guard", new Builder().speed(72.0f).viewDistance(128).angleOfView(60).hitBoxSize(44));
 
     /*
      * IDEAS FOR NEW ENEMIES:
@@ -33,10 +30,10 @@ public enum EnemyType {
 
     public static HashMap<String, EnemyType> ENEMY_IDS;
 
-    EnemyType(VariationID id, String texture, Builder builder) {
+    EnemyType(String id, String texture, Builder builder) {
         createIdMapAndArrays();
-        addToMap(id.getFullId(), this);
-        this.id = id.getFullId();
+        addToMap(id, this);
+        this.id = id;
         this.texture = texture;
         this.speed = builder.getSpeed();
         this.viewDistance = builder.getViewDistance();

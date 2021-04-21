@@ -3,42 +3,40 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.*;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RefuelableGasCan;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
-import com.wizatar08.escapemaze.helpers.IDTypes;
-import com.wizatar08.escapemaze.helpers.VariationID;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 
 import java.util.*;
 
 public enum ItemType {
     // IDTYPE: 3
-    NULL(new VariationID(IDTypes.ITEM, "000", "00"), "null", new Builder()),
-    RED_KEY(new VariationID(IDTypes.ITEM, "001", "01"), "red_key", new Builder().weight(0.1f).className(Key.class)),
-    ORANGE_KEY(new VariationID(IDTypes.ITEM, "001", "02"), "orange_key", new Builder().weight(0.1f).className(Key.class)),
-    YELLOW_KEY(new VariationID(IDTypes.ITEM, "001", "03"), "yellow_key", new Builder().weight(0.1f).className(Key.class)),
-    GREEN_KEY(new VariationID(IDTypes.ITEM, "001", "04"), "green_key", new Builder().weight(0.1f).className(Key.class)),
-    BLUE_KEY(new VariationID(IDTypes.ITEM, "001", "05"), "blue_key", new Builder().weight(0.1f).className(Key.class)),
-    DARK_BLUE_KEY(new VariationID(IDTypes.ITEM, "001", "06"), "dark_blue_key", new Builder().weight(0.1f).className(Key.class)),
-    PURPLE_KEY(new VariationID(IDTypes.ITEM, "001", "07"), "purple_key", new Builder().weight(0.1f).className(Key.class)),
-    PINK_KEY(new VariationID(IDTypes.ITEM, "001", "08"), "pink_key", new Builder().weight(0.1f).className(Key.class)),
-    DIAMOND(new VariationID(IDTypes.ITEM, "002", "01"), "diamond", new Builder().weight(0.2f).required()),
-    LARGE_DIAMOND(new VariationID(IDTypes.ITEM, "002", "02"), "large_diamond", new Builder().weight(0.65f).required()), // Must always be surrounded by lasers
-    RUBY(new VariationID(IDTypes.ITEM, "002", "03"), "ruby", new Builder().weight(0.3f).required()),
-    LASER_DEACTIVATOR(new VariationID(IDTypes.ITEM, "003", "01"), "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class)),
-    PASS_1(new VariationID(IDTypes.ITEM, "004", "01"), "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
-    PASS_2(new VariationID(IDTypes.ITEM, "004", "02"), "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
-    PASS_3(new VariationID(IDTypes.ITEM, "004", "03"), "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
-    BASIC_BATTERY(new VariationID(IDTypes.ITEM, "005", "01"), "battery", new Builder().weight(0.3f).powerSource().className(RechargableBattery.class, new Object[]{40, new Tex("tile_overlays/battery_plugged")})),
-    BASIC_GAS_CAN(new VariationID(IDTypes.ITEM, "006", "01"), "gas_can", new Builder().weight(0.4f).gasSource().className(RefuelableGasCan.class, new Object[]{40, new Tex("tile_overlays/gas_can_refuel")})),
-    BOOSTER(new VariationID(IDTypes.ITEM, "007", "01"), "booster", new Builder().weight(0.6f).className(Booster.class)),
-    ADMIN_ACCESSOR(new VariationID(IDTypes.ITEM, "008", "01"), "admin_pass", new Builder().weight(0.2f)),
-    HOVERING_DEVICE(new VariationID(IDTypes.ITEM, "009", "01"), "hovering_device", new Builder().weight(0.3f).className(HoveringDevice.class)),
-    SMALL_EMP(new VariationID(IDTypes.ITEM, "010", "01"), "small_emp", new Builder().weight(0.2f).className(SmallEMP.class)),
-    EMP(new VariationID(IDTypes.ITEM, "010", "02"), "emp", new Builder().weight(1.3f).className(EMP.class)),
-    HACKED_COMPUTER(new VariationID(IDTypes.ITEM, "011", "01"), "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class)),
-    INSTRUCTIONS(new VariationID(IDTypes.ITEM, "012", "01"), "instructions", new Builder().weight(0.5f)),
-    PARTS_RED(new VariationID(IDTypes.ITEM, "013", "01"), "red_robot_parts", new Builder().weight(1.5f)),
-    MINI_GENERATOR(new VariationID(IDTypes.ITEM, "014", "01"), "mini_generator", new Builder().weight(1.35f)),
-    HELPER_BOT(new VariationID(IDTypes.ITEM, "015", "01"), "helper_bot_unpowered", new Builder().weight(1.35f).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")}));
+    NULL("300000", "null", new Builder()),
+    RED_KEY("300101", "red_key", new Builder().weight(0.1f).className(Key.class)),
+    ORANGE_KEY("300102", "orange_key", new Builder().weight(0.1f).className(Key.class)),
+    YELLOW_KEY("300103", "yellow_key", new Builder().weight(0.1f).className(Key.class)),
+    GREEN_KEY("300104", "green_key", new Builder().weight(0.1f).className(Key.class)),
+    BLUE_KEY("300105", "blue_key", new Builder().weight(0.1f).className(Key.class)),
+    DARK_BLUE_KEY("300106", "dark_blue_key", new Builder().weight(0.1f).className(Key.class)),
+    PURPLE_KEY("300107", "purple_key", new Builder().weight(0.1f).className(Key.class)),
+    PINK_KEY("300108", "pink_key", new Builder().weight(0.1f).className(Key.class)),
+    DIAMOND("300201", "diamond", new Builder().weight(0.2f).required()),
+    LARGE_DIAMOND("300202", "large_diamond", new Builder().weight(0.65f).required()), // Must always be surrounded by lasers
+    RUBY("300203", "ruby", new Builder().weight(0.3f).required()),
+    LASER_DEACTIVATOR("300301", "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class)),
+    PASS_1("300401", "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
+    PASS_2("300402", "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
+    PASS_3("300403", "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
+    BASIC_BATTERY("300501", "battery", new Builder().weight(0.3f).powerSource().className(RechargableBattery.class, new Object[]{40, new Tex("tile_overlays/battery_plugged")})),
+    BASIC_GAS_CAN("300601", "gas_can", new Builder().weight(0.4f).gasSource().className(RefuelableGasCan.class, new Object[]{40, new Tex("tile_overlays/gas_can_refuel")})),
+    BOOSTER("300701", "booster", new Builder().weight(0.6f).className(Booster.class)),
+    ADMIN_ACCESSOR("300801", "admin_pass", new Builder().weight(0.2f)),
+    HOVERING_DEVICE("300901", "hovering_device", new Builder().weight(0.3f).className(HoveringDevice.class)),
+    SMALL_EMP("301001", "small_emp", new Builder().weight(0.2f).className(SmallEMP.class)),
+    EMP("301002", "emp", new Builder().weight(1.3f).className(EMP.class)),
+    HACKED_COMPUTER("301101", "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class)),
+    INSTRUCTIONS("301201", "instructions", new Builder().weight(0.5f)),
+    PARTS_RED("301301", "red_robot_parts", new Builder().weight(1.5f)),
+    MINI_GENERATOR("301401", "mini_generator", new Builder().weight(1.35f)),
+    HELPER_BOT("301501", "helper_bot_unpowered", new Builder().weight(1.35f).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")}));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults
@@ -68,10 +66,10 @@ public enum ItemType {
 
     private static HashMap<String, ItemType> ITEM_IDS;
 
-    ItemType(VariationID id, String texture, Builder builder) {
+    ItemType(String id, String texture, Builder builder) {
         createIdMapAndArrays();
-        addToMap(id.getFullId(), this);
-        this.id = id.getFullId();
+        addToMap(id, this);
+        this.id = id;
         this.texture = texture;
         this.weight = builder.getWeight();
         this.required = builder.getRequired();

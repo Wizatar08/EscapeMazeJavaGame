@@ -4,7 +4,7 @@ import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
 import com.wizatar08.escapemaze.map.TileMap;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
-import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 
 /*
 PLAYER CONTROLS:

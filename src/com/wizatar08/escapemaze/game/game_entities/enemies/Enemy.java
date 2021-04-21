@@ -4,17 +4,14 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.EnemyPathfinder;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {
@@ -110,10 +107,8 @@ public class Enemy implements Entity {
         float lastRot = rot;
         rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0].floatValue(), pathCoords[currentPathPoint][1].floatValue());
         rotDiff = lastRot - rot;
-        //System.out.println((hypotenuse.intValue() < 0 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) + ", " + (hypotenuse.intValue() < 0) + ", " + checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5));
         if (hypotenuse.intValue() < -1 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
             moveToNextPath();
-            System.out.println("NEXT PATH");
         }
         float diffX = x;
         float diffY = y;

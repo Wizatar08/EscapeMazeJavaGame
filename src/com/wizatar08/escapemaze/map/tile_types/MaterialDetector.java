@@ -8,7 +8,7 @@ import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class MaterialDetector extends Tile {

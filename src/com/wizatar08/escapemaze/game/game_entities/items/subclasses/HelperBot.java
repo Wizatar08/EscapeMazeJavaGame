@@ -1,13 +1,12 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.google.gson.JsonObject;
-import com.sun.javafx.sg.prism.NGAmbientLight;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.drawings.Drawer;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Drawer;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;

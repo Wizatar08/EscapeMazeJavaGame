@@ -1,15 +1,13 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.wizatar08.escapemaze.helpers.drawings.Drawer.*;
+import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity, TileEntity {

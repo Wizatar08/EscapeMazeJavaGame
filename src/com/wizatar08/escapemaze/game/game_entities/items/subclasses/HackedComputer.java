@@ -3,7 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.helpers.drawings.Tex;
+import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.menus.Game;
 
 public class HackedComputer extends Item {
