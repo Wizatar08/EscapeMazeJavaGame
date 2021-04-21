@@ -27,5 +27,6 @@ public class PressurePlate extends Tile {
                 }
             });
         }
+        System.out.println(gameController.pressurePlatesActive());
     }
 }

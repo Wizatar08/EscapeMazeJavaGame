@@ -19,7 +19,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {
     private int currentPathPoint, distanceView, hitBoxSize;
-    private float x, y, width, height, rot, alarmSpeed;
+    private float x, y, width, height, rot, rotDiff, alarmSpeed;
     private String id;
     private final BigDecimal[][] pathCoords;
     private Tex texture, test;
@@ -29,6 +29,7 @@ public class Enemy implements Entity {
     private Game gameController;
     private Timer freezeTime;
     private BigDecimal tileSize, hypotenuse;
+    private boolean justSwitched, beginningSwitch;
 
     public Enemy(Game game, int id, int[][] path) {
         this.id = String.valueOf(id);
@@ -59,6 +60,9 @@ public class Enemy implements Entity {
         this.alarmSpeed = type.getAlarmSpeed();
         this.hitBoxSize = type.getHitBoxSize();
         this.freezeTime = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
+        this.rotDiff = 0f;
+        this.justSwitched = false;
+        this.beginningSwitch = true;
         multiplyPaths();
     }
 
@@ -87,16 +91,29 @@ public class Enemy implements Entity {
         if (currentPathPoint >= pathCoords.length) {
             currentPathPoint = 0;
         }
+        justSwitched = true;
     }
 
     public void draw() {
         texture.draw(x + Game.DIS_X, y + Game.DIS_Y, rot);
     }
 
+    private void moveToNextPath() {
+        nextPath();
+        System.out.println(hypotenuse.floatValue());
+        beginningSwitch = false;
+        hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
+    }
+
     private void move() {
-        if (hypotenuse.intValue() < 0 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
-            nextPath();
-            hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
+        justSwitched = false;
+        float lastRot = rot;
+        rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0].floatValue(), pathCoords[currentPathPoint][1].floatValue());
+        rotDiff = lastRot - rot;
+        //System.out.println((hypotenuse.intValue() < 0 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) + ", " + (hypotenuse.intValue() < 0) + ", " + checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5));
+        if (hypotenuse.intValue() < -1 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
+            moveToNextPath();
+            System.out.println("NEXT PATH");
         }
         float diffX = x;
         float diffY = y;
@@ -113,7 +130,6 @@ public class Enemy implements Entity {
 
     public void update() {
         if (freezeTime.isPaused()) {
-            rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0].floatValue(), pathCoords[currentPathPoint][1].floatValue());
             move();
             pathfinder.update();
             detectPlayer();

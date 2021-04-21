@@ -43,6 +43,33 @@ public class Game {
     private boolean pressurePlatesActive, materialDetectorsActive;
     private ArrayList<ItemType> itemsNeededForNewPlayerInstance;
 
+    /*
+    LEVEL PLAN: from levels 11 to 50
+    Level 11: +pressure plate and computer
+    Level 13: +Material Detector, speed bot
+    Level 15: +camera
+    Level 16: +Dispenser
+    Level 20: First boss level: Just the scroll
+    Level 21: +battery and booster
+    Level 22: +gas can and smoke machine; magnifying bot
+    Level 24: +battery/gas can recharge
+    Level 25: +Sensor bot
+    Level 26: +lasers, large diamonds, EMP's
+    Level 27: +hover device
+    Level 28: +movement detectors, 360 camera
+    Level 30: Second boss level: Scroll and ramming bot
+    Level 31: +multiple player instances
+    Level 33: +Admin doors and passes
+    Level 35: +security bot
+    Level 36: +warden
+    Level 38: +hacked computer, admin accessor
+    Level 40: Third boss level: Scroll, two ramming bots
+    Level 41: +buildable player instances, gas spot
+    Level 43: +blockade
+    Level 46: +admin door, shutoff switch
+    Level 50: Fourth boss level
+     */
+
     public Game() {
         ItemType nullItem = ItemType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)
         TileType nullTile = TileType.NULL; // This is so all items in ItemType can be created before all tiles in TileType are (because weird glitches happen when you create all items while creating all tiles)

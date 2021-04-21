@@ -53,6 +53,7 @@ public enum ItemType {
      * - Smoke machine: Must have 30% gas can to use. This halves the vision of all robots for 20 seconds.
      * - Gas spot: Must have 40% gas can to use. Puts gas on the ground. The next enemy to step in it gets debuffed (loses half its speed and vision). Does not work on cameras or atoms bots. This clears the gas spot.
      * - Blockade: Item cannot be picked up, but instead pushed (This is considered an item because it shouldn't spawn as a tile). This prevents enemies from seeing you through it. If an enemy bumps into it, alarm will be set off.
+     * - Shutoff switch: All doors become unlocked. Must have EMP and admin accessor to use
      */
 
 

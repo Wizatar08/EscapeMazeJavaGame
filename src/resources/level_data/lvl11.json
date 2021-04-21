@@ -1,0 +1,16 @@
+{
+  "level_name": "Level 11",
+  "map": "level11",
+  "player_start": [
+    {
+      "color": "red",
+      "x": 13,
+      "y": 2
+    }
+  ],
+  "enemies": "lvl11",
+  "items": "lvl11",
+  "scroll": "none",
+  "alarm_seconds": 30,
+  "inventory_slots": 5
+}
