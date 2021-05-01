@@ -162,6 +162,19 @@ public class UI {
         menuList.add(new Menu(name, x, y, width, height, optionsWidth, optionsHeight, null));
     }
 
+    public void removeMenu(String name) {
+        for (Menu menu : menuList) {
+            if (menu.getName().equals(name)) {
+                menuList.remove(menu);
+                break;
+            }
+        }
+    }
+
+    public void clearAllMenus() {
+        menuList.clear();
+    }
+
     public Menu getMenu(String name) {
         for (Menu m: menuList) {
             if (name.equals(m.getName())) {

@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.helpers.visuals;
 
 import com.wizatar08.escapemaze.helpers.Timer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
@@ -86,14 +87,18 @@ public class Tex {
     }
 
     public void draw(float x, float y, float angle, float width, float height) {
+        draw(x, y, angle, width, height, new Color(1.0f, 1.0f, 1.0f));
+    }
+
+    public void draw(float x, float y, float angle, float width, float height, Color color) {
         timer.update();
         if (timer.getTotalSeconds() <= 0 || timer.getTotalSeconds() > 256) {
             timer.setTime(timer.getStartingSeconds());
             frame = getNextFrameNum();
         }
-        drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * frame, (1.0f / totalFrames) * frame + (1.0f / totalFrames));
+        drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * frame, (1.0f / totalFrames) * frame + (1.0f / totalFrames), color.r, color.g, color.b, 1.0f);
         if (fade) {
-            drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
+            drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), color.r, color.g, color.b, ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
         }
     }
 

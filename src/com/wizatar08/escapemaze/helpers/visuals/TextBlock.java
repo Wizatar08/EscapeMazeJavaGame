@@ -84,13 +84,11 @@ public class TextBlock {
 
     public float getWidth() {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
-        int w = (int)(awtFont.getStringBounds(text, frc).getWidth());
-        return w;
+        return (float) (awtFont.getStringBounds(text, frc).getWidth());
     }
     public float getHeight() {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
-        int h = (int)(awtFont.getStringBounds(text, frc).getHeight());
-        return h;
+        return (float)(awtFont.getStringBounds(text, frc).getHeight());
     }
 
     public void setX(float x) {
@@ -123,5 +121,9 @@ public class TextBlock {
 
     public void hide() {
         show = false;
+    }
+
+    public TrueTypeFont getTrueTypeFont () {
+        return trueTypeFont;
     }
 }

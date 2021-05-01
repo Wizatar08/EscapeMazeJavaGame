@@ -54,9 +54,13 @@ public class Drawer {
     }
 
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle, float topY, float bottomY, float alpha) {
+        drawQuadTex(tex, x, y, width, height, angle, topY, bottomY, 1.0f, 1.0f, 1.0f, alpha);
+    }
+
+    public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle, float topY, float bottomY, float r, float g, float b, float alpha) {
         tex.bind();
         glTranslatef(x + width / 2, y + height / 2, 0);
-        glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        glColor4f(r, g, b, alpha);
         glRotatef(angle, 0, 0, 1);
         glScalef(1, -1, 0); // For some reason the new way of using textures in this game flips all the textures vertically, so we have to flip it back.
         glTranslatef(-width / 2, -height / 2, 0);

@@ -97,7 +97,6 @@ public class Enemy implements Entity {
 
     private void moveToNextPath() {
         nextPath();
-        System.out.println(hypotenuse.floatValue());
         beginningSwitch = false;
         hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
     }

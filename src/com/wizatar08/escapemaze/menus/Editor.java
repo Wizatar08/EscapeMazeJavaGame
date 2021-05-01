@@ -9,6 +9,7 @@ import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.helpers.visuals.InputTextBlock;
 import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
 import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;
 import com.wizatar08.escapemaze.map.TileMap;
 import com.wizatar08.escapemaze.helpers.ExternalMapHandler;
@@ -42,12 +43,14 @@ public class Editor {
     private boolean isSelectingEnemy, isPlacingItem;
     private ArrayList<Item> items;
     private ArrayList<Enemy> enemies;
+    private final ArrayList<TileType> shownTiles;
+    private ArrayList<TileType> filturedTiles;
     private int[][] positions;
     private int index;
     private String id;
-    private boolean buttonPressed;
+    private boolean buttonPressed, isFilturingTiles;
     private TextBlock status;
-    private InputTextBlock test;
+    private InputTextBlock filterTilesInput;
 
     public Editor() {
         editorUI = new UI();
@@ -57,7 +60,6 @@ public class Editor {
         isSelectingEnemy = false;
         positions = new int[1024][2];
         buttonPressed = false;
-        createMenus();
         try {
             map = ExternalMapHandler.LoadMap(null, "map_default");
         } catch (NullPointerException e) {
@@ -69,7 +71,10 @@ public class Editor {
         items = new ArrayList<>();
         status = new TextBlock(editorUI, "Status", "", 8, 8);
         gson = new Gson();
-        test = new InputTextBlock(editorUI, "test", "", 0, 0, 512, 48, 24, Color.red);
+        filterTilesInput = new InputTextBlock(editorUI, "test", "", WIDTH - 256, 12, 512, 48, 48, new Color(0.9f, 0.0f, 0.2f), "Filter Tiles");
+        shownTiles = TileType.TILE_TYPES;
+        createMenus("");
+        isFilturingTiles = false;
     }
 
     private void changeMapSize(int width, int height) {
@@ -163,6 +168,13 @@ public class Editor {
                     menuIndex = 0;
                 }
             }
+            if (keyDown(Keyboard.KEY_A)) {
+                menuIndex--;
+                int max = 0;
+                if (menuIndex < 0) {
+                    menuIndex = editorUI.getMenuList().size() - 1;
+                }
+            }
         }
         if (keyDown(Keyboard.KEY_UP)) displacementY += 6;
         if (keyDown(Keyboard.KEY_DOWN)) displacementY -= 6;
@@ -207,8 +219,8 @@ public class Editor {
                     }
                 }
             } else {
-                for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
-                    int ceil = (int) Math.ceil(i / (3 * 11));
+                for (int i = 0; i < filturedTiles.size(); i++) {
+                    int ceil = (int) Math.ceil(i / (3 * 10));
                     for (int j = 0; j < editorUI.getMenu("Tiles" + ceil).getButtons().size(); j++) {
                         if (editorUI.getMenu("Tiles" + ceil).isButtonClicked(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName())) {
                             tileSelected = TileType.TILE_IDS.get(editorUI.getMenu("Tiles" + ceil).getButtons().get(j).getName());
@@ -298,15 +310,39 @@ public class Editor {
     }
 
     public void update() {
-        test.update();
-        detectKey();
-        detectIfButtonDown();
+        filterTilesInput.update();
+        if (!isFilturingTiles) {
+            detectKey();
+            detectIfButtonDown();
+        }
         showMenu();
         draw();
         if (isSelectingEnemy || isPlacingItem) {
             setPlacement();
         }
-        test.draw();
+        filterTilesInput.draw();
+        if (filterTilesInput.activated()) {
+            startTileFilter(filterTilesInput.getChars());
+        }
+    }
+
+    private void startTileFilter(String filtur) {
+        isFilturingTiles = true;
+        createMenus(filtur);
+        isFilturingTiles = false;
+    }
+
+    private ArrayList<TileType> getTileOptions(String filter) {
+        if (filter.equals("")) {
+            return shownTiles;
+        }
+        ArrayList<TileType> newList = new ArrayList<>();
+        for (TileType type : TileType.TILE_TYPES) {
+            if (type.toString().toLowerCase().contains(filter.replace(" ", "_").toLowerCase())) {
+                newList.add(type);
+            }
+        }
+        return newList;
     }
 
     private void draw() {
@@ -327,18 +363,21 @@ public class Editor {
     }
 
 
-    private void createMenus() {
+    private void createMenus(String filter) {
         int w = 3;
-        int h = 11;
-        for (int i = 0; i < TileType.TILE_TYPES.size(); i++) {
+        int h = 10;
+        filturedTiles = getTileOptions(filter);
+        filturedTiles.remove(TileType.NULL);
+        editorUI.clearAllMenus();
+        for (int i = 0; i < filturedTiles.size(); i++) {
             int ceil = (int) Math.ceil(i / (w * h));
-            if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 20, 204, 744, 3, 11);
-            Tex[] textures = new Tex[TileType.TILE_TYPES.get(i).getOverlayTex().length + 1];
-            textures[0] = TileType.TILE_TYPES.get(i).getTexture();
-            for (int j = 0; j < TileType.TILE_TYPES.get(i).getOverlayTex().length; j++) {
-                textures[j + 1] = TileType.TILE_TYPES.get(i).getOverlayTex()[j];
+            if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 84, 204, 680, w, h);
+            Tex[] textures = new Tex[filturedTiles.get(i).getOverlayTex().length + 1];
+            textures[0] = filturedTiles.get(i).getTexture();
+            for (int j = 0; j < filturedTiles.get(i).getOverlayTex().length; j++) {
+                textures[j + 1] = filturedTiles.get(i).getOverlayTex()[j];
             }
-            editorUI.getMenu("Tiles" + ceil).addButton(TileType.TILE_TYPES.get(i).getId(), textures, TileType.TILE_TYPES.get(i).getOverlayTexRot());
+            editorUI.getMenu("Tiles" + ceil).addButton(filturedTiles.get(i).getId(), textures, filturedTiles.get(i).getOverlayTexRot());
         }
     }
 

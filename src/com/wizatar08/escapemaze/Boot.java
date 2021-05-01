@@ -7,6 +7,9 @@ import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
 import org.lwjgl.opengl.Display;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+
 /**
  * Where all the code is set up and run
  */
