@@ -214,7 +214,6 @@ public class Editor {
                     if (itemAlreadyThere) {
                         items.remove(ind);
                     } else {
-                        System.out.println(ItemType.getType(id) + ", " + id);
                         items.add(new Item(null, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), null,(int) Math.floor(xPlace / TILE_SIZE) * TILE_SIZE, (int) Math.floor(yPlace / TILE_SIZE) * TILE_SIZE));
                     }
                 }

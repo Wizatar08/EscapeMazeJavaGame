@@ -4,6 +4,11 @@ import com.wizatar08.escapemaze.helpers.Timer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
 
 public class Tex {
@@ -65,6 +70,24 @@ public class Tex {
         return new Tex(t.getTexturePath(), t.getImageHeight(), t.getSecondsBetweenFrames(), t.isFading());
     }
 
+    public static Tex[] getTexInFolder(String folderName) {
+        File folder = new File("src/resources/images/" + folderName).getAbsoluteFile();
+        File[] files = folder.listFiles();
+        System.out.println(folder);
+        ArrayList<Tex> texArray = new ArrayList<>();
+        for (File file : files) {
+            if (file.toString().endsWith(".png")) {
+                texArray.add(new Tex(folderName + "/" + file.getName()));
+            }
+        }
+        Tex[] texList = new Tex[texArray.size()];
+        for (int i = 0; i < texArray.size(); i++) {
+            texList[i] = texArray.get(i);
+            System.out.println(texList[i]);
+        }
+        return texList;
+    }
+
     public int getNextFrameNum() {
         int f = frame;
         f++;
@@ -88,6 +111,10 @@ public class Tex {
 
     public void draw(float x, float y, float angle, float width, float height) {
         draw(x, y, angle, width, height, new Color(1.0f, 1.0f, 1.0f));
+    }
+
+    public void draw(float x, float y, Color color) {
+        draw(x, y, 0, texture.getImageWidth(), texture.getImageHeight(), color);
     }
 
     public void draw(float x, float y, float angle, float width, float height, Color color) {

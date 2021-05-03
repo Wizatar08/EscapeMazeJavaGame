@@ -104,7 +104,7 @@ public enum TileType {
      * - DONE: Refuel station: Can refuel gas tank there.
      * - Movement detector: Activates alarm when player hits the tile. Can be deactivated by overriding movement detector management computer.
      * - Material detector: Activates alarm when you hold a required item when moving onto this tile. Can be deactivated by overriding material detector computer.
-     * - DONE: Pressure plate mamanement computer: Managed pressure plates, can be overridden
+     * - DONE: Pressure plate management computer: Managed pressure plates, can be overridden
      * - Movement detector computer: Manages movement detectors, can be overridden
      * - Material detector computer: Manages material detectors, can be overridden
      *

@@ -15,7 +15,9 @@ import com.wizatar08.escapemaze.map.tile_types.PressurePlate;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,17 +47,19 @@ public class Player implements Entity {
     private Inventory inventory;
     private float weightInfluence, speedInfluence;
     private boolean selected;
+    private org.newdawn.slick.Color texColor;
 
     // Constructor for Player object
-    public Player(Game game, String texColor, float startXTile, float startYTile, TileMap map) {
+    public Player(Game game, int texColor, float startXTile, float startYTile, TileMap map) {
         this.gameController = game;
         setX(startXTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
         setY(startYTile * TILE_SIZE + (TILE_SIZE / 4) - TILE_SIZE);
+        this.texColor = new Color(texColor);
         this.width = 32;
         this.height = 32;
         this.map = map;
         this.isSafe = false;
-        this.tex = new Tex("players/player_" + texColor);
+        this.tex = new Tex("players/player_base");
         this.detectTex = new Tex("tiles/selectors/tile_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         this.speedInfluence = 0.0f;
@@ -265,7 +269,7 @@ public class Player implements Entity {
     // Draw the player if not in a safe spot
     public void draw() {
         if (!isSafe) {
-            tex.draw(x + Game.DIS_X, y + Game.DIS_Y);
+            tex.draw(x + Game.DIS_X, y + Game.DIS_Y, texColor);
         }
         if (isNearSafeSpot()) {
             for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {

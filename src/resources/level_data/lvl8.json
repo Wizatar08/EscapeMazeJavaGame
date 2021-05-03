@@ -3,7 +3,7 @@
   "map": "level8",
   "player_start": [
     {
-      "color": "red",
+      "color": "FF0000",
       "x": 13,
       "y": 3
     }

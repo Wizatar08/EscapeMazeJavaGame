@@ -130,10 +130,10 @@ public class JSONLevel {
         return inventorySlots;
     }
 
-    public String[] getPlayerTexNames() {
-        String[] names = new String[playerSettings.size()];
+    public int[] getPlayerTexNames() {
+        int[] names = new int[playerSettings.size()];
         for (int i = 0; i < playerSettings.getAsJsonArray().size(); i++) {
-            names[i] = playerSettings.get(i).getAsJsonObject().get("color").getAsString();
+            names[i] = Integer.parseInt(playerSettings.get(i).getAsJsonObject().get("color").getAsString(), 16);
         }
         return names;
     }

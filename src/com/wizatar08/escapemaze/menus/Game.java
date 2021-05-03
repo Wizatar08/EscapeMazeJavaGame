@@ -151,6 +151,8 @@ public class Game {
             }
         }
         addRequiredNewPlayerItems();
+
+        System.out.println(Tex.getTexInFolder("players"));
     }
 
     public enum GameStates {
@@ -184,7 +186,6 @@ public class Game {
     }
 
     public void update() {
-        //playerInstances.forEach((p) -> System.out.println(p.getX() + ", " + p.getY()));
         if (currentGameState == GameStates.GAME_END) {
             detectIfButtonHitOnGameEnd();
         } else {
@@ -354,8 +355,7 @@ public class Game {
             bot.beginCountdown();
             if (bot.countdownAtZero()) {
                 applicableItems.forEach(Item::destroy);
-                System.out.println((bot.getX() / TILE_SIZE * TILE_SIZE) + ", " + (bot.getY() / TILE_SIZE * TILE_SIZE));
-                playerInstances.add(new Player(this, "red", (bot.getX() + TILE_SIZE) / TILE_SIZE, (bot.getY() + TILE_SIZE) / TILE_SIZE, map));
+                playerInstances.add(new Player(this, 0xFF0000, (bot.getX() + TILE_SIZE) / TILE_SIZE, (bot.getY() + TILE_SIZE) / TILE_SIZE, map));
                 bot.setDurability(0);
                 bot.endCountdown();
             }
