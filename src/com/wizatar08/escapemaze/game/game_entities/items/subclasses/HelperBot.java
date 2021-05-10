@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.google.gson.JsonObject;
+import com.wizatar08.escapemaze.game.events.ItemTouchAndRemoveEvent;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
@@ -10,6 +11,7 @@ import com.wizatar08.escapemaze.helpers.visuals.Tex;
 import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HelperBot extends RechargableBattery {
     private Game gameController;
@@ -17,6 +19,7 @@ public class HelperBot extends RechargableBattery {
     private boolean isPowered, isActive;
     private ArrayList<Item> itemsTouching;
     private Timer timerToTransform;
+    private ItemTouchAndRemoveEvent touchEvent;
 
     public HelperBot(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
         super(game, type, texture, data, x, y);
@@ -29,6 +32,7 @@ public class HelperBot extends RechargableBattery {
         isActive = false;
         itemsTouching = new ArrayList<>();
         timerToTransform = new Timer(Timer.TimerModes.COUNT_DOWN, 10);
+        touchEvent = new ItemTouchAndRemoveEvent((Item) this, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS);
     }
 
     @Override
@@ -48,11 +52,12 @@ public class HelperBot extends RechargableBattery {
                     removeFromTouching(item);
                 }
             }
-            if (isPowered) {
-                gameController.doHelperBotTasks(itemsTouching, this);
-            }
         } else {
             itemsTouching.clear();
+        }
+        if (isInInventory()) {
+            timerToTransform.pause();
+            timerToTransform.setTime(10);
         }
     }
 
@@ -117,5 +122,17 @@ public class HelperBot extends RechargableBattery {
         } else {
             return unpoweredTex;
         }
+    }
+
+    @Override
+    public void onTrigger(ArrayList<Item> items) {
+        int color = 0;
+        for (Item item : items) {
+            if (item.getType() == ItemType.PARTS) {
+                color = ((RobotPartsItem) item).getColorIntValue();
+            }
+            gameController.removeItemFromGame(item);
+        }
+        gameController.addNewPlayer(color, getX(), getY());
     }
 }

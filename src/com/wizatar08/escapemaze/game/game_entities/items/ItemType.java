@@ -34,7 +34,7 @@ public enum ItemType {
     EMP("301002", "emp", new Builder().weight(1.3f).className(EMP.class)),
     HACKED_COMPUTER("301101", "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class)),
     INSTRUCTIONS("301201", "instructions", new Builder().weight(0.5f)),
-    PARTS_RED("301301", "red_robot_parts", new Builder().weight(1.5f)),
+    PARTS("301301", "robot_parts", new Builder().weight(1.5f).className(RobotPartsItem.class)),
     MINI_GENERATOR("301401", "mini_generator", new Builder().weight(1.35f)),
     HELPER_BOT("301501", "helper_bot_unpowered", new Builder().weight(1.35f).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")}));
 

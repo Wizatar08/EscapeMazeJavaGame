@@ -14,7 +14,6 @@ public class ItemUnlocksDoor extends Tile {
 
     public ItemUnlocksDoor(Game game, float x, float y, int width, int height, TileType type) {
         super(game, x, y, width, height, type);
-        System.out.println(type + ", " + this.getId());
         this.unlockableBy = (ItemType) type.subClassArgs()[0];
         this.gameController = game;
         this.detectTex = new Tex("tiles/selectors/item_use_selector");

@@ -2,6 +2,7 @@ package com.wizatar08.escapemaze.menus;
 
 import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
+import com.wizatar08.escapemaze.game.events.EventManager;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
@@ -151,8 +152,6 @@ public class Game {
             }
         }
         addRequiredNewPlayerItems();
-
-        System.out.println(Tex.getTexInFolder("players"));
     }
 
     public enum GameStates {
@@ -190,16 +189,13 @@ public class Game {
             detectIfButtonHitOnGameEnd();
         } else {
             for (int i = 0; i < playerInstances.size(); i++) {
-                if (i != currentPlayer) {
-                    playerInstances.get(i).setSelected(false);
-                } else {
-                    playerInstances.get(i).setSelected(true);
-                }
+                playerInstances.get(i).setSelected(i == currentPlayer);
             }
             updateDisplacement();
             drawAll();
             playerInstances.forEach(Player::draw);
             if (currentGameState != GameStates.PAUSED) {
+                EventManager.update(this);
                 updateEnemies();
                 updateTime();
                 playerInstances.forEach(Player::update);
@@ -348,34 +344,14 @@ public class Game {
         gameEndUI.draw();
     }
 
-    public void doHelperBotTasks(ArrayList<Item> items, HelperBot bot) {
-        ArrayList<Item> applicableItems;
-        if (canAddPlayer(items).size() >= itemsNeededForNewPlayerInstance.size()) {
-            applicableItems = canAddPlayer(items);
-            bot.beginCountdown();
-            if (bot.countdownAtZero()) {
-                applicableItems.forEach(Item::destroy);
-                playerInstances.add(new Player(this, 0xFF0000, (bot.getX() + TILE_SIZE) / TILE_SIZE, (bot.getY() + TILE_SIZE) / TILE_SIZE, map));
-                bot.setDurability(0);
-                bot.endCountdown();
-            }
-        }
-    }
-
-    private ArrayList<Item> canAddPlayer(ArrayList<Item> itemsList) {
-        ArrayList<Item> applicable = new ArrayList<>();
-        for (Item item : itemsList) {
-            if (itemsNeededForNewPlayerInstance.contains(item.getType()) && !applicable.contains(item)) {
-                applicable.add(item);
-            }
-        }
-        return applicable;
+    public void addNewPlayer(int color, float xPos, float yPos) {
+        playerInstances.add(new Player(this, color, 1 + (xPos / TILE_SIZE), 1 + (yPos / TILE_SIZE), map));
     }
 
     public void addRequiredNewPlayerItems() {
         itemsNeededForNewPlayerInstance = new ArrayList<>();
         itemsNeededForNewPlayerInstance.add(ItemType.INSTRUCTIONS);
-        itemsNeededForNewPlayerInstance.add(ItemType.PARTS_RED);
+        itemsNeededForNewPlayerInstance.add(ItemType.PARTS);
         itemsNeededForNewPlayerInstance.add(ItemType.MINI_GENERATOR);
     }
 

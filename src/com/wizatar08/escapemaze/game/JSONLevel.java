@@ -64,9 +64,7 @@ public class JSONLevel {
     }
 
     public ArrayList<Enemy> getEnemies(Game game) {
-        System.out.println(enemyFileName);
         this.gson = new Gson();
-        System.out.println(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json"));
         InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(Project.class.getClassLoader().getResourceAsStream("resources/level_enemies/" + enemyFileName + ".json")));
         JSONEnemyClass enemies = gson.fromJson(reader, JSONEnemyClass.class);
         return enemies.getEnemies(game);

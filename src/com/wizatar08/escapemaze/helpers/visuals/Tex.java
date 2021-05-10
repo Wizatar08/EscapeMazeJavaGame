@@ -73,7 +73,6 @@ public class Tex {
     public static Tex[] getTexInFolder(String folderName) {
         File folder = new File("src/resources/images/" + folderName).getAbsoluteFile();
         File[] files = folder.listFiles();
-        System.out.println(folder);
         ArrayList<Tex> texArray = new ArrayList<>();
         for (File file : files) {
             if (file.toString().endsWith(".png")) {
@@ -83,7 +82,6 @@ public class Tex {
         Tex[] texList = new Tex[texArray.size()];
         for (int i = 0; i < texArray.size(); i++) {
             texList[i] = texArray.get(i);
-            System.out.println(texList[i]);
         }
         return texList;
     }

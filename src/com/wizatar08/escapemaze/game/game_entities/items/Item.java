@@ -97,6 +97,13 @@ public class Item implements Entity {
         drawOnPlayer();
     }
 
+    /**
+     * Called when an event with this is called.
+     */
+    public void onTrigger(ArrayList<Item> items) {
+
+    }
+
     public void drop() {}
 
     public void onPickup() {}

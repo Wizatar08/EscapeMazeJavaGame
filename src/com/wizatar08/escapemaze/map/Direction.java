@@ -12,7 +12,6 @@ public enum Direction {
     Direction(float xDirection, float yDirection) {
         xDir = xDirection;
         yDir = yDirection;
-        System.out.println(this + ", " + xDir + ", " + yDir);
     }
 
     public float getxDir() {

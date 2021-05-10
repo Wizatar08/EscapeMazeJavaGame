@@ -40,7 +40,6 @@ public class JSONEnemyClass {
             for(int j = 0; j < enemies.get(i).getAsJsonObject().get("paths").getAsJsonArray().size(); j++) {
                 enemyPathList[j] = enemyList[i][j];
             }
-            //System.out.println(enemyPathList.length + ", " + enemies.get(i).getAsJsonObject().get("paths").getAsJsonArray().size() + ", " + enemies.size());
             enemiesList.add(new Enemy(game,
                     enemies.get(i).getAsJsonObject().get("id").getAsInt(),
                     enemyPathList));

@@ -58,7 +58,6 @@ public class Inventory {
     }
 
     public void draw() {
-        //System.out.println(items.get(0) + ", " + items.get(1) + ", " + items.get(2) + ", " + items.get(3) + ", " + items.get(4));
         for (int i = 0; i < slots; i++) {
             slotTex.draw(((float) WIDTH / 2) - (((float) TILE_SIZE / 2) * slots) + (i * 64), HEIGHT - 72);
         }
