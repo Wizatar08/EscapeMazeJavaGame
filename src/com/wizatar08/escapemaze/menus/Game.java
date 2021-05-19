@@ -30,7 +30,7 @@ public class Game {
     private int levelNumber, requiredItems, stolenItems, inventorySlots;
     private TileMap map;
     private String levelName;
-    private ArrayList<Player> playerInstances;
+    private ArrayList<Player> playerInstances, newPlayers;
     private ArrayList<Enemy> enemies;
     private ArrayList<Item> items, removedItems;
     private GameStates currentGameState, prevGameState;
@@ -43,7 +43,6 @@ public class Game {
     private Tex redScreen, alertBox, gameEndTex;
     private int currentPlayer;
     private boolean pressurePlatesActive, materialDetectorsActive;
-    private ArrayList<ItemType> itemsNeededForNewPlayerInstance;
 
     /*
     LEVEL PLAN: from levels 11 to 50
@@ -85,6 +84,7 @@ public class Game {
         levelTexts = level.getText(textUI);
         inventorySlots = level.getInventorySlots();
         playerInstances = new ArrayList<>();
+        newPlayers = new ArrayList<>();
         for (int i = 0; i < level.getPlayerStartPos().length; i++) {
             playerInstances.add(new Player(this, level.getPlayerTexNames()[i], level.getPlayerStartPos()[i][0] + 1, level.getPlayerStartPos()[i][1] + 1, map));
         }
@@ -151,7 +151,6 @@ public class Game {
                 map.getMapAsArray()[i][j].onMapCreation();
             }
         }
-        addRequiredNewPlayerItems();
     }
 
     public enum GameStates {
@@ -217,6 +216,8 @@ public class Game {
         }
         removedItems.forEach((i) -> items.remove(i));
         removedItems.clear();
+        playerInstances.addAll(newPlayers);
+        newPlayers.clear();
     }
 
     private void alarm() {
@@ -284,7 +285,7 @@ public class Game {
         for (Item item : items) {
             item.draw();
         }
-        playerInstances.forEach((p) -> p.draw());
+        playerInstances.forEach(Player::draw);
         ui.draw();
         updateText();
         if (currentGameState == GameStates.ALARM) {
@@ -322,6 +323,7 @@ public class Game {
     }
 
     public void removeItemFromGame(Item item) {
+        //System.out.println("REMOVE ITEM: " + item.getType());
         removedItems.add(item);
     }
 
@@ -345,14 +347,7 @@ public class Game {
     }
 
     public void addNewPlayer(int color, float xPos, float yPos) {
-        playerInstances.add(new Player(this, color, 1 + (xPos / TILE_SIZE), 1 + (yPos / TILE_SIZE), map));
-    }
-
-    public void addRequiredNewPlayerItems() {
-        itemsNeededForNewPlayerInstance = new ArrayList<>();
-        itemsNeededForNewPlayerInstance.add(ItemType.INSTRUCTIONS);
-        itemsNeededForNewPlayerInstance.add(ItemType.PARTS);
-        itemsNeededForNewPlayerInstance.add(ItemType.MINI_GENERATOR);
+        newPlayers.add(new Player(this, color, 1 + (xPos / TILE_SIZE), 1 + (yPos / TILE_SIZE), map));
     }
 
     public void stealItem() {

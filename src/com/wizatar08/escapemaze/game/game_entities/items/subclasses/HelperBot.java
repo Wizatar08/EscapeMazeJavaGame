@@ -18,7 +18,6 @@ public class HelperBot extends RechargableBattery {
     private Tex unpoweredTex, poweredTex, activeTex;
     private boolean isPowered, isActive;
     private ArrayList<Item> itemsTouching;
-    private Timer timerToTransform;
     private ItemTouchAndRemoveEvent touchEvent;
 
     public HelperBot(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
@@ -31,13 +30,11 @@ public class HelperBot extends RechargableBattery {
         isPowered = false;
         isActive = false;
         itemsTouching = new ArrayList<>();
-        timerToTransform = new Timer(Timer.TimerModes.COUNT_DOWN, 10);
-        touchEvent = new ItemTouchAndRemoveEvent((Item) this, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS);
+        touchEvent = new ItemTouchAndRemoveEvent(this, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS);
     }
 
     @Override
     public void update() {
-        timerToTransform.update();
         super.update();
         if (!isPowered) {
             isActive = false;
@@ -54,10 +51,6 @@ public class HelperBot extends RechargableBattery {
             }
         } else {
             itemsTouching.clear();
-        }
-        if (isInInventory()) {
-            timerToTransform.pause();
-            timerToTransform.setTime(10);
         }
     }
 
@@ -80,26 +73,6 @@ public class HelperBot extends RechargableBattery {
             super.getBackgroundBarTex().draw(xVal + 2, yVal);
             super.getBarTex().draw(xVal + 2, yVal + 56, 0, super.getBarTex().getOpenGLTex().getImageWidth() * super.getDurabilityPercentage());
         }
-    }
-
-    public void beginCountdown() {
-        timerToTransform.unpause();
-        isActive = true;
-    }
-
-    public void endCountdown() {
-        timerToTransform.setTime(10);
-        timerToTransform.pause();
-        isActive = false;
-    }
-
-    @Override
-    public void onPickup() {
-        endCountdown();
-    }
-
-    public boolean countdownAtZero() {
-        return timerToTransform.getTotalSeconds() <= 0;
     }
 
     @Override
@@ -131,8 +104,38 @@ public class HelperBot extends RechargableBattery {
             if (item.getType() == ItemType.PARTS) {
                 color = ((RobotPartsItem) item).getColorIntValue();
             }
-            gameController.removeItemFromGame(item);
         }
         gameController.addNewPlayer(color, getX(), getY());
     }
 }
+
+/*
+0 - Helper Bot
+1 - Battery
+2 - Instructions
+3 - Parts
+1st column - alone
+2nd column - through dispenser
+3rd column - with player creation alone
+4th column - player creation through dispenser
+
+0123 - 0, 0, 0, 0
+0132 - 0,  , 0
+0213 - 0
+0231 - 0
+0312 - 0
+0321 - 0
+3210 - 0, 0, 0
+3120 - 0
+2130 - 0
+2310 - 0
+1320 - 0
+1230 - 0
+1203 - 0, 0
+1302 - 0
+2103 -
+2301
+3102
+3201
+1023 - 0, 0
+ */
