@@ -25,7 +25,7 @@ public class EMP extends Item {
     @Override
     public void use() {
         super.use();
-        if (gameController.getEnemies().size() != 0 && gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedPowerSource(40f) != null) {
+        if (/*gameController.getEnemies().size() != 0 && */gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedPowerSource(40f) != null) {
             ((DurabilityItem) gameController.getCurrentPlayer().getInventory().getClosestNonOccupiedPowerSource(40f)).deplete(0.4f);
             gameController.getEnemies().forEach((e) -> {
                 e.freeze(20);

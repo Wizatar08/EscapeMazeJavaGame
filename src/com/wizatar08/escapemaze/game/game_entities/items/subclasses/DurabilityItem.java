@@ -65,6 +65,10 @@ public class DurabilityItem extends Item {
         durabilityTime.setTime(durability);
     }
 
+    public void fillDurability() {
+        durabilityTime.setTime(durabilityTime.getStartingSeconds());
+    }
+
     public void deplete() {
         durabilityTime.setTime(durabilityTime.getTotalSeconds() - (Clock.Delta() / 2));
     }

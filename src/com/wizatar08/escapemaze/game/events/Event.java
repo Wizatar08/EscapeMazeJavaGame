@@ -15,9 +15,6 @@ public class Event {
         return false;
     }
 
-    public void onOccurance() {
-    }
-
     public void setGameObject(Game game) {
         this.gameController = game;
     }

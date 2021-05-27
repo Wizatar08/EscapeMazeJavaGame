@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.events.Event;
 import com.wizatar08.escapemaze.game.events.ItemTouchAndRemoveEvent;
+import com.wizatar08.escapemaze.game.events.ItemTouchEvent;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
@@ -18,7 +19,6 @@ public class HelperBot extends RechargableBattery {
     private boolean isActive;
     public boolean isPowered;
     private ArrayList<Item> itemsTouching;
-    private Event[] events;
 
     public HelperBot(Game game, ItemType type, JsonObject data, float x, float y) {
         super(game, type, data, x, y);
@@ -31,10 +31,11 @@ public class HelperBot extends RechargableBattery {
         isActive = false;
         itemsTouching = new ArrayList<>();
         createCondition();
-        events = new Event[]{
+        createItemEvents(
                 new ItemTouchAndRemoveEvent(this, "createPlayer", condition, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS),
-                new ItemTouchAndRemoveEvent(this, "createParts", condition, 5, ItemType.WIRES, ItemType.METAL_SHEET, ItemType.SERVO_MOTOR)
-        };
+                new ItemTouchAndRemoveEvent(this, "createParts", condition, 5, ItemType.WIRES, ItemType.METAL_SHEET, ItemType.SERVO_MOTOR),
+                new ItemTouchEvent(this, "instantRechargeBattery", condition, 5, ItemType.BASIC_BATTERY)
+        );
     }
 
     @Override
@@ -120,6 +121,15 @@ public class HelperBot extends RechargableBattery {
 
     public void createParts(ArrayList<Item> items) {
         gameController.addItemToGame(new RobotPartsItem(gameController, ItemType.PARTS, null, getX(), getY()));
+        setDurability(0f);
+    }
+
+    public void instantRechargeBattery(ArrayList<Item> items) {
+        for (Item item : items) {
+            if (item.getType() == ItemType.BASIC_BATTERY) {
+                ((RechargableBattery) item).fillDurability();
+            }
+        }
         setDurability(0f);
     }
 }

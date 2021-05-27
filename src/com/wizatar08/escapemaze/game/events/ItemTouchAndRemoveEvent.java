@@ -9,58 +9,41 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ItemTouchAndRemoveEvent extends Event {
-    private final Item centerItem;
-    private final ArrayList<ItemType> itemsNeeded;
-    private final Timer timeTillTrigger;
-    private Item.Condition condition;
-    private String triggerMethodName;
+public class ItemTouchAndRemoveEvent extends ItemTouchEvent {
 
     public ItemTouchAndRemoveEvent(Item centerItem, String triggerMethodName, Item.Condition condition, int timeTillTrigger, ItemType... otherItems) {
-        super();
-        this.centerItem = centerItem;
-        this.timeTillTrigger = new Timer(Timer.TimerModes.COUNT_DOWN, timeTillTrigger);
-        this.timeTillTrigger.pause();
-        this.condition = condition;
-        this.triggerMethodName = triggerMethodName;
-        itemsNeeded = new ArrayList<>();
-        Collections.addAll(itemsNeeded, otherItems);
-    }
-
-    @Override
-    public boolean isOccuring() {
-        return true;
+        super(centerItem, triggerMethodName, condition, timeTillTrigger, otherItems);
     }
 
     @Override
     public void update() {
-        timeTillTrigger.update();
-        ArrayList<ItemType> types = new ArrayList<ItemType>(itemsNeeded);
+        getTimeTillTrigger().update();
+        ArrayList<ItemType> types = new ArrayList<ItemType>(getItemsNeeded());
         ArrayList<Item> items = new ArrayList<>();
         for (Item item1 : getGameController().getItems()) {
-            if (Drawer.checkCollision(item1.getX(), item1.getY(), item1.getWidth(), item1.getHeight(), centerItem.getX(), centerItem.getY(), centerItem.getWidth(), centerItem.getHeight()) && itemsNeeded.contains(item1.getType())
-                && item1 != centerItem) {
+            if (Drawer.checkCollision(item1.getX(), item1.getY(), item1.getWidth(), item1.getHeight(), getCenterItem().getX(), getCenterItem().getY(), getCenterItem().getWidth(), getCenterItem().getHeight()) && getItemsNeeded().contains(item1.getType())
+                && item1 != getCenterItem()) {
                 types.remove(item1.getType());
                 items.add(item1);
             }
         }
-        if (types.size() <= 0 && condition.passes()) {
-            timeTillTrigger.unpause();
-            if (timeTillTrigger.getTotalSeconds() <= 0) {
+        if (types.size() <= 0 && getCondition().passes()) {
+            getTimeTillTrigger().unpause();
+            if (getTimeTillTrigger().getTotalSeconds() <= 0) {
                 try {
-                    centerItem.getClass().getMethod(triggerMethodName, ArrayList.class).invoke(centerItem, items);
+                    getCenterItem().getClass().getMethod(getTriggerMethodName(), ArrayList.class).invoke(getCenterItem(), items);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
                 for (Item item : items) {
                     getGameController().removeItemFromGame(item);
-                    timeTillTrigger.pause();
-                    timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
+                    getTimeTillTrigger().pause();
+                    getTimeTillTrigger().setTime(getTimeTillTrigger().getStartingSeconds());
                 }
             }
         } else {
-            timeTillTrigger.pause();
-            timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
+            getTimeTillTrigger().pause();
+            getTimeTillTrigger().setTime(getTimeTillTrigger().getStartingSeconds());
         }
     }
 }

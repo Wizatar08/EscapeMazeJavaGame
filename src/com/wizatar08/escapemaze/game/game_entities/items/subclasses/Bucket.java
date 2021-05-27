@@ -16,7 +16,6 @@ public class Bucket extends Item {
     private Color contentColorTint;
     private int color;
     private JsonObject data;
-    private Event[] events;
 
     public Bucket(Game game, ItemType type, JsonObject data, float x, float y) {
         super(game, type, data, x, y);
@@ -29,9 +28,9 @@ public class Bucket extends Item {
             color = 0xFFFFFF;
             changeColorTint(color);
         }
-        events = new Event[] {
+        createItemEvents(
                 new ItemTouchEvent(this, "paint", new Condition(), 5, ItemType.PARTS)
-        };
+        );
     }
 
     private void changeContents(Contents contents) {

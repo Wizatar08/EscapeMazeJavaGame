@@ -15,6 +15,7 @@ public class ItemTouchEvent extends Event {
     private final Timer timeTillTrigger;
     private Item.Condition condition;
     private String triggerMethodName;
+    private boolean isOccuring;
 
     public ItemTouchEvent(Item centerItem, String triggerMethodName, Item.Condition condition, int timeTillTrigger, ItemType... itemsToTouch) {
         super();
@@ -25,11 +26,12 @@ public class ItemTouchEvent extends Event {
         this.triggerMethodName = triggerMethodName;
         itemsNeeded = new ArrayList<>();
         Collections.addAll(itemsNeeded, itemsToTouch);
+        this.isOccuring = false;
     }
 
     @Override
     public boolean isOccuring() {
-        return true;
+        return isOccuring;
     }
 
     @Override
@@ -45,19 +47,37 @@ public class ItemTouchEvent extends Event {
             }
         }
         if (types.size() <= 0 && condition.passes()) {
+            isOccuring = true;
             timeTillTrigger.unpause();
             if (timeTillTrigger.getTotalSeconds() <= 0) {
                 try {
                     centerItem.getClass().getMethod(triggerMethodName, ArrayList.class).invoke(centerItem, items);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    System.err.println(e + ": Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
+                    e.printStackTrace();
                 }
                 timeTillTrigger.pause();
                 timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
             }
         } else {
+            isOccuring = false;
             timeTillTrigger.pause();
             timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
         }
+    }
+
+    public Item getCenterItem() {
+        return centerItem;
+    }
+    public ArrayList<ItemType> getItemsNeeded() {
+        return itemsNeeded;
+    }
+    public Timer getTimeTillTrigger() {
+        return timeTillTrigger;
+    }
+    public Item.Condition getCondition() {
+        return condition;
+    }
+    public String getTriggerMethodName() {
+        return triggerMethodName;
     }
 }
