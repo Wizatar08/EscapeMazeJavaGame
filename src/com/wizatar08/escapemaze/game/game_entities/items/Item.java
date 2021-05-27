@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class Item implements Entity {
     private final Game gameController;
     private float x, y, texX, texY, width, height, weight, speedBoost;
-    private int passLevel, playerInd;
+    private int passLevel, playerInd, pixelLength;
     private Tex texture;
     private String id;
     private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor, displayOnPlayer;
@@ -31,6 +31,7 @@ public class Item implements Entity {
         this.texture = new Tex("game/items/" + type.getTexture());
         this.x = x;
         this.y = y;
+        this.pixelLength = type.getPixelLength();
         this.width = texture.getOpenGLTex().getImageWidth();
         this.height = texture.getOpenGLTex().getImageHeight();
         this.texX = x + ((Renderer.TILE_SIZE - width) / 2);
@@ -91,17 +92,6 @@ public class Item implements Entity {
         } else {
             gameController.removeItemFromGame(this);
         }
-    }
-
-    public boolean isTouching(Item... items) {
-        int required = items.length, found = 0;
-        ArrayList<? extends Item> itemsTouched;
-        for (Item item : items) {
-            if (Drawer.checkCollision(x, y, width, height, item.getX(), item.getY(), item.getWidth(), item.getHeight())) {
-                found++;
-            }
-        }
-        return required >= found;
     }
 
     @Override
@@ -252,6 +242,9 @@ public class Item implements Entity {
     }
     public Condition getConditions() {
         return condition;
+    }
+    public int getPixelLength() {
+        return pixelLength;
     }
 
 

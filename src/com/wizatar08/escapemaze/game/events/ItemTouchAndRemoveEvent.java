@@ -50,7 +50,7 @@ public class ItemTouchAndRemoveEvent extends Event {
                 try {
                     centerItem.getClass().getMethod(triggerMethodName, ArrayList.class).invoke(centerItem, items);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    System.err.println("Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
+                    e.printStackTrace();
                 }
                 for (Item item : items) {
                     getGameController().removeItemFromGame(item);

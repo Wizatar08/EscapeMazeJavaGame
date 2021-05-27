@@ -50,7 +50,7 @@ public class ItemTouchEvent extends Event {
                 try {
                     centerItem.getClass().getMethod(triggerMethodName, ArrayList.class).invoke(centerItem, items);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    System.err.println("Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
+                    System.err.println(e + ": Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
                 }
                 timeTillTrigger.pause();
                 timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());

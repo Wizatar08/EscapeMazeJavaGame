@@ -10,18 +10,18 @@ import java.util.*;
 public enum ItemType {
     // IDTYPE: 3
     NULL("300000", "null", new Builder()),
-    RED_KEY("300101", "red_key", new Builder().weight(0.1f).className(Key.class)),
-    ORANGE_KEY("300102", "orange_key", new Builder().weight(0.1f).className(Key.class)),
-    YELLOW_KEY("300103", "yellow_key", new Builder().weight(0.1f).className(Key.class)),
-    GREEN_KEY("300104", "green_key", new Builder().weight(0.1f).className(Key.class)),
-    BLUE_KEY("300105", "blue_key", new Builder().weight(0.1f).className(Key.class)),
-    DARK_BLUE_KEY("300106", "dark_blue_key", new Builder().weight(0.1f).className(Key.class)),
-    PURPLE_KEY("300107", "purple_key", new Builder().weight(0.1f).className(Key.class)),
-    PINK_KEY("300108", "pink_key", new Builder().weight(0.1f).className(Key.class)),
-    DIAMOND("300201", "diamond", new Builder().weight(0.2f).required()),
+    RED_KEY("300101", "red_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    ORANGE_KEY("300102", "orange_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    YELLOW_KEY("300103", "yellow_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    GREEN_KEY("300104", "green_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    BLUE_KEY("300105", "blue_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    DARK_BLUE_KEY("300106", "dark_blue_key", new Builder().pixelLength(32).weight(0.1f).className(Key.class)),
+    PURPLE_KEY("300107", "purple_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    PINK_KEY("300108", "pink_key", new Builder().weight(0.1f).pixelLength(32).className(Key.class)),
+    DIAMOND("300201", "diamond", new Builder().weight(0.2f).pixelLength(48).required()),
     LARGE_DIAMOND("300202", "large_diamond", new Builder().weight(0.65f).required()), // Must always be surrounded by lasers
-    RUBY("300203", "ruby", new Builder().weight(0.3f).required()),
-    LASER_DEACTIVATOR("300301", "laser_deactivator", new Builder().weight(0.15f).className(LaserDeactivator.class)),
+    RUBY("300203", "ruby", new Builder().weight(0.3f).pixelLength(32).required()),
+    LASER_DEACTIVATOR("300301", "laser_deactivator", new Builder().weight(0.15f).pixelLength(40).className(LaserDeactivator.class)),
     PASS_1("300401", "pass_level_1", new Builder().weight(0.15f).pass(1).className(Pass.class)),
     PASS_2("300402", "pass_level_2", new Builder().weight(0.15f).pass(2).className(Pass.class)),
     PASS_3("300403", "pass_level_3", new Builder().weight(0.15f).pass(3).className(Pass.class)),
@@ -33,14 +33,14 @@ public enum ItemType {
     SMALL_EMP("301001", "small_emp", new Builder().weight(0.2f).className(SmallEMP.class)),
     EMP("301002", "emp", new Builder().weight(1.3f).className(EMP.class)),
     HACKED_COMPUTER("301101", "hacked_computer", new Builder().weight(0.9f).className(HackedComputer.class)),
-    INSTRUCTIONS("301201", "instructions", new Builder().weight(0 /*0.5f*/)),
+    INSTRUCTIONS("301201", "instructions", new Builder().weight(0 /*0.5f*/).pixelLength(32)),
     PARTS("301301", "robot_parts", new Builder().weight(0 /*1.5f*/).className(RobotPartsItem.class)),
-    MINI_GENERATOR("301401", "mini_generator", new Builder().weight(0 /*1.35f*/)),
+    MINI_GENERATOR("301401", "mini_generator", new Builder().weight(0 /*1.35f*/).pixelLength(32)),
     HELPER_BOT("301501", "helper_bot_unpowered", new Builder().weight(0 /*1.35f*/).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")})),
-    WIRES("301601", "wires", new Builder().weight(0.1f)),
+    WIRES("301601", "wires", new Builder().weight(0.1f).pixelLength(32)),
     METAL_SHEET("301701", "metal_sheet", new Builder().weight(0.3f)),
-    SERVO_MOTOR("301801", "servo_motor", new Builder().weight(0.14f)),
-    BUCKET("301901", "bucket", new Builder().weight(0.11f).className(Bucket.class));
+    SERVO_MOTOR("301801", "servo_motor", new Builder().weight(0.14f).pixelLength(24)),
+    BUCKET("301901", "bucket", new Builder().weight(0.11f).className(Bucket.class).pixelLength(12));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults
@@ -65,7 +65,7 @@ public enum ItemType {
     private float weight;
     private boolean required, isPass, isAdminAccessor, power, gas;
     private Class<? extends Item> className;
-    private int passLevel;
+    private int passLevel, pixelLength;
     private Object[] classArgs;
 
     private static HashMap<String, ItemType> ITEM_IDS;
@@ -75,6 +75,7 @@ public enum ItemType {
         addToMap(id, this);
         this.id = id;
         this.texture = texture;
+        this.pixelLength = builder.getPixelLength();
         this.weight = builder.getWeight();
         this.required = builder.getRequired();
         this.className = builder.getClassName();
@@ -128,6 +129,9 @@ public enum ItemType {
     public Object[] getClassArgs() {
         return classArgs;
     }
+    public int getPixelLength() {
+        return pixelLength;
+    }
 
     public static ItemType getType(String type) {
         if (ITEM_IDS.get(type) != null) {
@@ -144,7 +148,7 @@ public enum ItemType {
         private float weight;
         private boolean required, isAdminAccessor, power, gas;
         private Class<? extends Item> className;
-        private int passLevel;
+        private int passLevel, pixelLength;
         private Object[] classArgs;
 
         private Builder() {
@@ -156,6 +160,7 @@ public enum ItemType {
             this.gas = false;
             this.isAdminAccessor = false;
             this.classArgs = null;
+            this.pixelLength = 64;
         }
 
         public Builder weight(float weight) {
@@ -199,6 +204,11 @@ public enum ItemType {
             return this;
         }
 
+        public Builder pixelLength(int length) {
+            pixelLength = length;
+            return this;
+        }
+
         public float getWeight() {
             return weight;
         }
@@ -222,6 +232,9 @@ public enum ItemType {
         }
         public Object[] getClassArgs() {
             return classArgs;
+        }
+        public int getPixelLength() {
+            return pixelLength;
         }
     }
 }

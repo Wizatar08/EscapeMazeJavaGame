@@ -299,7 +299,7 @@ public class Player implements Entity {
     private void detectIfHitItem() {
         Item item = null;
         for (Item item1 : gameController.getItems()) {
-            if (checkCollision(x, y, width, height, item1.getTexX(), item1.getTexY(), item1.getWidth(), item1.getHeight()) && !item1.isInInventory() && item1.canPickUp() && inventory.canAdd()) {
+            if (checkCollision(x, y, width, height, item1.getTexX() + ((item1.getWidth() - item1.getPixelLength()) / 2), item1.getTexY() + ((item1.getWidth() - item1.getPixelLength()) / 2), item1.getPixelLength(), item1.getPixelLength()) && !item1.isInInventory() && item1.canPickUp() && inventory.canAdd()) {
                 item = item1;
             }
         }

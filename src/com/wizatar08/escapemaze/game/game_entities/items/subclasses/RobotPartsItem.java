@@ -13,8 +13,12 @@ public class RobotPartsItem extends Item {
 
     public RobotPartsItem(Game game, ItemType type, JsonObject data, float x, float y) {
         super(game, type, data, x, y);
-        colorInt = Integer.parseInt(data.get("color").getAsString(), 16);
-        color = new Color(Integer.parseInt(data.get("color").getAsString(), 16));
+        try {
+            colorInt = Integer.parseInt(data.get("color").getAsString(), 16);
+        } catch (NullPointerException e) {
+            colorInt = 0xFFFFFF;
+        }
+        color = new Color(colorInt);
     }
 
     public void setColor(int color) {

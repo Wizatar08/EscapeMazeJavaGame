@@ -119,7 +119,7 @@ public class HelperBot extends RechargableBattery {
     }
 
     public void createParts(ArrayList<Item> items) {
-        gameController.addItemToGame(new Item(gameController, ItemType.PARTS, null, getX(), getY()));
+        gameController.addItemToGame(new RobotPartsItem(gameController, ItemType.PARTS, null, getX(), getY()));
         setDurability(0f);
     }
 }
