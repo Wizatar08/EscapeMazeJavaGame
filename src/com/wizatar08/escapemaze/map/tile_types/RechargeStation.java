@@ -2,7 +2,7 @@ package com.wizatar08.escapemaze.map.tile_types;
 
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.Tile;
 import com.wizatar08.escapemaze.map.TileType;

@@ -2,8 +2,8 @@ package com.wizatar08.escapemaze.helpers.ui;
 
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
-import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.TextBlock;
+import com.wizatar08.escapemaze.visuals.Tex;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;

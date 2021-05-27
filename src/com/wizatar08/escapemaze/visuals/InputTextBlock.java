@@ -1,6 +1,5 @@
-package com.wizatar08.escapemaze.helpers.visuals;
+package com.wizatar08.escapemaze.visuals;
 
-import com.wizatar08.escapemaze.helpers.ui.Button;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;

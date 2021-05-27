@@ -1,13 +1,13 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
-import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
+import static com.wizatar08.escapemaze.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity, TileEntity {
@@ -23,6 +23,7 @@ public class Tile implements Entity, TileEntity {
     private Game game;
     private Class<? extends Tile> subClass;
     private Condition rayTraceSeeable;
+    private Tex.Cluster tileDecorations;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
@@ -45,6 +46,7 @@ public class Tile implements Entity, TileEntity {
         this.isActive = type.startsActive();
         this.activeInfluencesPassable = type.activeInfluencesPassable();
         this.requiredPassLevels = type.cardPassesNeeded();
+        this.tileDecorations = type.getTileDecorations();
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
     }
 
@@ -129,6 +131,9 @@ public class Tile implements Entity, TileEntity {
                         defaultOverlapTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, defaultOverlapTexRots[i]);
                     }
                 }
+            }
+            if (tileDecorations != null) {
+                tileDecorations.draw(x + Game.DIS_X, y + Game.DIS_Y);
             }
         } else {
             canBeSeen = false;

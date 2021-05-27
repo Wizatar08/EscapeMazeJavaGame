@@ -4,14 +4,14 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.EnemyPathfinder;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
+import static com.wizatar08.escapemaze.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Enemy implements Entity {

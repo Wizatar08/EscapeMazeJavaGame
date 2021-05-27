@@ -1,4 +1,4 @@
-package com.wizatar08.escapemaze.helpers.visuals;
+package com.wizatar08.escapemaze.visuals;
 
 import com.wizatar08.escapemaze.helpers.Timer;
 import org.newdawn.slick.Color;
@@ -6,10 +6,8 @@ import org.newdawn.slick.opengl.Texture;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
-import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
+import static com.wizatar08.escapemaze.visuals.Drawer.*;
 
 public class Tex {
     private final int imageHeight, totalFrames;
@@ -86,7 +84,7 @@ public class Tex {
         return texList;
     }
 
-    public int getNextFrameNum() {
+    private int getNextFrameNum() {
         int f = frame;
         f++;
         if (f >= totalFrames) {
@@ -142,5 +140,44 @@ public class Tex {
     }
     public boolean isFading() {
         return fade;
+    }
+
+    public class Cluster {
+        private ArrayList<Tex> texes;
+        private ArrayList<Float> xDisplacements, yDisplacements;
+        private int amount, radius;
+
+        public Cluster(Tex tex, int amount, int radius) {
+            this(new Tex[]{tex}, amount, radius);
+        }
+
+        public Cluster(Tex[] texList, int amount, int radius) {
+            this.amount = amount;
+            this.radius = radius;
+
+            this.texes = new ArrayList<>();
+            this.xDisplacements = new ArrayList<>();
+            this.yDisplacements = new ArrayList<>();
+
+            for (int i = 0; i < amount; i++) {
+                texes.add(texList[(int) Math.floor(Math.random() * texList.length)]);
+                xDisplacements.add((float) (Math.random() * 2 * radius) - radius);
+                yDisplacements.add((float) (Math.random() * 2 * radius) - radius);
+            }
+        }
+
+        public void draw(float x, float y) {
+            for (int i = 0; i < texes.size(); i++) {
+                texes.get(i).draw(x + xDisplacements.get(i), y + yDisplacements.get(i));
+            }
+        }
+
+        public int getTexAmount() {
+            return amount;
+        }
+
+        public int getRadius() {
+            return radius;
+        }
     }
 }

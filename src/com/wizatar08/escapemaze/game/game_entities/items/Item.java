@@ -2,14 +2,17 @@ package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.game_entities.Player;
-import com.wizatar08.escapemaze.helpers.visuals.Drawer;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Drawer;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
+import org.lwjgl.Sys;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class Item implements Entity {
     private final Game gameController;
@@ -20,6 +23,7 @@ public class Item implements Entity {
     private boolean inInventory, required, isPass, isPowerSource, isGasSource, isAdminAccessor, displayOnPlayer;
     private Timer cooldownPickupTimer;
     private ItemType type;
+    public Condition condition;
 
     public Item(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
         this.gameController = game;
@@ -45,6 +49,15 @@ public class Item implements Entity {
         this.speedBoost = 0;
 
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
+
+        createCondition();
+    }
+
+    /**
+     * Class meant to be overwritten by subclasses. This will determine if a particular property of an item is valid for an event.
+     */
+    public void createCondition() {
+        condition = null;
     }
 
     private void updateTimer() {
@@ -95,6 +108,9 @@ public class Item implements Entity {
     public void update() {
         updateTimer();
         drawOnPlayer();
+        if (condition != null) {
+            condition.update();
+        }
     }
 
     /**
@@ -233,5 +249,49 @@ public class Item implements Entity {
     }
     public boolean isRunning() {
         return false;
+    }
+    public Condition getConditions() {
+        return condition;
+    }
+
+
+    public class Condition {
+        public ArrayList<Field> conditions;
+        private Item className;
+
+        public Condition() {
+            className = null;
+            conditions = new ArrayList<>();
+        }
+
+        public Condition(Item clazz, String... boolVarNames) {
+            conditions = new ArrayList<>();
+            this.className = clazz;
+            for (String b : boolVarNames) {
+                try {
+                    this.conditions.add(clazz.getClass().getDeclaredField(b));
+                } catch (NoSuchFieldException e) {
+                    System.err.println("Could not find field in class " + clazz.getClass().getName() + ": " + b);
+                }
+            }
+        }
+
+        public boolean passes() {
+            boolean test = true;
+            for (Field b : conditions) {
+                try {
+                    test = test && ((boolean) b.get(className));
+                } catch (IllegalAccessException e) {
+                    System.err.println("Cannot find method " + b.getName() + " in class " + className.getClass().getName());
+                }
+            }
+            System.out.println(test);
+            return test;
+        }
+
+        public void update() {
+
+        }
+
     }
 }

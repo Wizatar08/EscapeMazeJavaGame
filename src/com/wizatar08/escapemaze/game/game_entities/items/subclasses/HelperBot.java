@@ -1,24 +1,24 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.google.gson.JsonObject;
+import com.wizatar08.escapemaze.game.events.Event;
 import com.wizatar08.escapemaze.game.events.ItemTouchAndRemoveEvent;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.game.game_entities.items.subclasses.durability.RechargableBattery;
-import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.visuals.Drawer;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Drawer;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.menus.Game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HelperBot extends RechargableBattery {
     private Game gameController;
     private Tex unpoweredTex, poweredTex, activeTex;
-    private boolean isPowered, isActive;
+    private boolean isActive;
+    public boolean isPowered;
     private ArrayList<Item> itemsTouching;
-    private ItemTouchAndRemoveEvent touchEvent;
+    private Event[] events;
 
     public HelperBot(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
         super(game, type, texture, data, x, y);
@@ -30,12 +30,21 @@ public class HelperBot extends RechargableBattery {
         isPowered = false;
         isActive = false;
         itemsTouching = new ArrayList<>();
-        touchEvent = new ItemTouchAndRemoveEvent(this, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS);
+        createCondition();
+        events = new Event[]{
+                new ItemTouchAndRemoveEvent(this, "createPlayer", condition, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS)
+        };
+    }
+
+    @Override
+    public void createCondition() {
+        super.condition = new Condition(this, "isPowered");
     }
 
     @Override
     public void update() {
         super.update();
+        super.condition.passes();
         if (!isPowered) {
             isActive = false;
         }
@@ -97,15 +106,19 @@ public class HelperBot extends RechargableBattery {
         }
     }
 
-    @Override
-    public void onTrigger(ArrayList<Item> items) {
+    public void createPlayer(ArrayList<Item> items) {
         int color = 0;
         for (Item item : items) {
             if (item.getType() == ItemType.PARTS) {
                 color = ((RobotPartsItem) item).getColorIntValue();
             }
         }
+        setDurability(0);
         gameController.addNewPlayer(color, getX(), getY());
+    }
+
+    public void test(ArrayList<Item> items) {
+        System.out.println("TEST");
     }
 }
 

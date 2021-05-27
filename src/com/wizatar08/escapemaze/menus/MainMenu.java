@@ -1,9 +1,9 @@
 package com.wizatar08.escapemaze.menus;
 
 import com.wizatar08.escapemaze.helpers.Lang;
-import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
+import com.wizatar08.escapemaze.visuals.TextBlock;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;

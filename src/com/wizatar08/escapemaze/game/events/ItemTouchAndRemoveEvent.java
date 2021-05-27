@@ -3,9 +3,9 @@ package com.wizatar08.escapemaze.game.events;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.helpers.visuals.Drawer;
-import com.wizatar08.escapemaze.menus.Game;
+import com.wizatar08.escapemaze.visuals.Drawer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,12 +13,16 @@ public class ItemTouchAndRemoveEvent extends Event {
     private final Item centerItem;
     private final ArrayList<ItemType> itemsNeeded;
     private final Timer timeTillTrigger;
+    private Item.Condition condition;
+    private String triggerMethodName;
 
-    public ItemTouchAndRemoveEvent(Item centerItem, int timeTillTrigger, ItemType... otherItems) {
+    public ItemTouchAndRemoveEvent(Item centerItem, String triggerMethodName, Item.Condition condition, int timeTillTrigger, ItemType... otherItems) {
         super();
         this.centerItem = centerItem;
         this.timeTillTrigger = new Timer(Timer.TimerModes.COUNT_DOWN, timeTillTrigger);
         this.timeTillTrigger.pause();
+        this.condition = condition;
+        this.triggerMethodName = triggerMethodName;
         itemsNeeded = new ArrayList<>();
         Collections.addAll(itemsNeeded, otherItems);
     }
@@ -40,12 +44,15 @@ public class ItemTouchAndRemoveEvent extends Event {
                 items.add(item1);
             }
         }
-        if (types.size() <= 0) {
+        if (types.size() <= 0 && condition.passes()) {
             timeTillTrigger.unpause();
             if (timeTillTrigger.getTotalSeconds() <= 0) {
-                centerItem.onTrigger(items);
+                try {
+                    centerItem.getClass().getMethod(triggerMethodName, ArrayList.class).invoke(centerItem, items);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    System.err.println("Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
+                }
                 for (Item item : items) {
-                    System.out.println("TOUCH AND REMOVE: " + item.getType());
                     getGameController().removeItemFromGame(item);
                     timeTillTrigger.pause();
                     timeTillTrigger.setTime(10);

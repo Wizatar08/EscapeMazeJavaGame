@@ -12,7 +12,7 @@
   "items": "lvl1",
   "scroll": "none",
   "alarm_seconds": 45,
-  "inventory_slots": 9,
+  "inventory_slots": 5,
   "text": [
     {
       "text": "game.ui.beginner_text.1",

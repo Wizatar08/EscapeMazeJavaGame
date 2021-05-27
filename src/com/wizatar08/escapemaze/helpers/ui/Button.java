@@ -1,7 +1,7 @@
 package com.wizatar08.escapemaze.helpers.ui;
 
-import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.TextBlock;
+import com.wizatar08.escapemaze.visuals.Tex;
 
 public class Button {
     private String name;

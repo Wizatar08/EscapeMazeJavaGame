@@ -1,7 +1,7 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.tile_types.*;
 import com.wizatar08.escapemaze.render.Renderer;
 
@@ -129,6 +129,7 @@ public enum TileType {
     private final Class<? extends Tile> subClass;
     private final Object[] subClassArgs;
     private final Tile.Condition rayTraceSeeable;
+    private final Tex.Cluster tileDecorations;
 
     TileType(String id, Tex texture, Builder builder) {
         createIdMapAndArrays();
@@ -151,6 +152,7 @@ public enum TileType {
         this.cardPassesNeeded = builder.getCardPassesNeeded();
         this.authorityLocked = builder.isAuthorityDoor();
         this.isPressurePlateComputer = builder.isPressurePlateComputer();
+        this.tileDecorations = builder.getTileDecorations();
         this.subClass = builder.getSubClass();
     }
 
@@ -223,6 +225,9 @@ public enum TileType {
     public Tile.Condition isRayTraceSeeable() {
         return rayTraceSeeable;
     }
+    public Tex.Cluster getTileDecorations() {
+        return tileDecorations;
+    }
 
     /**
      * Tile builder class.
@@ -235,6 +240,7 @@ public enum TileType {
         public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
         public static Tile.Condition rayTraceSeeable;
+        public static Tex.Cluster tileDecorations;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -260,6 +266,7 @@ public enum TileType {
             subClass = null;
             startsActive = false;
             activeInfluencesPassable = false;
+            tileDecorations = null;
         }
 
         /**
@@ -422,6 +429,11 @@ public enum TileType {
             return this;
         }
 
+        private Builder decorations(Tex.Cluster decorations) {
+            tileDecorations = decorations;
+            return this;
+        }
+
         // Getters
         public Class<? extends Tile> getSubClass() {
             return subClass;
@@ -479,6 +491,9 @@ public enum TileType {
         }
         public boolean activeInfluencesPassable() {
             return activeInfluencesPassable;
+        }
+        public Tex.Cluster getTileDecorations() {
+            return tileDecorations;
         }
     }
 }

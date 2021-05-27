@@ -9,7 +9,7 @@ import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.JSONEnemyClass;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.Lang;
-import com.wizatar08.escapemaze.helpers.visuals.TextBlock;
+import com.wizatar08.escapemaze.visuals.TextBlock;
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import com.wizatar08.escapemaze.menus.Game;
 import org.lwjgl.util.glu.Project;

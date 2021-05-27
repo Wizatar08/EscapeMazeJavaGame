@@ -1,14 +1,12 @@
 package com.wizatar08.escapemaze;
 
 import com.wizatar08.escapemaze.helpers.Clock;
-import com.wizatar08.escapemaze.helpers.visuals.Drawer;
+import com.wizatar08.escapemaze.visuals.Drawer;
 import com.wizatar08.escapemaze.helpers.Lang;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.render.Renderer;
+import com.wizatar08.escapemaze.visuals.Tex;
 import org.lwjgl.opengl.Display;
-
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 
 /**
  * Where all the code is set up and run

@@ -1,6 +1,6 @@
 package com.wizatar08.escapemaze.interfaces;
 
-import com.wizatar08.escapemaze.helpers.visuals.Tex;
+import com.wizatar08.escapemaze.visuals.Tex;
 
 public interface TileEntity {
 

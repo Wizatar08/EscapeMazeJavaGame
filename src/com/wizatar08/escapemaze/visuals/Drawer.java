@@ -1,4 +1,4 @@
-package com.wizatar08.escapemaze.helpers.visuals;
+package com.wizatar08.escapemaze.visuals;
 
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;

@@ -1,4 +1,4 @@
-package com.wizatar08.escapemaze.helpers.visuals;
+package com.wizatar08.escapemaze.visuals;
 
 import com.wizatar08.escapemaze.helpers.ui.UI;
 import org.newdawn.slick.Color;
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
-import static com.wizatar08.escapemaze.helpers.visuals.Drawer.*;
+import static com.wizatar08.escapemaze.visuals.Drawer.*;
 
 public class TextBlock {
     private UI ui;
