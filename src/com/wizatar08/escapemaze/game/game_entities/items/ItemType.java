@@ -36,7 +36,11 @@ public enum ItemType {
     INSTRUCTIONS("301201", "instructions", new Builder().weight(0 /*0.5f*/)),
     PARTS("301301", "robot_parts", new Builder().weight(0 /*1.5f*/).className(RobotPartsItem.class)),
     MINI_GENERATOR("301401", "mini_generator", new Builder().weight(0 /*1.35f*/)),
-    HELPER_BOT("301501", "helper_bot_unpowered", new Builder().weight(0 /*1.35f*/).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")}));
+    HELPER_BOT("301501", "helper_bot_unpowered", new Builder().weight(0 /*1.35f*/).className(HelperBot.class, new Object[]{60, new Tex("game/items/helper_bot_powered"), new Tex("game/items/helper_bot_active")})),
+    WIRES("301601", "wires", new Builder().weight(0.1f)),
+    METAL_SHEET("301701", "metal_sheet", new Builder().weight(0.3f)),
+    SERVO_MOTOR("301801", "servo_motor", new Builder().weight(0.14f)),
+    BUCKET("301901", "bucket", new Builder().weight(0.11f).className(Bucket.class));
 
     /* IDEAS FOR ITEMS:
      * - DONE: Pass: Can unlock vaults

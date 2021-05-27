@@ -20,10 +20,10 @@ public class HelperBot extends RechargableBattery {
     private ArrayList<Item> itemsTouching;
     private Event[] events;
 
-    public HelperBot(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public HelperBot(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
-        unpoweredTex = texture;
+        unpoweredTex = new Tex("game/items/" + type.getTexture());
         poweredTex = (Tex) type.getClassArgs()[1];
         activeTex = (Tex) type.getClassArgs()[2];
         setDurability(0);
@@ -32,7 +32,8 @@ public class HelperBot extends RechargableBattery {
         itemsTouching = new ArrayList<>();
         createCondition();
         events = new Event[]{
-                new ItemTouchAndRemoveEvent(this, "createPlayer", condition, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS)
+                new ItemTouchAndRemoveEvent(this, "createPlayer", condition, 10, ItemType.MINI_GENERATOR, ItemType.INSTRUCTIONS, ItemType.PARTS),
+                new ItemTouchAndRemoveEvent(this, "createParts", condition, 5, ItemType.WIRES, ItemType.METAL_SHEET, ItemType.SERVO_MOTOR)
         };
     }
 
@@ -117,8 +118,9 @@ public class HelperBot extends RechargableBattery {
         gameController.addNewPlayer(color, getX(), getY());
     }
 
-    public void test(ArrayList<Item> items) {
-        System.out.println("TEST");
+    public void createParts(ArrayList<Item> items) {
+        gameController.addItemToGame(new Item(gameController, ItemType.PARTS, null, getX(), getY()));
+        setDurability(0f);
     }
 }
 

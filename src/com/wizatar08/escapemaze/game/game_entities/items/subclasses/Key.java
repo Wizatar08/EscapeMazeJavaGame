@@ -12,8 +12,8 @@ public class Key extends Item {
     private Game gameController;
     private Tile tile;
 
-    public Key(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public Key(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
     }
 

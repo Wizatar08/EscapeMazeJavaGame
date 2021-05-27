@@ -11,8 +11,8 @@ public class EMP extends Item {
     private Game gameController;
     private Timer countdown;
 
-    public EMP(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public EMP(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
         countdown = new Timer(Timer.TimerModes.COUNT_DOWN, 40);
     }

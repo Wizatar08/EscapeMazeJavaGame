@@ -25,10 +25,10 @@ public class Item implements Entity {
     private ItemType type;
     public Condition condition;
 
-    public Item(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
+    public Item(Game game, ItemType type, JsonObject data, float x, float y) {
         this.gameController = game;
         this.type = type;
-        this.texture = texture;
+        this.texture = new Tex("game/items/" + type.getTexture());
         this.x = x;
         this.y = y;
         this.width = texture.getOpenGLTex().getImageWidth();
@@ -285,7 +285,6 @@ public class Item implements Entity {
                     System.err.println("Cannot find method " + b.getName() + " in class " + className.getClass().getName());
                 }
             }
-            System.out.println(test);
             return test;
         }
 

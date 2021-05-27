@@ -12,8 +12,8 @@ public class Pass extends Item {
     private Game gameController;
     private Tile tile;
 
-    public Pass(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public Pass(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
         tile = null;
     }

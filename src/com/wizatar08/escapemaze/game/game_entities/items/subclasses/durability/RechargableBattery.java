@@ -13,8 +13,8 @@ public class RechargableBattery extends DurabilityItem {
     private Tile tile;
     private ItemType type;
 
-    public RechargableBattery(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public RechargableBattery(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
         tile = null;
         this.type = type;

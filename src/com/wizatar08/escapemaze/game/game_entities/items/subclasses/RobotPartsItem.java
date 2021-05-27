@@ -11,10 +11,15 @@ public class RobotPartsItem extends Item {
     private Color color;
     private int colorInt;
 
-    public RobotPartsItem(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public RobotPartsItem(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         colorInt = Integer.parseInt(data.get("color").getAsString(), 16);
         color = new Color(Integer.parseInt(data.get("color").getAsString(), 16));
+    }
+
+    public void setColor(int color) {
+        this.color = new Color(color);
+        this.colorInt = color;
     }
 
     @Override

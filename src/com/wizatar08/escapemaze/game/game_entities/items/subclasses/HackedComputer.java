@@ -9,8 +9,8 @@ import com.wizatar08.escapemaze.menus.Game;
 public class HackedComputer extends Item {
     private Game gameController;
 
-    public HackedComputer(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public HackedComputer(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
     }
 

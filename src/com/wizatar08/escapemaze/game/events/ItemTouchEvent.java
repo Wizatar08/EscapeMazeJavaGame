@@ -9,14 +9,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ItemTouchAndRemoveEvent extends Event {
+public class ItemTouchEvent extends Event {
     private final Item centerItem;
     private final ArrayList<ItemType> itemsNeeded;
     private final Timer timeTillTrigger;
     private Item.Condition condition;
     private String triggerMethodName;
 
-    public ItemTouchAndRemoveEvent(Item centerItem, String triggerMethodName, Item.Condition condition, int timeTillTrigger, ItemType... otherItems) {
+    public ItemTouchEvent(Item centerItem, String triggerMethodName, Item.Condition condition, int timeTillTrigger, ItemType... itemsToTouch) {
         super();
         this.centerItem = centerItem;
         this.timeTillTrigger = new Timer(Timer.TimerModes.COUNT_DOWN, timeTillTrigger);
@@ -24,7 +24,7 @@ public class ItemTouchAndRemoveEvent extends Event {
         this.condition = condition;
         this.triggerMethodName = triggerMethodName;
         itemsNeeded = new ArrayList<>();
-        Collections.addAll(itemsNeeded, otherItems);
+        Collections.addAll(itemsNeeded, itemsToTouch);
     }
 
     @Override
@@ -52,11 +52,8 @@ public class ItemTouchAndRemoveEvent extends Event {
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     System.err.println("Method " + triggerMethodName + " cannot be run within " + centerItem.getClass());
                 }
-                for (Item item : items) {
-                    getGameController().removeItemFromGame(item);
-                    timeTillTrigger.pause();
-                    timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
-                }
+                timeTillTrigger.pause();
+                timeTillTrigger.setTime(timeTillTrigger.getStartingSeconds());
             }
         } else {
             timeTillTrigger.pause();

@@ -40,13 +40,12 @@ public class JSONItemClass {
             Class clazz = ItemType.getType(id).getClassname();
             if (clazz != null) {
                 try {
-                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, Tex.class, JsonObject.class, float.class, float.class).newInstance(game, ItemType.getType(id), new Tex("game/items/" + ItemType.getType(id).getTexture()), data, x, y));
+                    itemList.add((Item) clazz.getConstructor(Game.class, ItemType.class, JsonObject.class, float.class, float.class).newInstance(game, ItemType.getType(id), data, x, y));
                 } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             } else {
-                Tex t = new Tex("game/items/" + ItemType.getType(id).getTexture());
-                itemList.add(new Item(game, ItemType.getType(id), t, data, x, y));
+                itemList.add(new Item(game, ItemType.getType(id), data, x, y));
             }
         }
         return itemList;

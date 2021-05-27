@@ -10,8 +10,8 @@ public class HoveringDevice extends Item {
     private final Game gameController;
     private boolean running, canRun;
 
-    public HoveringDevice(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public HoveringDevice(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
         running = false;
     }

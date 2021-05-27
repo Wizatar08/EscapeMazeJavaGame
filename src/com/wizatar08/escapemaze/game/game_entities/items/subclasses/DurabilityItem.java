@@ -14,8 +14,8 @@ public class DurabilityItem extends Item {
     private float percentage;
     private final float onePercent;
 
-    public DurabilityItem(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public DurabilityItem(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         durabilityTime = new Timer(Timer.TimerModes.COUNT_DOWN, (int) type.getClassArgs()[0]);
         backgroundTex = new Tex("game/durability/background");
         barTex = new Tex("game/durability/bar");

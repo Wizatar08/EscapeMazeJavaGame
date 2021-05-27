@@ -10,8 +10,8 @@ public class Booster extends Item {
     private Game gameController;
     private boolean running;
 
-    public Booster(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public Booster(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         this.gameController = game;
         running = false;
     }

@@ -12,8 +12,8 @@ public class LaserDeactivator extends Item {
     private Game gameController;
     private Tile tile;
 
-    public LaserDeactivator(Game game, ItemType type, Tex texture, JsonObject data, float x, float y) {
-        super(game, type, texture, data, x, y);
+    public LaserDeactivator(Game game, ItemType type, JsonObject data, float x, float y) {
+        super(game, type, data, x, y);
         gameController = game;
         this.tile = null;
     }
