@@ -43,6 +43,11 @@ public class TileMap {
                 tile.draw();
             }
         }
+        for (Tile[] tiles : map) {
+            for (Tile tile : tiles) {
+                tile.drawTileDecorations();
+            }
+        }
     }
 
     public void setTile(int xCoord, int yCoord, TileType type) {

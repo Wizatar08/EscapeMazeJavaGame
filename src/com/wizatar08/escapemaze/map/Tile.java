@@ -7,6 +7,8 @@ import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
+import java.util.Collections;
+
 import static com.wizatar08.escapemaze.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
@@ -38,7 +40,7 @@ public class Tile implements Entity, TileEntity {
         this.type = type;
         this.subClass = type.getSubClass();
         this.canPass = type.isPassable();
-        this.defaultTexture = Tex.newInstance(type.getTexture());
+        this.defaultTexture = Tex.newInstance(type.getTexture()[(int) Math.floor(Math.random() * type.getTexture().length)]);
         this.defaultOverlapTexture = type.getOverlayTex();
         this.defaultOverlapTexRots = type.getOverlayTexRot();
         this.activeTexture = type.getActiveTileTexture();
@@ -46,7 +48,9 @@ public class Tile implements Entity, TileEntity {
         this.isActive = type.startsActive();
         this.activeInfluencesPassable = type.activeInfluencesPassable();
         this.requiredPassLevels = type.cardPassesNeeded();
-        this.tileDecorations = type.getTileDecorations();
+        if (type.getTileDecorations() != null) {
+            this.tileDecorations = new Tex.Cluster((Tex[]) type.getTileDecorations()[0], (int) type.getTileDecorations()[1], (int) type.getTileDecorations()[2], (int) type.getTileDecorations()[3]);
+        }
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
     }
 
@@ -132,11 +136,14 @@ public class Tile implements Entity, TileEntity {
                     }
                 }
             }
-            if (tileDecorations != null) {
-                tileDecorations.draw(x + Game.DIS_X, y + Game.DIS_Y);
-            }
         } else {
             canBeSeen = false;
+        }
+    }
+
+    public void drawTileDecorations() {
+        if (tileDecorations != null) {
+            tileDecorations.draw(x + Game.DIS_X, y + Game.DIS_Y);
         }
     }
 

@@ -371,7 +371,7 @@ public class Editor {
             int ceil = (int) Math.ceil(i / (w * h));
             if (editorUI.getMenu("Tiles" + ceil) == null) editorUI.createMenu("Tiles" + ceil, WIDTH - (int) (64 * 3.3), 84, 204, 680, w, h);
             Tex[] textures = new Tex[filturedTiles.get(i).getOverlayTex().length + 1];
-            textures[0] = filturedTiles.get(i).getTexture();
+            textures[0] = filturedTiles.get(i).getTexture()[(int) Math.floor(Math.random() * filturedTiles.get(i).getTexture().length)];
             for (int j = 0; j < filturedTiles.get(i).getOverlayTex().length; j++) {
                 textures[j + 1] = filturedTiles.get(i).getOverlayTex()[j];
             }

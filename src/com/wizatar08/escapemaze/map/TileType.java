@@ -5,6 +5,7 @@ import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.tile_types.*;
 import com.wizatar08.escapemaze.render.Renderer;
 
+import javax.swing.event.CaretListener;
 import java.util.*;
 
 public enum TileType {
@@ -95,7 +96,18 @@ public enum TileType {
     DISPENSER_1("101501", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{0, 0}).dispenser(Direction.UP)),
     DISPENSER_2("101502", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 90}).dispenser(Direction.RIGHT)),
     DISPENSER_3("101503", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{0, 180}).dispenser(Direction.DOWN)),
-    DISPENSER_4("101504", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 270}).dispenser(Direction.LEFT));
+    DISPENSER_4("101504", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 270}).dispenser(Direction.LEFT)),
+    GRASS("101601", new Tex("tiles/grass"), new Builder().isPassable()),
+    GRASS_TREE("101602", new Tex("tiles/grass"), new Builder().isPassable().decorations(Tex.getTexInFolder("tile_decorators/grass_tree_space"), 2, 24)),
+    GRASS_FLOWER_ROWS_VERTICAL("101603", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{0}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 0)),
+    GRASS_FLOWER_ROWS_HORIZONTAL("101604", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{90}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 90)),
+    GRASS_PEBBLES_GROUND("101605", new Tex("tiles/grass"), new Builder().isPassable().decorations(Tex.getTexInFolder("tile_decorators/path_pebbles"), 8, 32)),
+    WINDOW_END_DEFAULT_FLOOR_1("101701", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{0})),
+    WINDOW_END_DEFAULT_FLOOR_2("101702", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{90})),
+    WINDOW_END_DEFAULT_FLOOR_3("101703", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{180})),
+    WINDOW_END_DEFAULT_FLOOR_4("101704", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{270})),
+    WINDOW_MIDDLE_DEFAULT_FLOOR_HORIZONTAL("101705", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{0})),
+    WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}));
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -119,7 +131,7 @@ public enum TileType {
 
     // Initialize variables
     private final String id;
-    private final Tex texture;
+    private final Tex[] texture;
     private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer, startsActive, activeInfluencesPassasble;
     private final Direction safeSpot;
     private final Tex[] overlayTex, activeTexture;
@@ -129,9 +141,13 @@ public enum TileType {
     private final Class<? extends Tile> subClass;
     private final Object[] subClassArgs;
     private final Tile.Condition rayTraceSeeable;
-    private final Tex.Cluster tileDecorations;
+    private final Object[] tileDecorations;
 
     TileType(String id, Tex texture, Builder builder) {
+        this (id, new Tex[]{texture}, builder);
+    }
+
+    TileType(String id, Tex[] texture, Builder builder) {
         createIdMapAndArrays();
         addToMap(id, this);
         this.id = id;
@@ -174,7 +190,7 @@ public enum TileType {
     public String getId() {
         return id;
     }
-    public Tex getTexture() {
+    public Tex[] getTexture() {
         return texture;
     }
     public boolean isPassable() {
@@ -225,7 +241,7 @@ public enum TileType {
     public Tile.Condition isRayTraceSeeable() {
         return rayTraceSeeable;
     }
-    public Tex.Cluster getTileDecorations() {
+    public Object[] getTileDecorations() {
         return tileDecorations;
     }
 
@@ -240,7 +256,7 @@ public enum TileType {
         public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
         public static Tile.Condition rayTraceSeeable;
-        public static Tex.Cluster tileDecorations;
+        public static Object[] tileDecorations;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -429,8 +445,13 @@ public enum TileType {
             return this;
         }
 
-        private Builder decorations(Tex.Cluster decorations) {
-            tileDecorations = decorations;
+        private Builder decorations(Tex[] texes, int amount, int radius) {
+            tileDecorations = new Object[]{texes, amount, radius, 0};
+            return this;
+        }
+
+        private Builder decorations(Tex[] texes, int amount, int radius, int setRotation) {
+            tileDecorations = new Object[]{texes, amount, radius, setRotation};
             return this;
         }
 
@@ -492,7 +513,7 @@ public enum TileType {
         public boolean activeInfluencesPassable() {
             return activeInfluencesPassable;
         }
-        public Tex.Cluster getTileDecorations() {
+        public Object[] getTileDecorations() {
             return tileDecorations;
         }
     }

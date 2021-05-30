@@ -74,7 +74,8 @@ public class Tex {
         ArrayList<Tex> texArray = new ArrayList<>();
         for (File file : files) {
             if (file.toString().endsWith(".png")) {
-                texArray.add(new Tex(folderName + "/" + file.getName()));
+                String fileName = file.getName().replace(".png", "");
+                texArray.add(new Tex(folderName + "/" + fileName));
             }
         }
         Tex[] texList = new Tex[texArray.size()];
@@ -125,6 +126,13 @@ public class Tex {
         }
     }
 
+    public static Cluster cluster(Tex tex, int amount, int radius) {
+        return new Cluster(tex, amount, radius);
+    }
+    public static Cluster cluster(Tex[] texList, int amount, int radius) {
+        return new Cluster(texList, amount, radius);
+    }
+
     public Texture getOpenGLTex() {
         return texture;
     }
@@ -142,18 +150,23 @@ public class Tex {
         return fade;
     }
 
-    public class Cluster {
+    public static class Cluster {
         private ArrayList<Tex> texes;
         private ArrayList<Float> xDisplacements, yDisplacements;
-        private int amount, radius;
+        private int amount, radius, rotation;
 
         public Cluster(Tex tex, int amount, int radius) {
             this(new Tex[]{tex}, amount, radius);
         }
 
         public Cluster(Tex[] texList, int amount, int radius) {
+            this(texList, amount, radius, 0);
+        }
+
+        public Cluster(Tex[] texList, int amount, int radius, int rotation) {
             this.amount = amount;
             this.radius = radius;
+            this.rotation = rotation;
 
             this.texes = new ArrayList<>();
             this.xDisplacements = new ArrayList<>();
@@ -168,7 +181,7 @@ public class Tex {
 
         public void draw(float x, float y) {
             for (int i = 0; i < texes.size(); i++) {
-                texes.get(i).draw(x + xDisplacements.get(i), y + yDisplacements.get(i));
+                texes.get(i).draw(x + xDisplacements.get(i), y + yDisplacements.get(i), rotation);
             }
         }
 
@@ -178,6 +191,10 @@ public class Tex {
 
         public int getRadius() {
             return radius;
+        }
+
+        public ArrayList<Tex> getTextures() {
+            return texes;
         }
     }
 }

@@ -96,6 +96,8 @@ public class Enemy implements Entity {
     }
 
     private void moveToNextPath() {
+        setX(pathCoords[currentPathPoint][0].floatValue());
+        setY(pathCoords[currentPathPoint][1].floatValue());
         nextPath();
         beginningSwitch = false;
         hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
@@ -106,7 +108,10 @@ public class Enemy implements Entity {
         float lastRot = rot;
         rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0].floatValue(), pathCoords[currentPathPoint][1].floatValue());
         rotDiff = lastRot - rot;
-        if (hypotenuse.intValue() < -1 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
+        float disX = pathCoords[currentPathPoint][0].floatValue() - x;
+        float disY = pathCoords[currentPathPoint][1].floatValue() - y;
+        if ((Math.abs(disX) + Math.abs(disY) < 4) || hypotenuse.intValue() <= 1) {
+        //if (hypotenuse.intValue() < -1 && checkCollision(x, y, width + 4, height + 4, pathCoords[currentPathPoint][0].intValue() - 2 + TILE_SIZE, pathCoords[currentPathPoint][1].intValue() - 2 + TILE_SIZE, 5, 5)) {
             moveToNextPath();
         }
         float diffX = x;
