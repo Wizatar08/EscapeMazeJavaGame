@@ -112,6 +112,11 @@ public class Item implements Entity {
         }
     }
 
+    @Override
+    public void onCollisionWith(Entity entity) {
+
+    }
+
     /**
      * Called when an event with this is called.
      */

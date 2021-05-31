@@ -19,6 +19,7 @@ public class PressurePlate extends Tile {
 
     @Override
     public void update() {
+        super.update();
         if (gameController.pressurePlatesActive()) {
             ArrayList<Player> player = gameController.getPlayerInstances();
             player.forEach((p) -> {

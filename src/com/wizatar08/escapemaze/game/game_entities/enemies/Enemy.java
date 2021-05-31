@@ -139,6 +139,11 @@ public class Enemy implements Entity {
         freezeTime.update();
     }
 
+    @Override
+    public void onCollisionWith(Entity entity) {
+
+    }
+
     public void freeze(float seconds) {
         freezeTime.setTime(seconds);
         freezeTime.unpause();

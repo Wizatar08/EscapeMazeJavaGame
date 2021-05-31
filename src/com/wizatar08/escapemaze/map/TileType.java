@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
+import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.tile_types.*;
 import com.wizatar08.escapemaze.render.Renderer;
@@ -142,6 +143,7 @@ public enum TileType {
     private final Object[] subClassArgs;
     private final Tile.Condition rayTraceSeeable;
     private final Object[] tileDecorations;
+    private final int[] hitbox;
 
     TileType(String id, Tex texture, Builder builder) {
         this (id, new Tex[]{texture}, builder);
@@ -170,6 +172,7 @@ public enum TileType {
         this.isPressurePlateComputer = builder.isPressurePlateComputer();
         this.tileDecorations = builder.getTileDecorations();
         this.subClass = builder.getSubClass();
+        this.hitbox = builder.getHitbox();
     }
 
     private void createIdMapAndArrays() {
@@ -244,6 +247,9 @@ public enum TileType {
     public Object[] getTileDecorations() {
         return tileDecorations;
     }
+    public int[] getHitbox() {
+        return hitbox;
+    }
 
     /**
      * Tile builder class.
@@ -257,6 +263,7 @@ public enum TileType {
         public static Object[] subClassArgs;
         public static Tile.Condition rayTraceSeeable;
         public static Object[] tileDecorations;
+        public static int[] hitbox;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -283,6 +290,7 @@ public enum TileType {
             startsActive = false;
             activeInfluencesPassable = false;
             tileDecorations = null;
+            hitbox = new int[]{0, 0, Renderer.TILE_SIZE, Renderer.TILE_SIZE};
         }
 
         /**
@@ -455,6 +463,14 @@ public enum TileType {
             return this;
         }
 
+        private Builder hitbox(int x, int y, int width, int height) {
+            hitbox[0] = x;
+            hitbox[1] = y;
+            hitbox[2] = width;
+            hitbox[3] = height;
+            return this;
+        }
+
         // Getters
         public Class<? extends Tile> getSubClass() {
             return subClass;
@@ -515,6 +531,9 @@ public enum TileType {
         }
         public Object[] getTileDecorations() {
             return tileDecorations;
+        }
+        private int[] getHitbox() {
+            return hitbox;
         }
     }
 }

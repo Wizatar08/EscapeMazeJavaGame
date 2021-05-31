@@ -1,12 +1,15 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import static com.wizatar08.escapemaze.visuals.Drawer.*;
@@ -26,6 +29,7 @@ public class Tile implements Entity, TileEntity {
     private Class<? extends Tile> subClass;
     private Condition rayTraceSeeable;
     private Tex.Cluster tileDecorations;
+    private Hitbox hitBox;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
@@ -52,6 +56,8 @@ public class Tile implements Entity, TileEntity {
             this.tileDecorations = new Tex.Cluster((Tex[]) type.getTileDecorations()[0], (int) type.getTileDecorations()[1], (int) type.getTileDecorations()[2], (int) type.getTileDecorations()[3]);
         }
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
+        this.hitBox = new Hitbox(this, type.getHitbox()[0], type.getHitbox()[1], type.getHitbox()[2], type.getHitbox()[3]);
+
     }
 
     public enum Condition {
@@ -150,7 +156,21 @@ public class Tile implements Entity, TileEntity {
     /**
      * Overridden in subclasses. Used to constantly update this tile.
      */
-    public void update() {}
+    public void update() {
+        hitBox.update();
+    }
+
+    /**
+     * Runs when something hits the player
+     * @param entity
+     */
+    @Override
+    public void onCollisionWith(Entity entity) {
+        if (entity instanceof Player && !this.testIfPassable()) {
+            ((Player) entity).onWallCollision();
+        }
+    }
+
     /**
      * Overridden in subclasses. Used to carry out a function when a player presses the USE button when NEAR the tile.
      */
@@ -177,7 +197,11 @@ public class Tile implements Entity, TileEntity {
     /**
      * Overridden in subclasses. Used to carry out a function when the whole map is loaded.
      */
-    public void onMapCreation() {}
+    public void onMapCreation() {
+        for (Player player : game.getPlayerInstances()) {
+            hitBox.addCollidingEntityDetector(player);
+        }
+    }
 
     // Getters
     public float getHeight() {

@@ -22,6 +22,7 @@ public class MaterialDetectorComputer extends Tile {
 
     @Override
     public void update() {
+        super.update();
         this.setActive(gameController.materialDetectorsActive());
     }
 

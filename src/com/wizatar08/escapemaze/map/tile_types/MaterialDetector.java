@@ -28,6 +28,7 @@ public class MaterialDetector extends Tile {
 
     @Override
     public void onMapCreation() {
+        super.onMapCreation();
         createDetectionAreas();
     }
 

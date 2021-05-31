@@ -44,7 +44,7 @@ public class Player implements Entity {
     private Tex tex, detectTex;
     private final Game gameController;
     private Inventory inventory;
-    private float weightInfluence, speedInfluence;
+    private float weightInfluence, speedInfluence, prevXDir, prevYDir;
     private boolean selected;
     private org.newdawn.slick.Color texColor;
 
@@ -204,45 +204,25 @@ public class Player implements Entity {
         return (Mouse.getEventButton() == key) && (Mouse.getEventButtonState());
     }
 
-    // Move the player and detect if the player hit any walls
+    // Move the player
     private void moveCharacter(float xDir, float yDir) {
-        Tile leftTile = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.floor(y / TILE_SIZE));
-        Tile rightTile = map.getTile((int) Math.floor(x / TILE_SIZE) + 1, (int) Math.floor(y / TILE_SIZE));
-        Tile upTile = map.getTile((int) Math.floor(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE) - 1);
-        Tile downTile = map.getTile((int) Math.floor(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE) + 1);
+        prevXDir = xDir * Clock.Delta() * Clock.FPS;
+        prevYDir = yDir * Clock.Delta() * Clock.FPS;
 
-        Tile currTile = map.getTile((int) Math.floor((x + 32) / TILE_SIZE), (int) Math.round(y / TILE_SIZE));
-        Tile currTile2 = map.getTile((int) Math.ceil(x / TILE_SIZE), (int) Math.floor(y / TILE_SIZE) - 1);
-        Tile currTile3 = map.getTile((int) Math.floor(x / TILE_SIZE) - 1, (int) Math.ceil(y / TILE_SIZE));
+        if (xDir != 0) {
+            x += prevXDir;
+        }
+        if (yDir != 0) {
+            y += prevYDir;
+        }
+    }
 
-        if (xDir < 0) {
-            x += xDir * Clock.Delta() * Clock.FPS;
-            if (!leftTile.testIfPassable()&& checkCollision(leftTile.getX(), leftTile.getY(), leftTile.getWidth(), leftTile.getHeight(), x, y, width, height) ||
-                (checkCollision(currTile3.getX(), currTile3.getY(), currTile3.getWidth(), currTile3.getHeight(), x, y, width, height) && !currTile3.testIfPassable())) {
-                x -= xDir * Clock.Delta() * Clock.FPS;
-            }
-        }
-        if (xDir > 0) {
-            x += xDir * Clock.Delta() * Clock.FPS;
-            if (!rightTile.testIfPassable() && checkCollision(rightTile.getX(), rightTile.getY(), rightTile.getWidth(), rightTile.getHeight(), x, y, width, height ) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.testIfPassable())) {
-                x -= xDir * Clock.Delta() * Clock.FPS;
-            }
-        }
-        if (yDir < 0) {
-            y += yDir * Clock.Delta() * Clock.FPS;
-            if (!upTile.testIfPassable() && checkCollision(upTile.getX(), upTile.getY(), upTile.getWidth(), upTile.getHeight(), x, y, width, height) ||
-                    (checkCollision(currTile2.getX(), currTile2.getY(), currTile2.getWidth(), currTile2.getHeight(), x, y, width, height) && !currTile2.testIfPassable())) {
-                y -= yDir * Clock.Delta() * Clock.FPS;
-            }
-        }
-        if (yDir > 0) {
-            y += yDir * Clock.Delta() * Clock.FPS;
-            if ((!downTile.testIfPassable() && checkCollision(downTile.getX(), downTile.getY(), downTile.getWidth(), downTile.getHeight(), x, y, width, height)) ||
-                (checkCollision(currTile.getX(), currTile.getY(), currTile.getWidth(), currTile.getHeight(), x, y, width, height) && !currTile.testIfPassable())) {
-                y -= yDir * Clock.Delta() * Clock.FPS;
-            }
-        }
+    /**
+     * Function that is run when a player hits a wall
+     */
+    public void onWallCollision() {
+        x -= prevXDir;
+        y -= prevYDir;
     }
 
     private void useItem(int slot) {
@@ -393,6 +373,11 @@ public class Player implements Entity {
         detectIfAtSpecificTile();
         detectIfHitItem();
         calculateSpeed();
+    }
+
+    @Override
+    public void onCollisionWith(Entity entity) {
+
     }
 
 

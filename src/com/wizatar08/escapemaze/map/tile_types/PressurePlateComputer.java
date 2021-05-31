@@ -22,6 +22,7 @@ public class PressurePlateComputer extends Tile {
 
     @Override
     public void update() {
+        super.update();
         this.setActive(gameController.pressurePlatesActive());
     }
 

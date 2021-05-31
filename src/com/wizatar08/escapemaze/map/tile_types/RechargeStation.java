@@ -32,6 +32,7 @@ public class RechargeStation extends Tile {
 
     @Override
     public void update() {
+        super.update();
         if (itemCharging != null) {
             if (itemCharging.getDurabilityPercentage() < 1.0f) {
                 itemCharging.add(Clock.Delta() * 0.01f);

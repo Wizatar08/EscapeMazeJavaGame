@@ -52,4 +52,9 @@ public interface Entity {
      * Update the entity
      */
     void update();
+
+    /**
+     * Run this when collided with another entity
+     */
+    void onCollisionWith(Entity entity);
 }
