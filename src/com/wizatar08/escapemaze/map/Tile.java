@@ -30,6 +30,7 @@ public class Tile implements Entity, TileEntity {
     private Condition rayTraceSeeable;
     private Tex.Cluster tileDecorations;
     private Hitbox hitBox;
+    private RegularTileTextureSettings textureSettings;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
@@ -57,7 +58,7 @@ public class Tile implements Entity, TileEntity {
         }
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
         this.hitBox = new Hitbox(this, type.getHitbox()[0], type.getHitbox()[1], type.getHitbox()[2], type.getHitbox()[3]);
-
+        this.textureSettings = type.getTextureSettings();
     }
 
     public enum Condition {
@@ -121,6 +122,12 @@ public class Tile implements Entity, TileEntity {
         }
     }
 
+    public enum RegularTileTextureSettings {
+        UNIQUE,
+        SPLIT_CENTER_HORIZONTAL,
+        SPLIT_CENTER_VERTICAL;
+    }
+
     public boolean testIfPassable() {
         return canPass && (!activeInfluencesPassable || !isActive);
     }
@@ -129,9 +136,21 @@ public class Tile implements Entity, TileEntity {
         setX(initialX + Editor.displacementX);
         setY(initialY + Editor.displacementY);
         if (x + Game.DIS_X > -TILE_SIZE && x + Game.DIS_X < WIDTH + TILE_SIZE && y + Game.DIS_Y > -TILE_SIZE && y + Game.DIS_Y < HEIGHT + TILE_SIZE) {
-            defaultTexture.draw(x + Game.DIS_X, y + Game.DIS_Y);
+            if (textureSettings == RegularTileTextureSettings.UNIQUE) {
+                defaultTexture.draw(x + Game.DIS_X, y + Game.DIS_Y);
+            } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_VERTICAL) {
+                Tex leftTex = getLeftTile().getTexture();
+                Tex rightTile = getRightTile().getTexture();
+                rightTile.draw(x + ((float) TILE_SIZE / 2), y, (float) TILE_SIZE / 2, TILE_SIZE, 0.5f, 1.0f, 0.0f, 1.0f);
+                leftTex.draw(x, y, (float) TILE_SIZE / 2, TILE_SIZE, 0.0f, 0.5f, 0.0f, 1.0f);
+            } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL) {
+                Tex upTile = getAboveTile().getTexture();
+                Tex downTile = getBelowTile().getTexture();
+                downTile.draw(x, y + ((float) TILE_SIZE / 2), TILE_SIZE, (float) TILE_SIZE / 2, 0.0f, 1.0f, 0.5f, 1.0f);
+                upTile.draw(x, y, TILE_SIZE, (float) TILE_SIZE / 2, 0.0f, 1.0f, 0.0f, 0.5f);
+            }
             canBeSeen = true;
-            if (hasMultipleTexs && !isActive){
+            if (hasMultipleTexs && !isActive) {
                 for (int i = 0; i < activeTexture.length; i++) {
                     activeTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, activeTextureRots[i]);
                 }
@@ -201,6 +220,25 @@ public class Tile implements Entity, TileEntity {
         for (Player player : game.getPlayerInstances()) {
             hitBox.addCollidingEntityDetector(player);
         }
+    }
+
+    public Tile getAboveTile() {
+        return game.getMap().getTile(this.getXPlace(), this.getYPlace() - 1);
+    }
+    public Tile getLeftTile() {
+        return game.getMap().getTile(this.getXPlace() - 1, this.getYPlace());
+    }
+    public Tile getBelowTile() {
+        return game.getMap().getTile(this.getXPlace(), this.getYPlace() + 1);
+    }
+    public Tile getRightTile() {
+        return game.getMap().getTile(this.getXPlace() + 1, this.getYPlace());
+    }
+
+    /**
+     * Overridden in subclasses
+     */
+    public void onPlayerPickupItemFromTile() {
     }
 
     // Getters

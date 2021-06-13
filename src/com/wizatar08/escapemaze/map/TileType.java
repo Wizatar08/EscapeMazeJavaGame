@@ -103,12 +103,8 @@ public enum TileType {
     GRASS_FLOWER_ROWS_VERTICAL("101603", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{0}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 0)),
     GRASS_FLOWER_ROWS_HORIZONTAL("101604", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{90}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 90)),
     GRASS_PEBBLES_GROUND("101605", new Tex("tiles/grass"), new Builder().isPassable().decorations(Tex.getTexInFolder("tile_decorators/path_pebbles"), 8, 32)),
-    WINDOW_END_DEFAULT_FLOOR_1("101701", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{0})),
-    WINDOW_END_DEFAULT_FLOOR_2("101702", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{90})),
-    WINDOW_END_DEFAULT_FLOOR_3("101703", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{180})),
-    WINDOW_END_DEFAULT_FLOOR_4("101704", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_end")}, new int[]{270})),
-    WINDOW_MIDDLE_DEFAULT_FLOOR_HORIZONTAL("101705", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{0})),
-    WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", new Tex("tiles/metal_wall"), new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}));
+    WINDOW_MIDDLE_DEFAULT_FLOOR_HORIZONTAL("101705", Tile.RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{0}).hitbox(0, 20, 64, 24)),
+    WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}).hitbox(20, 0, 24, 64));
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -133,7 +129,7 @@ public enum TileType {
     // Initialize variables
     private final String id;
     private final Tex[] texture;
-    private final boolean isPassable, isSafeSpot, isSecurityComputer, isSecure, authorityLocked, isPressurePlateComputer, startsActive, activeInfluencesPassasble;
+    private final boolean isPassable, isSafeSpot, isSecurityComputer, authorityLocked, isPressurePlateComputer, startsActive, activeInfluencesPassasble;
     private final Direction safeSpot;
     private final Tex[] overlayTex, activeTexture;
     private final int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
@@ -144,9 +140,15 @@ public enum TileType {
     private final Tile.Condition rayTraceSeeable;
     private final Object[] tileDecorations;
     private final int[] hitbox;
+    private Tile.RegularTileTextureSettings textureSettings = Tile.RegularTileTextureSettings.UNIQUE;
 
     TileType(String id, Tex texture, Builder builder) {
         this (id, new Tex[]{texture}, builder);
+    }
+
+    TileType(String id, Tile.RegularTileTextureSettings settings, Builder builder) {
+        this (id, new Tex[]{new Tex("tiles/metal_wall")}, builder);
+        this.textureSettings = settings;
     }
 
     TileType(String id, Tex[] texture, Builder builder) {
@@ -166,7 +168,6 @@ public enum TileType {
         this.subClassArgs = builder.getSubClassArgs();
         this.activeTexture = builder.getActiveTileTexture();
         this.activeTextureRots = builder.getActiveTileTextureRots();
-        this.isSecure = builder.isSecure();
         this.cardPassesNeeded = builder.getCardPassesNeeded();
         this.authorityLocked = builder.isAuthorityDoor();
         this.isPressurePlateComputer = builder.isPressurePlateComputer();
@@ -195,6 +196,9 @@ public enum TileType {
     }
     public Tex[] getTexture() {
         return texture;
+    }
+    public Tile.RegularTileTextureSettings getTextureSettings() {
+        return textureSettings;
     }
     public boolean isPassable() {
         return isPassable;
@@ -226,9 +230,6 @@ public enum TileType {
     public int[] getActiveTileTextureRots() {
         return activeTextureRots;
     }
-    public boolean isSecure() {
-        return isSecure;
-    }
     public boolean isAuthorityDoor() {
         return authorityLocked;
     }
@@ -258,7 +259,7 @@ public enum TileType {
         public static Direction safeSpot;
         public static Tex[] activeTexture, overlayTex;
         public static int[] activeTextureRots, overlayTexRot, cardPassesNeeded;
-        public static boolean isSecure, doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate, startsActive, activeInfluencesPassable;
+        public static boolean doorLocked, isSecurityComputer, escapeDoor, isSafeSpot, isPassable, authorityLocked, isPressurePlateComputer, pressurePlate, startsActive, activeInfluencesPassable;
         public static Class<? extends Tile> subClass;
         public static Object[] subClassArgs;
         public static Tile.Condition rayTraceSeeable;
@@ -280,7 +281,6 @@ public enum TileType {
             subClassArgs = null;
             activeTexture = null;
             activeTextureRots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            isSecure = false;
             doorLocked = false;
             authorityLocked = false;
             cardPassesNeeded = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -386,8 +386,8 @@ public enum TileType {
         private Builder laserSecure(Tex[] deactivatedTileTexture, int[] deactivatedTileTextureRots) {
             activeTexture = deactivatedTileTexture;
             activeTextureRots = deactivatedTileTextureRots;
-            isSecure = true;
             startsActive = true;
+            subclass(LaserSecure.class);
             return this;
         }
 
@@ -507,9 +507,6 @@ public enum TileType {
         }
         public int[] getActiveTileTextureRots() {
             return activeTextureRots;
-        }
-        public boolean isSecure() {
-            return isSecure;
         }
         public boolean isDoorLocked() {
             return doorLocked;

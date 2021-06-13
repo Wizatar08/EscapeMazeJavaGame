@@ -110,6 +110,19 @@ public class Tex {
         draw(x, y, angle, width, height, new Color(1.0f, 1.0f, 1.0f));
     }
 
+    /**
+     * Draw a portion of a still texture
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param leftX
+     * @param rightX
+     */
+    public void draw(float x, float y, float width, float height, float leftX, float rightX, float topY, float bottomY) {
+        drawQuadTex(texture, x, y, width, height, 0, topY, bottomY, leftX, rightX, 1, 1, 1, 1);
+    }
+
     public void draw(float x, float y, Color color) {
         draw(x, y, 0, texture.getImageWidth(), texture.getImageHeight(), color);
     }

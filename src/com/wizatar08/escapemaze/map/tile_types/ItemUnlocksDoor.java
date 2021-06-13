@@ -31,9 +31,4 @@ public class ItemUnlocksDoor extends Tile {
             }
         }
     }
-
-    @Override
-    public void useTile() {
-
-    }
 }

@@ -58,6 +58,10 @@ public class Drawer {
     }
 
     public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle, float topY, float bottomY, float r, float g, float b, float alpha) {
+        drawQuadTex(tex, x, y, width, height, angle, topY, bottomY, 0, 1, r, g, b, alpha);
+    }
+
+    public static void drawQuadTex(Texture tex, float x, float y, float width, float height, float angle, float topY, float bottomY, float leftX, float rightX, float r, float g, float b, float alpha) {
         tex.bind();
         glTranslatef(x + width / 2, y + height / 2, 0);
         glColor4f(r, g, b, alpha);
@@ -66,10 +70,10 @@ public class Drawer {
         glTranslatef(-width / 2, -height / 2, 0);
         glBegin(GL_QUADS);
         glClear(GL_COLOR_BUFFER_BIT);
-        glTexCoord2f(0, bottomY); glVertex2f(0, 0);
-        glTexCoord2f(1, bottomY); glVertex2f(width, 0);
-        glTexCoord2f(1, topY); glVertex2f(width, height);
-        glTexCoord2f(0, topY); glVertex2f(0, height);
+        glTexCoord2f(leftX, bottomY); glVertex2f(0, 0);
+        glTexCoord2f(rightX, bottomY); glVertex2f(width, 0);
+        glTexCoord2f(rightX, topY); glVertex2f(width, height);
+        glTexCoord2f(leftX, topY); glVertex2f(0, height);
         glEnd();
         glLoadIdentity();
     }

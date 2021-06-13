@@ -11,4 +11,12 @@ public class LaserSecure extends Tile {
         super(game, x, y, width, height, type);
         this.gameController = game;
     }
+
+    @Override
+    public void onPlayerPickupItemFromTile() {
+        super.onPlayerPickupItemFromTile();
+        if (isActive()) {
+            gameController.setState(Game.GameStates.ALARM);
+        }
+    }
 }

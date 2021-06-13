@@ -285,9 +285,7 @@ public class Player implements Entity {
         }
         if (item != null) {
             Tile tile = gameController.getMap().getTile((int) item.getX() / TILE_SIZE, (int) item.getY() / TILE_SIZE);
-            if (tile.getX() == item.getX() && tile.getY() == item.getY() && tile.getSubClass() == PressurePlate.class && tile.isActive()) {
-                gameController.setState(Game.GameStates.ALARM);
-            }
+            tile.onPlayerPickupItemFromTile();
             addItemToInventory(item);
             item.hitItem(gameController);
         }
