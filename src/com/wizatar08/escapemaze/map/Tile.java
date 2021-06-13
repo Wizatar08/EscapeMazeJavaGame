@@ -2,6 +2,8 @@ package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Hitbox;
+import com.wizatar08.escapemaze.menus.MenuRun;
+import com.wizatar08.escapemaze.menus.Menus;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.interfaces.TileEntity;
@@ -223,16 +225,32 @@ public class Tile implements Entity, TileEntity {
     }
 
     public Tile getAboveTile() {
-        return game.getMap().getTile(this.getXPlace(), this.getYPlace() - 1);
+        if (MenuRun.MENU == Menus.GAME)
+            return game.getMap().getTile(this.getXPlace(), this.getYPlace() - 1);
+        else if (MenuRun.MENU == Menus.EDITOR)
+            return Editor.MAP.getTile(this.getXPlace(), this.getYPlace() - 1);
+        return null;
     }
     public Tile getLeftTile() {
-        return game.getMap().getTile(this.getXPlace() - 1, this.getYPlace());
+        if (MenuRun.MENU == Menus.GAME)
+            return game.getMap().getTile(this.getXPlace() - 1, this.getYPlace());
+        else if (MenuRun.MENU == Menus.EDITOR)
+            return Editor.MAP.getTile(this.getXPlace() - 1, this.getYPlace());
+        return null;
     }
     public Tile getBelowTile() {
-        return game.getMap().getTile(this.getXPlace(), this.getYPlace() + 1);
+        if (MenuRun.MENU == Menus.GAME)
+            return game.getMap().getTile(this.getXPlace(), this.getYPlace() + 1);
+        else if (MenuRun.MENU == Menus.EDITOR)
+            return Editor.MAP.getTile(this.getXPlace(), this.getYPlace() + 1);
+        return null;
     }
     public Tile getRightTile() {
-        return game.getMap().getTile(this.getXPlace() + 1, this.getYPlace());
+        if (MenuRun.MENU == Menus.GAME)
+            return game.getMap().getTile(this.getXPlace() + 1, this.getYPlace());
+        else if (MenuRun.MENU == Menus.EDITOR)
+            return Editor.MAP.getTile(this.getXPlace() + 1, this.getYPlace());
+        return null;
     }
 
     /**

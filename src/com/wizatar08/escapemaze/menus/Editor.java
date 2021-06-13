@@ -1,3 +1,15 @@
+/*
+* EDITOR CONTROLS:
+* M - Load a map and all of its items
+* S - Save a map
+* = - Change map width
+* - - Change map height
+* E - Add an enemy and it's path. Press again to save the data and go back to Tile Placement mode.
+* I - Add a certain item. Press again to save the data and go back to Tile Placement mode.
+* D/A - Look at the different tiles that can be used
+* Arrow keys - Move the map
+ */
+
 package com.wizatar08.escapemaze.menus;
 
 import com.google.gson.Gson;
@@ -31,7 +43,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 public class Editor {
     // Initialize variables
     private Tex background;
-    private TileMap map;
+    public static TileMap MAP;
     private UI editorUI;
     private ArrayList<UI.Menu> menus;
     private Gson gson;
@@ -60,9 +72,9 @@ public class Editor {
         positions = new int[1024][2];
         buttonPressed = false;
         try {
-            map = ExternalMapHandler.LoadMap(null, "map_default");
+            MAP = ExternalMapHandler.LoadMap(null, "map_default");
         } catch (NullPointerException e) {
-            map = new TileMap(null);
+            MAP = new TileMap(null);
         }
         displacementX = 0;
         displacementY = 0;
@@ -77,15 +89,14 @@ public class Editor {
     }
 
     private void changeMapSize(int width, int height) {
-        TileMap oldMap = map;
-        map = new TileMap(null, width, height);
-        for(int i = 0; i < map.getMapAsArray().length; i++){
-            for(int j = 0; j < map.getMapAsArray()[i].length; j++){
-                map.setTile(i, j, TileType.DEFAULT_FLOOR);
+        TileMap oldMap = MAP;
+        MAP = new TileMap(null, width, height);
+        for(int i = 0; i < MAP.getMapAsArray().length; i++){
+            for(int j = 0; j < MAP.getMapAsArray()[i].length; j++){
+                MAP.setTile(i, j, TileType.DEFAULT_FLOOR);
                 try {
-                    map.setTile(i, j, oldMap.getTile(i, j).getType());
-                } catch (ArrayIndexOutOfBoundsException e) {
-                }
+                    MAP.setTile(i, j, oldMap.getTile(i, j).getType());
+                } catch (ArrayIndexOutOfBoundsException ignored) {}
             }
         }
     }
@@ -93,19 +104,19 @@ public class Editor {
     private void detectKey() {
         while (Keyboard.next()) {
             if (keyDown(Keyboard.KEY_S)) {
-                ExternalMapHandler.SaveMap("map", map);
+                ExternalMapHandler.SaveMap("map", MAP);
             }
             if (keyDown(Keyboard.KEY_M)) {
-                String mapName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
+                String MAPName = JOptionPane.showInputDialog(Lang.get("editor.load_map.popup"));
                 try {
-                    InputStreamReader in = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/" + mapName + ".json"));
+                    InputStreamReader in = new InputStreamReader(Project.class.getClassLoader().getResourceAsStream("resources/level_data/" + MAPName + ".json"));
                     JSONLevel lvlData = gson.fromJson(in, JSONLevel.class);
                     TileMap newMap = ExternalMapHandler.LoadMap(null, lvlData.getMap());
-                    map = newMap;
+                    MAP = newMap;
                     items = lvlData.getItems(null);
                     // ENEMIES HERE
                 } catch (NullPointerException e){
-                    JOptionPane.showMessageDialog(null, Lang.get("editor.load_map.error") + mapName + ".json");
+                    JOptionPane.showMessageDialog(null, Lang.get("editor.load_map.error") + MAPName + ".json");
                 }
             }
             if (keyDown(Keyboard.KEY_EQUALS)) {
@@ -115,7 +126,7 @@ public class Editor {
                         JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.less"));
                     } else if (size > 48) {
                         JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.more"));
-                    } else changeMapSize(size, map.getTilesHigh());
+                    } else changeMapSize(size, MAP.getTilesHigh());
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.width.error.nan"));
                 }
@@ -127,7 +138,7 @@ public class Editor {
                         JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.height.error.less"));
                     } else if (size > 48) {
                         JOptionPane.showMessageDialog(null, Lang.get("editor.change_map.height.error.more"));
-                    } else changeMapSize(map.getTilesWide(), size);
+                    } else changeMapSize(MAP.getTilesWide(), size);
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null,Lang.get("editor.change_map.height.error.nan"));
                 }
@@ -227,7 +238,7 @@ public class Editor {
                     }
                 }
                 if (!isOverButton && tileSelected != null) {
-                    map.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
+                    MAP.setTile((int) Math.floor(((Mouse.getX() - displacementX) / TILE_SIZE)), (int) Math.floor(((HEIGHT - Mouse.getY() - 1 - displacementY) / TILE_SIZE)), tileSelected);
                 }
             }
         } else {
@@ -345,7 +356,7 @@ public class Editor {
 
     private void draw() {
         background.draw(0, 0);
-        map.draw();
+        MAP.draw();
         editorUI.draw();
         for (Item item : items) {
             item.getTexture().draw(item.getX() + displacementX, item.getY() + displacementY);
