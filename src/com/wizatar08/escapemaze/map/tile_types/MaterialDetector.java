@@ -47,7 +47,7 @@ public class MaterialDetector extends Tile {
         Player p = gameController.getCurrentPlayer();
         if (gameController.materialDetectorsActive()) {
             for (int i = 0; i < xPoses.size(); i++) {
-                if (checkCollision(xPoses.get(i), yPoses.get(i), 1, 1, p.getX(), p.getY(), p.getWidth(), p.getHeight())) {
+                if (p.getHitbox().intersectsWith(xPoses.get(i), yPoses.get(i))) {
                     if (p.getInventory().hasRequiredItem()) {
                         gameController.setState(Game.GameStates.ALARM);
                     }

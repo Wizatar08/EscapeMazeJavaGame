@@ -6,18 +6,12 @@ import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.menus.Menus;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
-import com.wizatar08.escapemaze.interfaces.TileEntity;
 import com.wizatar08.escapemaze.menus.Editor;
 import com.wizatar08.escapemaze.menus.Game;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-
-import static com.wizatar08.escapemaze.visuals.Drawer.*;
 import static com.wizatar08.escapemaze.render.Renderer.*;
 
-public class Tile implements Entity, TileEntity {
+public class Tile implements Entity {
     private float x, y, initialX, initialY;
     private int width, height;
     private String id;
@@ -31,7 +25,7 @@ public class Tile implements Entity, TileEntity {
     private Class<? extends Tile> subClass;
     private Condition rayTraceSeeable;
     private Tex.Cluster tileDecorations;
-    private Hitbox hitBox;
+    private Hitbox hitBox, onTileHitBox;
     private RegularTileTextureSettings textureSettings;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
@@ -60,6 +54,7 @@ public class Tile implements Entity, TileEntity {
         }
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
         this.hitBox = new Hitbox(this, type.getHitbox()[0], type.getHitbox()[1], type.getHitbox()[2], type.getHitbox()[3]);
+        this.onTileHitBox = new Hitbox(this, 16, 16, TILE_SIZE - 16, TILE_SIZE - 16);
         this.textureSettings = type.getTextureSettings();
     }
 
@@ -93,7 +88,7 @@ public class Tile implements Entity, TileEntity {
                     boolean isTrue2 = false;
                     for (Player player : tile.game.getPlayerInstances()) {
                         for (Tile tile1 : player.getAllSurroundingTiles()) {
-                            if (tile1 == tile && checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), tile.x, tile.y, tile.width, tile.height)) {
+                            if (tile1 == tile && tile.hitBox.collidesWith(player)) {
                                 isTrue2 = true;
                             }
                         }
@@ -103,7 +98,7 @@ public class Tile implements Entity, TileEntity {
                     boolean isTrue3 = false;
                     for (Player player : tile.game.getPlayerInstances()) {
                         for (Tile tile1 : player.getAllSurroundingTiles()) {
-                            if (tile1 == tile && checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), tile.x, tile.y, tile.width, tile.height)) {
+                            if (tile1 == tile && tile.hitBox.collidesWith(player)) {
                                 isTrue3 = true;
                             }
                         }
@@ -178,18 +173,11 @@ public class Tile implements Entity, TileEntity {
      * Overridden in subclasses. Used to constantly update this tile.
      */
     public void update() {
-        hitBox.update();
-    }
-
-    /**
-     * Runs when something hits the player
-     * @param entity
-     */
-    @Override
-    public void onCollisionWith(Entity entity) {
-        if (entity instanceof Player && !this.testIfPassable()) {
-            ((Player) entity).onWallCollision();
-        }
+        game.getPlayerInstances().forEach((p) -> {
+            if (hitBox.collidesWith(p) && !this.testIfPassable()) {
+                p.onWallCollision();
+            }
+        });
     }
 
     /**
@@ -202,7 +190,7 @@ public class Tile implements Entity, TileEntity {
     public void playerNearTile(Direction direction) {}
     public boolean isOnTile() {
         Player player = game.getCurrentPlayer();
-        return checkCollision(player.getX(), player.getY(), player.getWidth(), player.getHeight(), x + 16, y + 16, x + width - 16, y - height - 16);
+        return onTileHitBox.collidesWith(player);
     }
 
     /**
@@ -218,11 +206,7 @@ public class Tile implements Entity, TileEntity {
     /**
      * Overridden in subclasses. Used to carry out a function when the whole map is loaded.
      */
-    public void onMapCreation() {
-        for (Player player : game.getPlayerInstances()) {
-            hitBox.addCollidingEntityDetector(player);
-        }
-    }
+    public void onMapCreation() {}
 
     public Tile getAboveTile() {
         if (MenuRun.MENU == Menus.GAME)
@@ -317,5 +301,14 @@ public class Tile implements Entity, TileEntity {
     }
     public boolean rayTraceSeeable() {
         return rayTraceSeeable.condition(this);
+    }
+    @Override
+    public Hitbox getHitbox() {
+        return hitBox;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity Tile{Type:" + type + ",x=" + x + ",y=" + y + "}";
     }
 }

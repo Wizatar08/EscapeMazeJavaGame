@@ -3,6 +3,7 @@ package com.wizatar08.escapemaze.game.game_entities.enemies;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Clock;
 import com.wizatar08.escapemaze.helpers.EnemyPathfinder;
+import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
@@ -19,20 +20,19 @@ public class Enemy implements Entity {
     private float x, y, width, height, rot, rotDiff, alarmSpeed;
     private String id;
     private final BigDecimal[][] pathCoords;
-    private Tex texture, test;
-    private EnemyType type;
-    private EnemyPathfinder pathfinder;
+    private final Tex texture;
+    private final EnemyType type;
+    private final EnemyPathfinder pathfinder;
     private ArrayList<Player> playerInstances;
-    private Game gameController;
-    private Timer freezeTime;
-    private BigDecimal tileSize, hypotenuse;
-    private boolean justSwitched, beginningSwitch;
+    private final Game gameController;
+    private final Timer freezeTime;
+    private final BigDecimal tileSize;
+    private BigDecimal hypotenuse;
+    private final Hitbox hitbox;
 
     public Enemy(Game game, int id, int[][] path) {
         this.id = String.valueOf(id);
         this.pathCoords = new BigDecimal[path.length][2];
-
-        this.test = new Tex("shapes/enemy_vision");
 
         for (int i = 0; i < path.length; i++) {
             for (int j = 0; j < path[i].length; j++) {
@@ -58,15 +58,16 @@ public class Enemy implements Entity {
         this.hitBoxSize = type.getHitBoxSize();
         this.freezeTime = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         this.rotDiff = 0f;
-        this.justSwitched = false;
-        this.beginningSwitch = true;
+        System.out.println(this.hitBoxSize + ", " + width + ", " + height);
+
+        this.hitbox = new Hitbox(this, (width - this.hitBoxSize) / 2, (height - this.hitBoxSize) / 2, this.hitBoxSize, this.hitBoxSize, true);
         multiplyPaths();
     }
 
     private void multiplyPaths() {
-        for (int i = 0; i < pathCoords.length; i++) {
-            for (int j = 0; j < pathCoords[i].length; j++) {
-                pathCoords[i][j].multiply(tileSize);
+        for (BigDecimal[] pathCoord : pathCoords) {
+            for (BigDecimal bigDecimal : pathCoord) {
+                bigDecimal.multiply(tileSize);
             }
         }
     }
@@ -88,7 +89,6 @@ public class Enemy implements Entity {
         if (currentPathPoint >= pathCoords.length) {
             currentPathPoint = 0;
         }
-        justSwitched = true;
     }
 
     public void draw() {
@@ -99,12 +99,10 @@ public class Enemy implements Entity {
         setX(pathCoords[currentPathPoint][0].floatValue());
         setY(pathCoords[currentPathPoint][1].floatValue());
         nextPath();
-        beginningSwitch = false;
         hypotenuse = BigDecimal.valueOf(Math.hypot(x - pathCoords[currentPathPoint][0].floatValue(), y - pathCoords[currentPathPoint][1].floatValue()));
     }
 
     private void move() {
-        justSwitched = false;
         float lastRot = rot;
         rot = pathfinder.getRotInDegrees(x, y, pathCoords[currentPathPoint][0].floatValue(), pathCoords[currentPathPoint][1].floatValue());
         rotDiff = lastRot - rot;
@@ -137,11 +135,7 @@ public class Enemy implements Entity {
             freezeTime.pause();
         }
         freezeTime.update();
-    }
-
-    @Override
-    public void onCollisionWith(Entity entity) {
-
+        hitbox.update();
     }
 
     public void freeze(float seconds) {
@@ -154,7 +148,8 @@ public class Enemy implements Entity {
             if (pathfinder.scanForWalls(distanceView, p) && (getAngleOfPlayerRelativeToEnemy() < ((float) type.getAngleOfView() / 2) && getAngleOfPlayerRelativeToEnemy() > ((float) -type.getAngleOfView() / 2)) && !playerInstances.get(gameController.getCurrentPlayerIndex()).isSafe()) {
                 gameController.setState(Game.GameStates.ALARM);
             }
-            if (checkCollision((width - hitBoxSize) / 2 + x, (height - hitBoxSize) / 2 + y, hitBoxSize, hitBoxSize, p.getX(), p.getY(), p.getWidth(), p.getHeight()) && !p.isSafe()) {
+            if (hitbox.collidesWith(p) && !p.isSafe()) {
+            //if (checkCollision((width - hitBoxSize) / 2 + x, (height - hitBoxSize) / 2 + y, hitBoxSize, hitBoxSize, p.getX(), p.getY(), p.getWidth(), p.getHeight()) && !p.isSafe()) {
                 gameController.setState(Game.GameStates.GAME_END);
                 gameController.endGame(false);
             }
@@ -219,5 +214,15 @@ public class Enemy implements Entity {
 
     public Game getGameController() {
         return gameController;
+    }
+
+    @Override
+    public Hitbox getHitbox() {
+        return hitbox;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity Enemy{Type:" + type + ",x=" + x + ",y=" + y + "}";
     }
 }

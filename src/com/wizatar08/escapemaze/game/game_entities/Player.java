@@ -4,6 +4,7 @@ import com.wizatar08.escapemaze.game.Inventory;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.helpers.Clock;
+import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.Direction;
 import com.wizatar08.escapemaze.map.TileDetectionSpot;
@@ -47,6 +48,7 @@ public class Player implements Entity {
     private float weightInfluence, speedInfluence, prevXDir, prevYDir;
     private boolean selected;
     private org.newdawn.slick.Color texColor;
+    private Hitbox hitbox;
 
     // Constructor for Player object
     public Player(Game game, int texColor, float startXTile, float startYTile, TileMap map) {
@@ -62,6 +64,7 @@ public class Player implements Entity {
         this.detectTex = new Tex("tiles/selectors/tile_selector");
         this.inventory = new Inventory(gameController.getMaxInventorySlots());
         this.speedInfluence = 0.0f;
+        this.hitbox = new Hitbox(this, 0, 0, width, height, true);
     }
 
     public Tile getOnTile() {
@@ -74,10 +77,7 @@ public class Player implements Entity {
         if (map.getSafeSpots() != null) {
             int i = 0;
             for (TileDetectionSpot tileDetectionSpot : map.getSafeSpots()) {
-                Tile tile = tileDetectionSpot.getDetectTile();
-                float distX = tileDetectionSpot.getDetectTile().getX() - tileDetectionSpot.getSafeTile().getX();
-                float distY = tileDetectionSpot.getDetectTile().getY() - tileDetectionSpot.getSafeTile().getY();
-                if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
+                if (tileDetectionSpot.getDetectionArea().collidesWith(this)) {
                     i++;
                 }
             }
@@ -169,7 +169,7 @@ public class Player implements Entity {
             Tile tile = tileDetectionSpot.getDetectTile();
             float distX = tile.getX() - tileDetectionSpot.getSafeTile().getX();
             float distY = tile.getY() - tileDetectionSpot.getSafeTile().getY();
-            if (checkCollision(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight(), x, y, width, height)) {
+            if (hitbox.collidesWith(tile)) {
                 x = tile.getX() - (distX / 4) + ((float) TILE_SIZE / 2) - 16;
                 y = tile.getY() - (distY / 4) + ((float) TILE_SIZE / 2) - 16;
                 if (tileDetectionSpot.getSafeTile().getSubClass() == ExitSpot.class) {
@@ -256,7 +256,7 @@ public class Player implements Entity {
                 Tile safeTile = tileDetectionSpot.getSafeTile();
                 float distX = tileDetectionSpot.getDetectTile().getX() - tileDetectionSpot.getSafeTile().getX();
                 float distY = tileDetectionSpot.getDetectTile().getY() - tileDetectionSpot.getSafeTile().getY();
-                if (checkCollision( tile.getX() + ((float) TILE_SIZE / 2) - 8 - (distX / 2), tile.getY() + ((float) TILE_SIZE / 2) - 8 - (distY / 2), (float) tile.getWidth() / 4, (float) tile.getHeight() / 4, x, y, width, height)) {
+                if (tileDetectionSpot.getDetectionArea().collidesWith(this)) {
                     detectTex.draw(safeTile.getX() + Game.DIS_X, safeTile.getY() + Game.DIS_Y);
                 }
             }
@@ -279,7 +279,7 @@ public class Player implements Entity {
     private void detectIfHitItem() {
         Item item = null;
         for (Item item1 : gameController.getItems()) {
-            if (checkCollision(x, y, width, height, item1.getTexX() + ((item1.getWidth() - item1.getPixelLength()) / 2), item1.getTexY() + ((item1.getWidth() - item1.getPixelLength()) / 2), item1.getPixelLength(), item1.getPixelLength()) && !item1.isInInventory() && item1.canPickUp() && inventory.canAdd()) {
+            if (hitbox.collidesWith(item1) && !item1.isInInventory() && item1.canPickUp() && inventory.canAdd()) {
                 item = item1;
             }
         }
@@ -371,11 +371,7 @@ public class Player implements Entity {
         detectIfAtSpecificTile();
         detectIfHitItem();
         calculateSpeed();
-    }
-
-    @Override
-    public void onCollisionWith(Entity entity) {
-
+        hitbox.update();
     }
 
 
@@ -423,5 +419,14 @@ public class Player implements Entity {
     }
     public void setSelected(boolean select) {
         this.selected = select;
+    }
+    @Override
+    public Hitbox getHitbox() {
+        return hitbox;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity Player{Color:(" + texColor.r + "," + texColor.g + "," + texColor.b + "," + texColor.a + "),x=" + x + ",y=" + y + "}";
     }
 }

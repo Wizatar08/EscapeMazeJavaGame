@@ -1,5 +1,7 @@
 package com.wizatar08.escapemaze.interfaces;
 
+import com.wizatar08.escapemaze.helpers.Hitbox;
+
 public interface Entity {
 
     /**
@@ -54,7 +56,7 @@ public interface Entity {
     void update();
 
     /**
-     * Run this when collided with another entity
+     * Gets the hitbox of the entity
      */
-    void onCollisionWith(Entity entity);
+    Hitbox getHitbox();
 }

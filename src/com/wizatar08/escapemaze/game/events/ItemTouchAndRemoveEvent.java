@@ -21,7 +21,7 @@ public class ItemTouchAndRemoveEvent extends ItemTouchEvent {
         ArrayList<ItemType> types = new ArrayList<ItemType>(getItemsNeeded());
         ArrayList<Item> items = new ArrayList<>();
         for (Item item1 : getGameController().getItems()) {
-            if (Drawer.checkCollision(item1.getX(), item1.getY(), item1.getWidth(), item1.getHeight(), getCenterItem().getX(), getCenterItem().getY(), getCenterItem().getWidth(), getCenterItem().getHeight()) && getItemsNeeded().contains(item1.getType())
+            if (item1.getHitbox().collidesWith(getCenterItem()) && getItemsNeeded().contains(item1.getType())
                 && item1 != getCenterItem()) {
                 types.remove(item1.getType());
                 items.add(item1);

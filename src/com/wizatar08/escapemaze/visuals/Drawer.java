@@ -29,10 +29,6 @@ public class Drawer {
         }
     }
 
-    public static boolean checkCollision(float x1, float y1, float width1, float height1, float x2, float y2, float width2, float height2) {
-        return x1 + width1 > x2 && x1 < x2 + width2 && y1 + height1 > y2 && y1 < y2 + height2;
-    }
-
     public static void drawQuad(float x, float y, float width, float height){
         glBegin(GL_QUADS);
         glVertex2f(x, y); // TOp left

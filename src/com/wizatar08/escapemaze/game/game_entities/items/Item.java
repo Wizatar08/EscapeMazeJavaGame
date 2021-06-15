@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.wizatar08.escapemaze.game.events.Event;
 import com.wizatar08.escapemaze.game.events.ItemTouchEvent;
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.visuals.Drawer;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
@@ -28,6 +29,7 @@ public class Item implements Entity {
     private ItemType type;
     public Condition condition;
     private ArrayList<Event> events;
+    private Hitbox hitbox;
 
     public Item(Game game, ItemType type, JsonObject data, float x, float y) {
         this.gameController = game;
@@ -52,6 +54,8 @@ public class Item implements Entity {
         this.displayOnPlayer = false;
 
         this.speedBoost = 0;
+
+        this.hitbox = new Hitbox(this, (((float) Renderer.TILE_SIZE - pixelLength) / 2), (((float) Renderer.TILE_SIZE - pixelLength) / 2), pixelLength, pixelLength);
 
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
 
@@ -110,11 +114,6 @@ public class Item implements Entity {
         if (condition != null) {
             condition.update();
         }
-    }
-
-    @Override
-    public void onCollisionWith(Entity entity) {
-
     }
 
     /**
@@ -260,7 +259,10 @@ public class Item implements Entity {
     public int getPixelLength() {
         return pixelLength;
     }
-
+    @Override
+    public Hitbox getHitbox() {
+        return hitbox;
+    }
 
     public class Condition {
         public ArrayList<Field> conditions;
@@ -299,5 +301,10 @@ public class Item implements Entity {
 
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "Entity Item{Type:" + type + ",x=" + x + ",y=" + y + "}";
     }
 }

@@ -23,7 +23,7 @@ public class PressurePlate extends Tile {
         if (gameController.pressurePlatesActive()) {
             ArrayList<Player> player = gameController.getPlayerInstances();
             player.forEach((p) -> {
-                if (Drawer.checkCollision(super.getX(), super.getY(), super.getWidth(), super.getHeight(), p.getX(), p.getY(), p.getWidth(), p.getHeight()) && !gameController.getCurrentPlayer().getInventory().hasActiveItem(HoveringDevice.class)) {
+                if (getHitbox().collidesWith(p) && !gameController.getCurrentPlayer().getInventory().hasActiveItem(HoveringDevice.class)) {
                     gameController.setState(Game.GameStates.ALARM);
                 }
             });

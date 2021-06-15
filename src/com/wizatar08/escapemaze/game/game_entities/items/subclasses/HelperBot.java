@@ -54,7 +54,7 @@ public class HelperBot extends RechargableBattery {
 
         if (!isInInventory()) {
             for (Item item : gameController.getItems()) {
-                if (Drawer.checkCollision(getX(), getY(), getWidth(), getHeight(), item.getX(), item.getY(), item.getWidth(), item.getHeight())) {
+                if (this.getHitbox().collidesWith(item)) {
                     addToTouching(item);
                 } else {
                     removeFromTouching(item);
