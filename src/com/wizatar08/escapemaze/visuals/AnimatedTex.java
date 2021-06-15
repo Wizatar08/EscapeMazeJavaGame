@@ -73,10 +73,9 @@ public class AnimatedTex extends Tex {
             timer.setTime(timer.getStartingSeconds());
             frame = getNextFrameNum();
         }
-        System.out.println(x + ", " + y + ", " + customWidth + ", " + imageHeight + ", " + leftX + ", " + rightX + ", " + topY + ", " + bottomY);
-        drawQuadTex(texture, x, y, customWidth, imageHeight * (bottomY - topY), 0, calculatedTopY + ((1.0f / totalFrames) * frame - 1), calculatedBottomY + ((1.0f / totalFrames) * frame - 1), leftX, rightX, color.r, color.g, color.b, color.a);
+        drawQuadTex(texture, x, y, customWidth, imageHeight * (bottomY - topY), angle, calculatedTopY + ((1.0f / totalFrames) * frame - 1), calculatedBottomY + ((1.0f / totalFrames) * frame - 1), leftX, rightX, color.r, color.g, color.b, color.a);
         if (fade) {
-            drawQuadTex(texture, x, y, texture.getImageWidth(), imageHeight, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), color.r, color.g, color.b, ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
+            drawQuadTex(texture, x, y, customWidth, imageHeight * (bottomY - topY), angle, calculatedTopY + ((1.0f / totalFrames) * getNextFrameNum()), calculatedBottomY + ((1.0f / totalFrames) * getNextFrameNum()), leftX, rightX, color.r, color.g, color.b, color.a * ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
         }
     }
 
