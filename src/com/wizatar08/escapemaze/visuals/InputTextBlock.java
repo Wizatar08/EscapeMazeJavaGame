@@ -74,7 +74,7 @@ public class InputTextBlock extends TextBlock{
             }
         }
         if (isSelected) {
-            cursorTex.draw(getX() + getWidth(), getY(), 0, cursorTex.getOpenGLTex().getImageWidth(), getFontSize(), getColor());
+            cursorTex.draw(getX() + getWidth(), getY(), getColor());
         }
     }
 

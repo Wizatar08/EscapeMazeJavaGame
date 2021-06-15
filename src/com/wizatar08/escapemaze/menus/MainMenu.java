@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.menus;
 
 import com.wizatar08.escapemaze.helpers.Lang;
+import com.wizatar08.escapemaze.visuals.AnimatedTex;
 import com.wizatar08.escapemaze.visuals.TextBlock;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.visuals.Tex;

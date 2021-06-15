@@ -19,8 +19,9 @@ public class RechargeStation extends Tile {
         itemCharging = null;
         detectItemTex = new Tex("tiles/selectors/item_use_selector");
         takeItemTex = new Tex("tiles/selectors/tile_selector");
-        hasItemTex = Tex.newInstance((Tex) type.subClassArgs()[0]);
-        hasItemFullTex = Tex.newInstance((Tex) type.subClassArgs()[1]);
+        hasItemTex = (Tex) type.subClassArgs()[0];
+        hasItemFullTex = (Tex) type.subClassArgs()[1];
+        System.out.println(hasItemTex.getClass());
     }
 
     public void chargeBattery(Tex tex) {

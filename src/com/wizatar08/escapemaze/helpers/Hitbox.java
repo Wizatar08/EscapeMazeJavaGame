@@ -31,7 +31,7 @@ public class Hitbox {
 
     public void update() {
         if (testBox != null) {
-            testBox.draw(object.getX() + x, object.getY() + y, 0, width, height);
+            //testBox.draw(object.getX() + x, object.getY() + y);
         }
     }
 

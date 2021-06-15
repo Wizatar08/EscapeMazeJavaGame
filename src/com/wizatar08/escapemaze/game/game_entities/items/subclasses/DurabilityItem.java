@@ -58,7 +58,7 @@ public class DurabilityItem extends Item {
     public void draw(float xVal, float yVal) {
         super.draw(xVal, yVal);
         backgroundTex.draw(xVal + 2, yVal);
-        barTex.draw(xVal + 2, yVal + 56, 0, barTex.getOpenGLTex().getImageWidth() * (durabilityTime.getTotalSeconds() / durabilityTime.getStartingSeconds()));
+        barTex.draw(xVal + 2, yVal + 56, (double) barTex.getOpenGLTex().getImageWidth() * (durabilityTime.getTotalSeconds() / durabilityTime.getStartingSeconds()));
     }
 
     public void setDurability(float durability) {

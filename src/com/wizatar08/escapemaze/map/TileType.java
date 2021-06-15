@@ -2,6 +2,8 @@ package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.helpers.Hitbox;
+import com.wizatar08.escapemaze.visuals.AnimatedTex;
+import com.wizatar08.escapemaze.visuals.Cluster;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.map.tile_types.*;
 import com.wizatar08.escapemaze.render.Renderer;
@@ -84,8 +86,8 @@ public enum TileType {
     PRESSURE_PLATE_DEFAULT_FLOOR_COMP_3("100903", new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{180}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{180}).rayTraceSeeable(Tile.Condition.ALWAYS)),
     PRESSURE_PLATE_DEFAULT_FLOOR_COMP_4("100904", new Tex("tiles/default_floor"), new Builder().isPassable().isPressurePlateComputer(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_deactivated")}, new int[]{270}).overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate_computer_activated")}, new int[]{270}).rayTraceSeeable(Tile.Condition.ALWAYS)),
     PRESSURE_PLATE_DEFAULT_FLOOR("101001", new Tex("tiles/default_floor"), new Builder().isPassable().pressurePlate().overlayTex(new Tex[]{new Tex("tile_overlays/pressure_plate")}, new int[]{0})),
-    DEFAULT_RECHARGE_STATION("101101", new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new Tex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f), new Tex("tile_overlays/recharge_station_has_battery_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
-    DEFAULT_REFUEL_STATION("101201", new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler(new Tex("tile_overlays/refuel_station_has_object", Renderer.TILE_SIZE, 0.15f), new Tex("tile_overlays/refuel_station_has_object_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    DEFAULT_RECHARGE_STATION("101101", new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/recharge_station")}, new int[]{0}).batteryCharger(new AnimatedTex("tile_overlays/recharge_station_has_battery", Renderer.TILE_SIZE, 0.07f), new AnimatedTex("tile_overlays/recharge_station_has_battery_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
+    DEFAULT_REFUEL_STATION("101201", new Tex("tiles/default_floor"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/refuel_station")}, new int[]{0}).gasRefueler(new AnimatedTex("tile_overlays/refuel_station_has_object", Renderer.TILE_SIZE, 0.15f), new AnimatedTex("tile_overlays/refuel_station_has_object_full", Renderer.TILE_SIZE, 0.5f)).rayTraceSeeable(Tile.Condition.ALWAYS)),
     METAL_WALL_MATERIAL_DETECTOR_1("101301", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{0, 180}).materialDetector(Direction.DOWN, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{0, 180})),
     METAL_WALL_MATERIAL_DETECTOR_2("101302", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{90, 270}).materialDetector(Direction.LEFT, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{90, 270})),
     METAL_WALL_MATERIAL_DETECTOR_3("101303", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/material_detector")}, new int[]{180, 0}).materialDetector(Direction.UP, new Tex[]{new Tex("tile_overlays/wall_side"), new Tex("tile_overlays/deactivated_material_detector")}, new int[]{180, 0})),
@@ -99,10 +101,10 @@ public enum TileType {
     DISPENSER_3("101503", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{0, 180}).dispenser(Direction.DOWN)),
     DISPENSER_4("101504", new Tex("tiles/metal_wall"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/wall_side_double"), new Tex("tile_overlays/dispenser")}, new int[]{90, 270}).dispenser(Direction.LEFT)),
     GRASS("101601", new Tex("tiles/grass"), new Builder().isPassable()),
-    GRASS_TREE("101602", new Tex("tiles/grass"), new Builder().isPassable().decorations(Tex.getTexInFolder("tile_decorators/grass_tree_space"), 2, 24)),
-    GRASS_FLOWER_ROWS_VERTICAL("101603", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{0}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 0)),
-    GRASS_FLOWER_ROWS_HORIZONTAL("101604", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{90}).decorations(Tex.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 90)),
-    GRASS_PEBBLES_GROUND("101605", new Tex("tiles/grass"), new Builder().isPassable().decorations(Tex.getTexInFolder("tile_decorators/path_pebbles"), 8, 32)),
+    GRASS_TREE("101602", new Tex("tiles/grass"), new Builder().isPassable().decorations(Cluster.getTexInFolder("tile_decorators/grass_tree_space"), 2, 24)),
+    GRASS_FLOWER_ROWS_VERTICAL("101603", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{0}).decorations(Cluster.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 0)),
+    GRASS_FLOWER_ROWS_HORIZONTAL("101604", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{90}).decorations(Cluster.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 90)),
+    GRASS_PEBBLES_GROUND("101605", new Tex("tiles/grass"), new Builder().isPassable().decorations(Cluster.getTexInFolder("tile_decorators/path_pebbles"), 8, 32)),
     WINDOW_MIDDLE_DEFAULT_FLOOR_HORIZONTAL("101705", Tile.RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{0}).hitbox(0, 20, 64, 24)),
     WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}).hitbox(20, 0, 24, 64));
 

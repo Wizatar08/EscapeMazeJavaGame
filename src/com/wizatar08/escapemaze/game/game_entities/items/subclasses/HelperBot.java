@@ -82,7 +82,7 @@ public class HelperBot extends RechargableBattery {
         getCurrentTex().draw(xVal, yVal);
         if (isInInventory()) {
             super.getBackgroundBarTex().draw(xVal + 2, yVal);
-            super.getBarTex().draw(xVal + 2, yVal + 56, 0, super.getBarTex().getOpenGLTex().getImageWidth() * super.getDurabilityPercentage());
+            super.getBarTex().draw(xVal + 2, yVal + 56, (double) super.getBarTex().getOpenGLTex().getImageWidth() * super.getDurabilityPercentage());
         }
     }
 

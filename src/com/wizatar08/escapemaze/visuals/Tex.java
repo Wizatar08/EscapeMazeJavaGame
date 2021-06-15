@@ -10,140 +10,88 @@ import java.util.ArrayList;
 import static com.wizatar08.escapemaze.visuals.Drawer.*;
 
 public class Tex {
-    private final int imageHeight, totalFrames;
-    private int frame;
-    private boolean fade;
-    private float secondsBetweenFrames;
-    private final Timer timer;
     private Texture texture;
     private String texturePath;
+    private static final Color DEFAULT_COLOR = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     /**
-     * Creates an unanimated texture;
+     * Creates a texture;
      * @param textureName
      */
     public Tex(String textureName) {
-        this(textureName, LoadPNG(textureName).getImageHeight());
-    }
-
-    /**
-     * Creates an animated texture with default values
-     * @param textureName
-     * @param imageHeight
-     */
-    public Tex(String textureName, int imageHeight) {
-        this(textureName, imageHeight, 1);
-    }
-
-    /**
-     * Creates a sudden transition animated texture where you can specify seconds between frames
-     * @param textureName
-     * @param imageHeight
-     * @param secondsBetweenFrames
-     */
-    public Tex(String textureName, int imageHeight, float secondsBetweenFrames) {
-        this(textureName, imageHeight, secondsBetweenFrames, false);
-    }
-
-    /**
-     * Creates an animated texture with all customization options
-     * @param textureName
-     * @param imageHeight
-     * @param secondsBetweenFrames
-     * @param fade
-     */
-    public Tex(String textureName, int imageHeight, float secondsBetweenFrames, boolean fade) {
         this.texture = LoadPNG(textureName);
         this.texturePath = textureName;
-        this.imageHeight = imageHeight;
-        this.secondsBetweenFrames = secondsBetweenFrames;
-        this.fade = fade;
-        this.timer = new Timer(Timer.TimerModes.COUNT_DOWN, secondsBetweenFrames);
-        this.frame = (int) Math.floor(texture.getImageHeight() / imageHeight);
-        this.totalFrames = frame;
-        this.timer.unpause();
     }
 
     public static Tex newInstance(Tex t) {
-        return new Tex(t.getTexturePath(), t.getImageHeight(), t.getSecondsBetweenFrames(), t.isFading());
+        return new Tex(t.getTexturePath());
     }
 
-    public static Tex[] getTexInFolder(String folderName) {
-        File folder = new File("src/resources/images/" + folderName).getAbsoluteFile();
-        File[] files = folder.listFiles();
-        ArrayList<Tex> texArray = new ArrayList<>();
-        for (File file : files) {
-            if (file.toString().endsWith(".png")) {
-                String fileName = file.getName().replace(".png", "");
-                texArray.add(new Tex(folderName + "/" + fileName));
-            }
-        }
-        Tex[] texList = new Tex[texArray.size()];
-        for (int i = 0; i < texArray.size(); i++) {
-            texList[i] = texArray.get(i);
-        }
-        return texList;
-    }
-
-    private int getNextFrameNum() {
-        int f = frame;
-        f++;
-        if (f >= totalFrames) {
-            f = 0;
-        }
-        return f;
-    }
-
+    /**
+     * Draw an image on the screen in the specified coordinates
+     * @param x
+     * @param y
+     */
     public void draw(float x, float y) {
         draw(x, y, 0);
     }
 
+    /**
+     * Draw a rotated texture
+     * @param x
+     * @param y
+     * @param angle
+     */
     public void draw(float x, float y, float angle) {
-        draw(x, y, angle, texture.getImageWidth());
-    }
-
-    public void draw(float x, float y, float angle, float width) {
-        draw(x, y, angle, width, imageHeight);
-    }
-
-    public void draw(float x, float y, float angle, float width, float height) {
-        draw(x, y, angle, width, height, new Color(1.0f, 1.0f, 1.0f));
+        draw(x, y, angle, DEFAULT_COLOR);
     }
 
     /**
-     * Draw a portion of a still texture
+     * Draw a texture with a color tint
      * @param x
      * @param y
-     * @param width
-     * @param height
+     * @param color
+     */
+    public void draw(float x, float y, Color color) {
+        draw(x, y, 0, color);
+    }
+
+    /**
+     * Draw a texture with angle and color tint customization
+     * @param x
+     * @param y
+     * @param angle
+     * @param color
+     */
+    public void draw(float x, float y, float angle, Color color) {
+        draw(x, y, texture.getImageWidth(), 0, 1, 0, 1, angle, color);
+    }
+
+    /**
+     * Draw a texture with angle and a set width
+     * @param x
+     * @param y
+     * @param customWidth
+     */
+    public void draw(float x, float y, double customWidth) {
+        draw(x, y, (float) customWidth, 0, 1, 0, 1, 0, DEFAULT_COLOR);
+    }
+
+    /**
+     * Draw a portion of a texture
+     * @param x
+     * @param y
      * @param leftX
      * @param rightX
+     * @param topY
+     * @param bottomY
      */
-    public void draw(float x, float y, float width, float height, float leftX, float rightX, float topY, float bottomY) {
-        drawQuadTex(texture, x, y, width, height, 0, topY, bottomY, leftX, rightX, 1, 1, 1, 1);
+    public void draw(float x, float y, float leftX, float rightX, float topY, float bottomY) {
+        draw(x, y, texture.getImageWidth() * (rightX - leftX), leftX, rightX, topY, bottomY, 0, DEFAULT_COLOR);
     }
 
-    public void draw(float x, float y, Color color) {
-        draw(x, y, 0, texture.getImageWidth(), texture.getImageHeight(), color);
-    }
-
-    public void draw(float x, float y, float angle, float width, float height, Color color) {
-        timer.update();
-        if (timer.getTotalSeconds() <= 0 || timer.getTotalSeconds() > 256) {
-            timer.setTime(timer.getStartingSeconds());
-            frame = getNextFrameNum();
-        }
-        drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * frame, (1.0f / totalFrames) * frame + (1.0f / totalFrames), color.r, color.g, color.b, 1.0f);
-        if (fade) {
-            drawQuadTex(texture, x, y, width, height, angle, (1.0f / totalFrames) * getNextFrameNum(), (1.0f / totalFrames) * getNextFrameNum() + (1.0f / totalFrames), color.r, color.g, color.b, ((timer.getStartingSeconds() - timer.getTotalSeconds()) / timer.getStartingSeconds()));
-        }
-    }
-
-    public static Cluster cluster(Tex tex, int amount, int radius) {
-        return new Cluster(tex, amount, radius);
-    }
-    public static Cluster cluster(Tex[] texList, int amount, int radius) {
-        return new Cluster(texList, amount, radius);
+    public void draw(float x, float y, float customWidth, float leftX, float rightX, float topY, float bottomY, float angle, Color color) {
+        drawQuadTex(texture, x, y, customWidth, texture.getImageHeight() * (bottomY - topY), angle, topY, bottomY, leftX, rightX, color.r, color.g, color.b, color.a);
     }
 
     public Texture getOpenGLTex() {
@@ -153,61 +101,6 @@ public class Tex {
     public String getTexturePath() {
         return texturePath;
     }
-    public int getImageHeight() {
-        return imageHeight;
-    }
-    public float getSecondsBetweenFrames() {
-        return secondsBetweenFrames;
-    }
-    public boolean isFading() {
-        return fade;
-    }
 
-    public static class Cluster {
-        private ArrayList<Tex> texes;
-        private ArrayList<Float> xDisplacements, yDisplacements;
-        private int amount, radius, rotation;
 
-        public Cluster(Tex tex, int amount, int radius) {
-            this(new Tex[]{tex}, amount, radius);
-        }
-
-        public Cluster(Tex[] texList, int amount, int radius) {
-            this(texList, amount, radius, 0);
-        }
-
-        public Cluster(Tex[] texList, int amount, int radius, int rotation) {
-            this.amount = amount;
-            this.radius = radius;
-            this.rotation = rotation;
-
-            this.texes = new ArrayList<>();
-            this.xDisplacements = new ArrayList<>();
-            this.yDisplacements = new ArrayList<>();
-
-            for (int i = 0; i < amount; i++) {
-                texes.add(texList[(int) Math.floor(Math.random() * texList.length)]);
-                xDisplacements.add((float) (Math.random() * 2 * radius) - radius);
-                yDisplacements.add((float) (Math.random() * 2 * radius) - radius);
-            }
-        }
-
-        public void draw(float x, float y) {
-            for (int i = 0; i < texes.size(); i++) {
-                texes.get(i).draw(x + xDisplacements.get(i), y + yDisplacements.get(i), rotation);
-            }
-        }
-
-        public int getTexAmount() {
-            return amount;
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-
-        public ArrayList<Tex> getTextures() {
-            return texes;
-        }
-    }
 }

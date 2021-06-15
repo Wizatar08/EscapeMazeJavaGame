@@ -4,6 +4,7 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.menus.Menus;
+import com.wizatar08.escapemaze.visuals.Cluster;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Editor;
@@ -24,7 +25,7 @@ public class Tile implements Entity {
     private Game game;
     private Class<? extends Tile> subClass;
     private Condition rayTraceSeeable;
-    private Tex.Cluster tileDecorations;
+    private Cluster tileDecorations;
     private Hitbox hitBox, onTileHitBox;
     private RegularTileTextureSettings textureSettings;
 
@@ -50,7 +51,7 @@ public class Tile implements Entity {
         this.activeInfluencesPassable = type.activeInfluencesPassable();
         this.requiredPassLevels = type.cardPassesNeeded();
         if (type.getTileDecorations() != null) {
-            this.tileDecorations = new Tex.Cluster((Tex[]) type.getTileDecorations()[0], (int) type.getTileDecorations()[1], (int) type.getTileDecorations()[2], (int) type.getTileDecorations()[3]);
+            this.tileDecorations = new Cluster((Tex[]) type.getTileDecorations()[0], (int) type.getTileDecorations()[1], (int) type.getTileDecorations()[2], (int) type.getTileDecorations()[3]);
         }
         this.hasMultipleTexs = type.getActiveTileTexture() != null;
         this.hitBox = new Hitbox(this, type.getHitbox()[0], type.getHitbox()[1], type.getHitbox()[2], type.getHitbox()[3]);
@@ -138,13 +139,13 @@ public class Tile implements Entity {
             } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_VERTICAL) {
                 Tex leftTex = getLeftTile().getTexture();
                 Tex rightTile = getRightTile().getTexture();
-                rightTile.draw(x + ((float) TILE_SIZE / 2), y, (float) TILE_SIZE / 2, TILE_SIZE, 0.5f, 1.0f, 0.0f, 1.0f);
-                leftTex.draw(x, y, (float) TILE_SIZE / 2, TILE_SIZE, 0.0f, 0.5f, 0.0f, 1.0f);
+                rightTile.draw(x + ((float) TILE_SIZE / 2), y, 0.5f, 1.0f, 0.0f, 1.0f);
+                leftTex.draw(x, y, 0.0f, 0.5f, 0.0f, 1.0f);
             } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL) {
                 Tex upTile = getAboveTile().getTexture();
                 Tex downTile = getBelowTile().getTexture();
-                downTile.draw(x, y + ((float) TILE_SIZE / 2), TILE_SIZE, (float) TILE_SIZE / 2, 0.0f, 1.0f, 0.5f, 1.0f);
-                upTile.draw(x, y, TILE_SIZE, (float) TILE_SIZE / 2, 0.0f, 1.0f, 0.0f, 0.5f);
+                downTile.draw(x, y + ((float) TILE_SIZE / 2), 0.0f, 1.0f, 0.5f, 1.0f);
+                upTile.draw(x, y, 0.0f, 1.0f, 0.0f, 0.5f);
             }
             canBeSeen = true;
             if (hasMultipleTexs && !isActive) {
