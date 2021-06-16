@@ -1,12 +1,12 @@
-package com.wizatar08.escapemaze.game.events;
+package com.wizatar08.escapemaze.game.game_entities.items.events;
 
 import com.wizatar08.escapemaze.menus.Game;
 
-public class Event {
+public class ItemEvent {
     private Game gameController;
 
-    public Event() {
-        EventManager.addToEvents(this);
+    public ItemEvent() {
+        ItemEventManager.addToEvents(this);
     }
 
     public void update() {}

@@ -2,11 +2,15 @@ package com.wizatar08.escapemaze.helpers;
 
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.render.Renderer;
+import com.wizatar08.escapemaze.visuals.Tex;
 
 public class RayTraceObject {
     private float x, y, targetX, targetY, width, height, targetWidth, targetHeight;
     private int angle;
     private Enemy rayTraceEnemy;
+
+    // For testing purposes
+    private Tex dot = new Tex("shapes/black_64");
 
     public RayTraceObject(Enemy rayTraceMainObject) {
         this.rayTraceEnemy = rayTraceMainObject;
@@ -40,6 +44,8 @@ public class RayTraceObject {
                     return false;
                 }
             }
+            // Testing purposes:
+            //dot.draw((float) x, (float) y, 0, 3, 3);
         }
         return true;
     }

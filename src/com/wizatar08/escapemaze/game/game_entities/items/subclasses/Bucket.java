@@ -1,8 +1,7 @@
 package com.wizatar08.escapemaze.game.game_entities.items.subclasses;
 
 import com.google.gson.JsonObject;
-import com.wizatar08.escapemaze.game.events.Event;
-import com.wizatar08.escapemaze.game.events.ItemTouchEvent;
+import com.wizatar08.escapemaze.game.game_entities.items.events.ItemTouchEvent;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
 import com.wizatar08.escapemaze.menus.Game;

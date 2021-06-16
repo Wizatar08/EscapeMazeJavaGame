@@ -1,22 +1,19 @@
 package com.wizatar08.escapemaze.game.game_entities.items;
 
 import com.google.gson.JsonObject;
-import com.wizatar08.escapemaze.game.events.Event;
-import com.wizatar08.escapemaze.game.events.ItemTouchEvent;
+import com.wizatar08.escapemaze.game.game_entities.items.events.ItemEvent;
+import com.wizatar08.escapemaze.game.game_entities.items.events.ItemTouchEvent;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Hitbox;
-import com.wizatar08.escapemaze.visuals.Drawer;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.helpers.Timer;
 import com.wizatar08.escapemaze.interfaces.Entity;
 import com.wizatar08.escapemaze.menus.Game;
 import com.wizatar08.escapemaze.render.Renderer;
-import org.lwjgl.Sys;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Stream;
 
 public class Item implements Entity {
     private final Game gameController;
@@ -28,7 +25,7 @@ public class Item implements Entity {
     private Timer cooldownPickupTimer;
     private ItemType type;
     public Condition condition;
-    private ArrayList<Event> events;
+    private ArrayList<ItemEvent> itemEvents;
     private Hitbox hitbox;
 
     public Item(Game game, ItemType type, JsonObject data, float x, float y) {
@@ -59,7 +56,7 @@ public class Item implements Entity {
 
         cooldownPickupTimer = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
 
-        events = new ArrayList<>();
+        itemEvents = new ArrayList<>();
         createCondition();
     }
 
@@ -71,7 +68,7 @@ public class Item implements Entity {
     }
 
     public void createItemEvents(ItemTouchEvent... events) {
-        Collections.addAll(this.events, events);
+        Collections.addAll(this.itemEvents, events);
     }
 
     private void updateTimer() {

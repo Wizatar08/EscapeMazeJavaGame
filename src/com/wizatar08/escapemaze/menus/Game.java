@@ -2,7 +2,7 @@ package com.wizatar08.escapemaze.menus;
 
 import com.google.gson.Gson;
 import com.wizatar08.escapemaze.game.JSONLevel;
-import com.wizatar08.escapemaze.game.events.EventManager;
+import com.wizatar08.escapemaze.game.game_entities.items.events.ItemEventManager;
 import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
@@ -193,7 +193,7 @@ public class Game {
             drawAll();
             playerInstances.forEach(Player::draw);
             if (currentGameState != GameStates.PAUSED) {
-                EventManager.update(this);
+                ItemEventManager.update(this);
                 updateEnemies();
                 updateTime();
                 playerInstances.forEach(Player::update);

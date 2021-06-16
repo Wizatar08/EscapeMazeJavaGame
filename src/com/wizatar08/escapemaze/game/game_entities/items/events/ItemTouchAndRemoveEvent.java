@@ -1,13 +1,10 @@
-package com.wizatar08.escapemaze.game.events;
+package com.wizatar08.escapemaze.game.game_entities.items.events;
 
 import com.wizatar08.escapemaze.game.game_entities.items.Item;
 import com.wizatar08.escapemaze.game.game_entities.items.ItemType;
-import com.wizatar08.escapemaze.helpers.Timer;
-import com.wizatar08.escapemaze.visuals.Drawer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class ItemTouchAndRemoveEvent extends ItemTouchEvent {
 
