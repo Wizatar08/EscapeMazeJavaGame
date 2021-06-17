@@ -19,7 +19,7 @@ public class SlidingGlassAutomaticDoor extends Tile {
     public void update() {
         super.update();
 
-        openDoor = playerWithinRange();
+        openDoor = playerWithinRange() || enemyWithinRange();
 
         Tile[] tiles = new Tile[]{getAboveTile(), getBelowTile(), getLeftTile(), getRightTile()};
 

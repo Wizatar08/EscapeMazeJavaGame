@@ -1,6 +1,7 @@
 package com.wizatar08.escapemaze.map;
 
 import com.wizatar08.escapemaze.game.game_entities.Player;
+import com.wizatar08.escapemaze.game.game_entities.enemies.Enemy;
 import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.menus.Menus;
@@ -15,7 +16,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity {
     private float x, y, initialX, initialY;
-    private int width, height, playerDetectionRange;
+    private int width, height, playerDetectionRange, enemyDetectionRange;
     private String id;
     private final Tex defaultTexture;
     private final Tex[] activeTexture, defaultOverlapTexture;
@@ -29,7 +30,7 @@ public class Tile implements Entity {
     private Cluster tileDecorations;
     private Hitbox hitBox, onTileHitBox;
     private RegularTileTextureSettings textureSettings;
-    private boolean playerWithinDistance;
+    private boolean playerWithinDistance, enemyWithinDistance;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
@@ -66,6 +67,8 @@ public class Tile implements Entity {
         this.textureSettings = type.getTextureSettings();
         this.playerDetectionRange = type.getPlayerDetectionRange();
         this.playerWithinDistance = false;
+        this.enemyDetectionRange = type.getEnemyDetectionRange();
+        this.enemyWithinDistance = false;
     }
 
     public enum Condition {
@@ -183,18 +186,23 @@ public class Tile implements Entity {
      * Overridden in subclasses. Used to constantly update this tile.
      */
     public void update() {
-        game.getPlayerInstances().forEach((p) -> {
+        int playerChosenDist = Integer.MAX_VALUE;
+        int enemyChosenDist = Integer.MAX_VALUE;
+        for (Player p : game.getPlayerInstances()) {
             if (hitBox.collidesWith(p) && !this.testIfPassable()) {
                 p.onWallCollision();
             }
             int pHyp = (int) Math.round(Math.sqrt(((p.getX() - x) * (p.getX() - x)) + ((p.getY() - y) * (p.getY() - y))));
-            if (pHyp <= playerDetectionRange) {
-                playerWithinDistance = true;
-                onPlayerDistanceDetection(p);
-            } else {
-                playerWithinDistance = false;
+            playerChosenDist = Math.min(playerChosenDist, pHyp);
+        }
+        if (enemyDetectionRange > 0) {
+            for (Enemy e : game.getEnemies()) {
+                int eHyp = (int) Math.round(Math.sqrt(((e.getX() - x) * (e.getX() - x)) + ((e.getY() - y) * (e.getY() - y))));
+                enemyChosenDist = Math.min(enemyChosenDist, eHyp);
             }
-        });
+        }
+        playerWithinDistance = playerChosenDist <= playerDetectionRange;
+        enemyWithinDistance = enemyChosenDist <= enemyDetectionRange;
     }
 
     /**
@@ -258,11 +266,6 @@ public class Tile implements Entity {
      * Overridden in subclasses
      */
     public void onPlayerPickupItemFromTile() {}
-
-    /**
-     * Overridden in subclasses. Used to determine if a player is at a certain distance from a tile.
-     */
-    public void onPlayerDistanceDetection(Player playerInstance) {}
 
     // Getters
     public float getHeight() {
@@ -334,6 +337,9 @@ public class Tile implements Entity {
     }
     public boolean playerWithinRange() {
         return playerWithinDistance;
+    }
+    public boolean enemyWithinRange() {
+        return enemyWithinDistance;
     }
 
     @Override
