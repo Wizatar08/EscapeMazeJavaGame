@@ -148,13 +148,13 @@ public class Tile implements Entity {
             } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_VERTICAL) {
                 Tex leftTex = getLeftTile().getTexture();
                 Tex rightTile = getRightTile().getTexture();
-                rightTile.draw(x + ((float) TILE_SIZE / 2), y, 0.5f, 1.0f, 0.0f, 1.0f);
-                leftTex.draw(x, y, 0.0f, 0.5f, 0.0f, 1.0f);
+                rightTile.draw(x + ((float) TILE_SIZE / 2) + Game.DIS_X, y + Game.DIS_Y, 0.5f, 1.0f, 0.0f, 1.0f);
+                leftTex.draw(x + Game.DIS_X, y + Game.DIS_Y, 0.0f, 0.5f, 0.0f, 1.0f);
             } else if (textureSettings == RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL) {
                 Tex upTile = getAboveTile().getTexture();
                 Tex downTile = getBelowTile().getTexture();
-                downTile.draw(x, y + ((float) TILE_SIZE / 2), 0.0f, 1.0f, 0.5f, 1.0f);
-                upTile.draw(x, y, 0.0f, 1.0f, 0.0f, 0.5f);
+                downTile.draw(x + Game.DIS_X, y + ((float) TILE_SIZE / 2) + Game.DIS_Y, 0.0f, 1.0f, 0.5f, 1.0f);
+                upTile.draw(x + Game.DIS_X, y + Game.DIS_Y, 0.0f, 1.0f, 0.0f, 0.5f);
             }
             canBeSeen = true;
             if (hasMultipleTexs && !isActive) {
@@ -290,10 +290,10 @@ public class Tile implements Entity {
     }
 
     public int getXPlace() {
-        return (int) x / TILE_SIZE;
+        return (int) (x - Editor.displacementX) / TILE_SIZE;
     }
     public int getYPlace() {
-        return (int) y / TILE_SIZE;
+        return (int) (y - Editor.displacementY) / TILE_SIZE;
     }
     public void setX(float x) {
         this.x = x;
