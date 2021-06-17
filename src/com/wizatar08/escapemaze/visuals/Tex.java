@@ -102,5 +102,7 @@ public class Tex {
         return texturePath;
     }
 
-
+    public Tex copy() {
+        return new Tex(texturePath);
+    }
 }

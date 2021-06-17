@@ -58,7 +58,6 @@ public class Enemy implements Entity {
         this.hitBoxSize = type.getHitBoxSize();
         this.freezeTime = new Timer(Timer.TimerModes.COUNT_DOWN, 0);
         this.rotDiff = 0f;
-        System.out.println(this.hitBoxSize + ", " + width + ", " + height);
 
         this.hitbox = new Hitbox(this, (width - this.hitBoxSize) / 2, (height - this.hitBoxSize) / 2, this.hitBoxSize, this.hitBoxSize, true);
         multiplyPaths();

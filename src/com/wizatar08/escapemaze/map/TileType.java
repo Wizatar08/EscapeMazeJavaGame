@@ -106,7 +106,11 @@ public enum TileType {
     GRASS_FLOWER_ROWS_HORIZONTAL("101604", new Tex("tiles/grass"), new Builder().overlayTex(new Tex[]{new Tex("tile_overlays/flower_rows")}, new int[]{90}).decorations(Cluster.getTexInFolder("tile_decorators/flower_rows"), 1, 0, 90)),
     GRASS_PEBBLES_GROUND("101605", new Tex("tiles/grass"), new Builder().isPassable().decorations(Cluster.getTexInFolder("tile_decorators/path_pebbles"), 8, 32)),
     WINDOW_MIDDLE_DEFAULT_FLOOR_HORIZONTAL("101705", Tile.RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{0}).hitbox(0, 20, 64, 24)),
-    WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}).hitbox(20, 0, 24, 64));
+    WINDOW_MIDDLE_DEFAULT_FLOOR_VERTICAL("101706", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new Tex("tile_overlays/window_middle")}, new int[]{90}).hitbox(20, 0, 24, 64)),
+    WINDOW_SLIDING_GLASS_DOOR_1("101801", Tile.RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new AnimatedTex("tile_overlays/window_sliding_door", Renderer.TILE_SIZE, 0.02f, false, AnimatedTex.AnimationSettings.STOP_AT_FIRST_FRAME)}, new int[]{0}).isPassable().detectPlayerFromDistance(128).hitbox(0, 20, 64, 24).subclass(SlidingGlassAutomaticDoor.class)),
+    WINDOW_SLIDING_GLASS_DOOR_2("101802", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new AnimatedTex("tile_overlays/window_sliding_door", Renderer.TILE_SIZE, 0.02f, false, AnimatedTex.AnimationSettings.STOP_AT_FIRST_FRAME)}, new int[]{90}).isPassable().detectPlayerFromDistance(128).hitbox(20, 0, 24, 64).subclass(SlidingGlassAutomaticDoor.class)),
+    WINDOW_SLIDING_GLASS_DOOR_3("101803", Tile.RegularTileTextureSettings.SPLIT_CENTER_HORIZONTAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new AnimatedTex("tile_overlays/window_sliding_door", Renderer.TILE_SIZE, 0.02f, false, AnimatedTex.AnimationSettings.STOP_AT_FIRST_FRAME)}, new int[]{180}).isPassable().detectPlayerFromDistance(128).hitbox(0, 20, 64, 24).subclass(SlidingGlassAutomaticDoor.class)),
+    WINDOW_SLIDING_GLASS_DOOR_4("101804", Tile.RegularTileTextureSettings.SPLIT_CENTER_VERTICAL, new Builder().rayTraceSeeable(Tile.Condition.ALWAYS).overlayTex(new Tex[]{new AnimatedTex("tile_overlays/window_sliding_door", Renderer.TILE_SIZE, 0.02f, false, AnimatedTex.AnimationSettings.STOP_AT_FIRST_FRAME)}, new int[]{270}).isPassable().detectPlayerFromDistance(128).hitbox(20, 0, 24, 64).subclass(SlidingGlassAutomaticDoor.class));
 
     /* IDEAS FOR TILES:
      * - DONE: Authority door: Must have multiple PASSES to unlock
@@ -143,6 +147,7 @@ public enum TileType {
     private final Object[] tileDecorations;
     private final int[] hitbox;
     private Tile.RegularTileTextureSettings textureSettings = Tile.RegularTileTextureSettings.UNIQUE;
+    private final int playerDetectionRange;
 
     TileType(String id, Tex texture, Builder builder) {
         this (id, new Tex[]{texture}, builder);
@@ -176,6 +181,7 @@ public enum TileType {
         this.tileDecorations = builder.getTileDecorations();
         this.subClass = builder.getSubClass();
         this.hitbox = builder.getHitbox();
+        this.playerDetectionRange = builder.getPlayerDetectionDist();
     }
 
     private void createIdMapAndArrays() {
@@ -253,6 +259,9 @@ public enum TileType {
     public int[] getHitbox() {
         return hitbox;
     }
+    public int getPlayerDetectionRange() {
+        return playerDetectionRange;
+    }
 
     /**
      * Tile builder class.
@@ -267,6 +276,7 @@ public enum TileType {
         public static Tile.Condition rayTraceSeeable;
         public static Object[] tileDecorations;
         public static int[] hitbox;
+        public static int playerDetectionDist;
 
         /**
          * Builder constructor. Defines all variables to its default value. Keep in mind that, unlike the other Builders for Items and Enemies, the order of which you call the methods MATTER. You should have the main functionality of the tile as the LAST method.
@@ -292,6 +302,7 @@ public enum TileType {
             startsActive = false;
             activeInfluencesPassable = false;
             tileDecorations = null;
+            playerDetectionDist = -1;
             hitbox = new int[]{0, 0, Renderer.TILE_SIZE, Renderer.TILE_SIZE};
         }
 
@@ -473,6 +484,11 @@ public enum TileType {
             return this;
         }
 
+        private Builder detectPlayerFromDistance(int range) {
+            playerDetectionDist = range;
+            return this;
+        }
+
         // Getters
         public Class<? extends Tile> getSubClass() {
             return subClass;
@@ -533,6 +549,9 @@ public enum TileType {
         }
         private int[] getHitbox() {
             return hitbox;
+        }
+        public int getPlayerDetectionDist() {
+            return playerDetectionDist;
         }
     }
 }

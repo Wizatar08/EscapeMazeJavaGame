@@ -1,3 +1,10 @@
+/*
+* IMPORTANT:
+* Make sure, in all animated textures, that the amount of frames there are is equal to a multiple of 2.
+*
+* Also don't have many AnimatedTex textures being drawn at the same time, it probably will crash the program
+ */
+
 package com.wizatar08.escapemaze.visuals;
 
 import com.wizatar08.escapemaze.helpers.Timer;
@@ -63,14 +70,15 @@ public class AnimatedTex extends Tex {
             this.frame = totalFrames - 1;
         }
         this.timer.unpause();
-        this.playAnim = true;
+        this.playAnim = this.animationManager != AnimationSettings.STOP_AT_FIRST_FRAME;
     }
 
     public enum AnimationSettings {
         PLAY_ONCE(false, false),
         LOOP_FOREVER(true, false),
         PLAY_BACKWARDS_ONCE(false, true),
-        PLAY_BACKWARDS_FOREVER(true, true);
+        PLAY_BACKWARDS_FOREVER(true, true),
+        STOP_AT_FIRST_FRAME(false, false);
 
         private boolean runAgain, backwards;
 
@@ -132,6 +140,11 @@ public class AnimatedTex extends Tex {
         if (playAnim) {
             timer.update();
         }
+        if (animationManager == AnimationSettings.STOP_AT_FIRST_FRAME) {
+            frame = 0;
+            playAnim = false;
+            timer.setTime(timer.getStartingSeconds());
+        }
         if (timer.getTotalSeconds() <= 0 || timer.getTotalSeconds() > 256) {
             timer.setTime(timer.getStartingSeconds());
             if (!animationManager.backwards) {
@@ -154,9 +167,7 @@ public class AnimatedTex extends Tex {
             } else if ((frame + 1) <= 1 && animationManager.backwards) {
                 stopPlayingAnimation();
             }
-            System.out.println(((frame + 1) <= 1 && animationManager.backwards));
         }
-        //System.out.println(frame + ", " + animationManager + ", " + animationManager.runAgain + ", " + animationManager.backwards);
     }
 
     public int getImageHeight() {
@@ -180,5 +191,10 @@ public class AnimatedTex extends Tex {
 
     public AnimationSettings getSettings() {
         return animationManager;
+    }
+
+    @Override
+    public AnimatedTex copy() {
+        return new AnimatedTex(texturePath, imageHeight, secondsBetweenFrames, fade, animationManager);
     }
 }

@@ -4,6 +4,7 @@ import com.wizatar08.escapemaze.game.game_entities.Player;
 import com.wizatar08.escapemaze.helpers.Hitbox;
 import com.wizatar08.escapemaze.menus.MenuRun;
 import com.wizatar08.escapemaze.menus.Menus;
+import com.wizatar08.escapemaze.visuals.AnimatedTex;
 import com.wizatar08.escapemaze.visuals.Cluster;
 import com.wizatar08.escapemaze.visuals.Tex;
 import com.wizatar08.escapemaze.interfaces.Entity;
@@ -14,7 +15,7 @@ import static com.wizatar08.escapemaze.render.Renderer.*;
 
 public class Tile implements Entity {
     private float x, y, initialX, initialY;
-    private int width, height;
+    private int width, height, playerDetectionRange;
     private String id;
     private final Tex defaultTexture;
     private final Tex[] activeTexture, defaultOverlapTexture;
@@ -28,6 +29,7 @@ public class Tile implements Entity {
     private Cluster tileDecorations;
     private Hitbox hitBox, onTileHitBox;
     private RegularTileTextureSettings textureSettings;
+    private boolean playerWithinDistance;
 
     public Tile(Game game, float x, float y, int width, int height, TileType type) {
         this.game = game;
@@ -43,8 +45,13 @@ public class Tile implements Entity {
         this.subClass = type.getSubClass();
         this.canPass = type.isPassable();
         this.defaultTexture = Tex.newInstance(type.getTexture()[(int) Math.floor(Math.random() * type.getTexture().length)]);
-        this.defaultOverlapTexture = type.getOverlayTex();
-        this.defaultOverlapTexRots = type.getOverlayTexRot();
+
+        Tex[] texes = new Tex[type.getOverlayTex().length];
+        for (int i = 0; i < type.getOverlayTex().length; i++) {
+            texes[i] = type.getOverlayTex()[i].copy();
+        }
+        this.defaultOverlapTexture = texes;
+        this.defaultOverlapTexRots = type.getOverlayTexRot().clone();
         this.activeTexture = type.getActiveTileTexture();
         this.activeTextureRots = type.getActiveTileTextureRots();
         this.isActive = type.startsActive();
@@ -57,6 +64,8 @@ public class Tile implements Entity {
         this.hitBox = new Hitbox(this, type.getHitbox()[0], type.getHitbox()[1], type.getHitbox()[2], type.getHitbox()[3]);
         this.onTileHitBox = new Hitbox(this, 16, 16, TILE_SIZE - 16, TILE_SIZE - 16);
         this.textureSettings = type.getTextureSettings();
+        this.playerDetectionRange = type.getPlayerDetectionRange();
+        this.playerWithinDistance = false;
     }
 
     public enum Condition {
@@ -153,7 +162,7 @@ public class Tile implements Entity {
                     activeTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, activeTextureRots[i]);
                 }
             } else {
-                if (defaultOverlapTexture != null) {
+                if (defaultOverlapTexture != null && defaultOverlapTexRots != null) {
                     for (int i = 0; i < defaultOverlapTexture.length; i++) {
                         defaultOverlapTexture[i].draw(x + Game.DIS_X, y + Game.DIS_Y, defaultOverlapTexRots[i]);
                     }
@@ -177,6 +186,13 @@ public class Tile implements Entity {
         game.getPlayerInstances().forEach((p) -> {
             if (hitBox.collidesWith(p) && !this.testIfPassable()) {
                 p.onWallCollision();
+            }
+            int pHyp = (int) Math.round(Math.sqrt(((p.getX() - x) * (p.getX() - x)) + ((p.getY() - y) * (p.getY() - y))));
+            if (pHyp <= playerDetectionRange) {
+                playerWithinDistance = true;
+                onPlayerDistanceDetection(p);
+            } else {
+                playerWithinDistance = false;
             }
         });
     }
@@ -241,8 +257,12 @@ public class Tile implements Entity {
     /**
      * Overridden in subclasses
      */
-    public void onPlayerPickupItemFromTile() {
-    }
+    public void onPlayerPickupItemFromTile() {}
+
+    /**
+     * Overridden in subclasses. Used to determine if a player is at a certain distance from a tile.
+     */
+    public void onPlayerDistanceDetection(Player playerInstance) {}
 
     // Getters
     public float getHeight() {
@@ -260,6 +280,11 @@ public class Tile implements Entity {
     public Tex getTexture() {
         return defaultTexture;
     }
+
+    public Tex[] getDefaultOverlapTexture() {
+        return defaultOverlapTexture;
+    }
+
     public TileType getType() {
         return type;
     }
@@ -306,6 +331,9 @@ public class Tile implements Entity {
     @Override
     public Hitbox getHitbox() {
         return hitBox;
+    }
+    public boolean playerWithinRange() {
+        return playerWithinDistance;
     }
 
     @Override
